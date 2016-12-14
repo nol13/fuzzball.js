@@ -3,7 +3,7 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python_levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
+This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python-Levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
 
 Try it out: <https://runkit.com/npm/fuzzball>
 
