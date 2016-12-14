@@ -416,7 +416,7 @@ fuzz.ratio("this is a test", "this is a test!")
         if (typeof str !== "string") return "";
         // Non-ascii won't turn into whitespace if force_ascii
         if (force_ascii) str = str.replace(/[^\x00-\x7F]/g, "");
-        // Non-alphanumeric to whitespace
+        // Non-alphanumeric (roman alphabet) to whitespace
         return str.replace(/\W|_/g,' ').toLowerCase().trim();
     }
 

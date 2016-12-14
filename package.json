@@ -15,9 +15,11 @@
   },
   "keywords": [
     "levenshtein",
-    "distance",
     "string",
-    "fuzzy"
+    "fuzzy",
+    "search",
+    "ratio",
+    "distance"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "MIT"

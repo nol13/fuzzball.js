@@ -5,6 +5,8 @@ Easy to use and powerful fuzzy string matching.
 
 This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python_levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
 
+Try it out: <https://runkit.com/npm/fuzzball>
+
 Requirements
 ============
 
@@ -13,7 +15,7 @@ Requirements
 Installation
 ============
 
-Using NPM (soon)
+Using NPM
 
     npm install fuzzball
 
@@ -24,8 +26,10 @@ Usage
 var fuzz = require('fuzzball');
 fuzz.ratio("this is a test", "this is a test!")
         100
-var options = {full_process: false};
-fuzz.ratio("this is a test", "this is a test!", options) // eh, don't need to clean it up..
+
+// eh, don't need to clean it up..
+var options = {full_process: false}; //non-alphanumeric will not be converted whitespace if false, default true
+fuzz.ratio("this is a test", "this is a test!", options) 
         97
 ```
 
@@ -65,6 +69,17 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
         100
 ```
 
+International
+
+```
+// full_process must be set to false if useCollator is true
+// or non-roman alphanumeric will be removed (got a good locale-specific alphanumeric check in js?)
+var options = {full_process: false, useCollator: true};
+fuzz.ratio("this is ä test", "this is a test", options)
+        100
+```
+
+
 Extract (search a list of choices for top results)
 
 ```
@@ -84,10 +99,11 @@ var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var scorer = fuzz.ratio;
 var processor = function(choice) {return choice['modelnumber']}
-var limit = 2; /** max number of results */
-var cutoff = 50; /** lowest score to return */
+var limit = 2; // max number of results
+var cutoff = 50; // lowest score to return
+var options = {}; 
 
-results = fuzz.extract(query, choices, scorer, processor, limit, cutoff);
+results = fuzz.extract(query, choices, scorer, processor, limit, cutoff, options);
 
 [ [ { id: 345, modelnumber: '123abc' }, 67 ],
  [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
