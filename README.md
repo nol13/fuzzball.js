@@ -82,6 +82,7 @@ fuzz.ratio("this is ä test", "this is a test", options)
 
 Extract (search a list of choices for top results)
 
+Simple: array of strings
 ```
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
@@ -93,7 +94,7 @@ results = fuzz.extract(query, choices);
   [ 'brown bear', 60 ] ]
 ```
 
-
+Less simple: array of objects with a procesor function + options
 ```
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
