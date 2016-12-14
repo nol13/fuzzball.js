@@ -65,8 +65,7 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
         100
 ```
 
-Process
-
+Extract (search a list of choices for top results)
 
 ```
 var query = "polar bear";
@@ -74,7 +73,9 @@ var choices = ["brown bear", "polar bear", "koala bear"];
 
 results = fuzz.extract(query, choices);
 
-[ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+[ [ 'polar bear', 100 ],
+  [ 'koala bear', 80 ],
+  [ 'brown bear', 60 ] ]
 ```
 
 
@@ -88,5 +89,6 @@ var cutoff = 50; /** lowest score to return */
 
 results = fuzz.extract(query, choices, scorer, processor, limit, cutoff);
 
-[ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+[ [ { id: 345, modelnumber: '123abc' }, 67 ],
+ [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
 ```
