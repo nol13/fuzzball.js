@@ -1,0 +1,24 @@
+{
+  "name": "fuzzball",
+  "version": "0.1",
+  "description": "Fuzzy string matching, ported from the fuzzywuzzy Python library.",
+  "main": "fuzzball.js",
+  "files": [
+    "fuzzball.js"
+  ],
+  "dependencies": {
+    "difflib": ">=0.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nbkap/fuzzball.js.git"
+  },
+  "keywords": [
+    "levenshtein",
+    "distance",
+    "string",
+    "fuzzy"
+  ],
+  "author": "Nolan Kaplan <nolan@nolankaplan.com>",
+  "license": "MIT"
+}
