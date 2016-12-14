@@ -12,9 +12,7 @@ Requirements
 Installation
 ============
 
-Using NPM
-
-.. code:: bash
+Using NPM (soon)
 
     npm install fuzzball
 
@@ -74,7 +72,8 @@ var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
 
 results = fuzz.extract(query, choices);
-        [ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+
+[ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
 ```
 
 
@@ -87,5 +86,6 @@ var limit = 2; /** max number of results */
 var cutoff = 50; /** lowest score to return */
 
 results = fuzz.extract(query, choices, scorer, processor, limit, cutoff);
-        [ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+
+[ [ { id: 345, modelnumber: '123abc' }, 67 ], [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
 ```
