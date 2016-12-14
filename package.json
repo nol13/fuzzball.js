@@ -1,6 +1,6 @@
 {
   "name": "fuzzball",
-  "version": "0.1",
+  "version": "0.0.2",
   "description": "Fuzzy string matching, ported from the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nbkap/fuzzball.js.git"
+    "url": "https://github.com/nol13/fuzzball.js.git"
   },
   "keywords": [
     "levenshtein",

@@ -1,10 +1,9 @@
 Fuzzball.js
 ==========
 
-Easy to use and powerful fuzzy string matching. It uses Levenshtein Distance <https://en.wikipedia.org/wiki/Levenshtein_distance>`_ to calculate the differences between sequences in a simple-to-use package.
+Easy to use and powerful fuzzy string matching. 
 
-
-This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/seatgeek/fuzzywuzzy> for distance calculations, with a slight modification to match the behavior of python_levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
+This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python_levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
 
 Requirements
 ============
