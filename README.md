@@ -21,7 +21,7 @@ Using NPM
 Usage
 =====
 
-```js
+```javascript
 var fuzz = require('fuzzball');
 fuzz.ratio("this is a test", "this is a test!")
         100
@@ -33,7 +33,7 @@ fuzz.ratio("this is a test", "this is a test!", options) // eh, don't need to cl
 Simple Ratio
 ~~~~~~~~~~~~
 
-```js
+```javascript
 fuzz.ratio("this is a test", "this is a test!")
         100
 ```
@@ -41,7 +41,7 @@ fuzz.ratio("this is a test", "this is a test!")
 Partial Ratio
 ~~~~~~~~~~~~~
 
-```js
+```javascript
 fuzz.partial_ratio("this is a test", "this is a test!")
         100
 fuzz.partial_ratio("this is a test", "this is a test!", {full_process: false}) //still 100
@@ -51,7 +51,7 @@ fuzz.partial_ratio("this is a test", "this is a test!", {full_process: false}) /
 Token Sort Ratio
 ~~~~~~~~~~~~~~~~
 
-```js
+```javascript
 fuzz.ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
         91
 fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
@@ -61,7 +61,7 @@ fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
 Token Set Ratio
 ~~~~~~~~~~~~~~~
 
-```js
+```javascript
 fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
         84
 fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
@@ -71,7 +71,7 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
 Process
 ~~~~~~~
 
-```js
+```javascript
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
 
@@ -80,7 +80,7 @@ results = fuzz.extract(query, choices);
 ```
 
 
-```js
+```javascript
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var scorer = fuzz.ratio;
