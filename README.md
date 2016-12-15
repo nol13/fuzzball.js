@@ -94,7 +94,9 @@ results = fuzz.extract(query, choices);
   [ 'brown bear', 60 ] ]
 ```
 
-Less simple: array of objects with a procesor function + options (all except query and choices are optional)
+Less simple: array of objects with a processor function + options (all except query and choices are optional)
+
+Processor function takes each choice and outputs the string which will be used for scoring
 ```
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
