@@ -45,7 +45,7 @@ Partial Ratio
 ```
 fuzz.partial_ratio("this is a test", "this is a test!")
         100
-fuzz.partial_ratio("this is a test", "this is a test!", {full_process: false}) //still 100
+fuzz.partial_ratio("this is a test", "this is a test again!") //still 100
         100
 ```
 
@@ -94,7 +94,7 @@ results = fuzz.extract(query, choices);
   [ 'brown bear', 60 ] ]
 ```
 
-Less simple: array of objects with a procesor function + options
+Less simple: array of objects with a procesor function + options (all except query and choices are optional)
 ```
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
@@ -102,10 +102,17 @@ var scorer = fuzz.ratio;
 var processor = function(choice) {return choice['modelnumber']}
 var limit = 2; // max number of results
 var cutoff = 50; // lowest score to return
-var options = {}; 
+var options = {}; // (can specify non-default values for full_process, useCollator, force_ascii, subcost)
 
 results = fuzz.extract(query, choices, scorer, processor, limit, cutoff, options);
 
 [ [ { id: 345, modelnumber: '123abc' }, 67 ],
  [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+```
+
+Distance (Levenshtein distance without any ratio calculations)
+
+```
+fuzz.distance("fuzzy was a bear", "fozzy was a bear")
+        1
 ```
