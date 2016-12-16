@@ -5,8 +5,6 @@ Easy to use and powerful fuzzy string matching.
 
 This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python-Levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations. 
 
-(Still getting the behavior of partial_ratio to match up 100%, difflib.js handles whitespace a bit differently when finding matching blocks)
-
 Try it out: <https://runkit.com/npm/fuzzball>
 
 Requirements
