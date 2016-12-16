@@ -231,14 +231,13 @@
         if (options.full_process) pre_processor = full_process;
         if (!limit || typeof limit !== "number") limit = choices.length;
         var results = [];
-        var topscores = Array.apply(null, Array(limit)).map(Number.prototype.valueOf,0);
         for (var c = 0; c < choices.length; c++) {
             var mychoice = pre_processor(processor(choices[c]), options.force_ascii);
             var result = scorer(query, mychoice, options);
             if (result > cutoff) results.push([choices[c],result]); //prob don't need to build full list if a limit.. TODO: optimize?
         } 
-        results = results.sort(function(a,b){return processor(b[1])-processor(a[1]);}); // using this for now..
-        return results.slice(0, parseInt(limit));
+        results = results.sort(function(a,b){return b[1]-a[1];}); // using this for now..
+        return results;//.slice(0, parseInt(limit));
     }
 
 /** Main Scoring Code */

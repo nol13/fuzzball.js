@@ -100,7 +100,7 @@ Processor function takes each choice and outputs the string which will be used f
 ```
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
-var scorer = fuzz.ratio;
+var scorer = fuzz.partial_ratio;
 var processor = function(choice) {return choice['modelnumber']}
 var limit = 2; // max number of results
 var cutoff = 50; // lowest score to return
