@@ -3,7 +3,9 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python-Levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations.
+This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python-Levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations. 
+
+(Still getting the behavior of partial_ratio to match up 100%, difflib.js handles whitespace a bit differently when finding matching blocks)
 
 Try it out: <https://runkit.com/npm/fuzzball>
 
@@ -51,7 +53,6 @@ fuzz.partial_ratio("this is a test", "this is a test again!") //still 100
 
 Token Sort Ratio
 
-
 ```
 fuzz.ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
         91
@@ -60,7 +61,6 @@ fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
 ```
 
 Token Set Ratio
-
 
 ```
 fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")

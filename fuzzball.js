@@ -191,7 +191,7 @@
             var partial = _partial_ratio(str1, str2) * partial_scale;
             var ptsor = partial_token_sort_ratio(str1, str2, options) * unbase_scale * partial_scale;
             var ptser = partial_token_set_ratio(str1, str2, options) * unbase_scale * partial_scale;
-            return Math.max(base, tsor, tser);
+            return Math.max(base, ptsor, ptser);
         }
         else {
             var tsor = token_sort_ratio(str1, str2, options) * unbase_scale;
@@ -285,20 +285,19 @@
     }
 
     function _partial_ratio(str1, str2, options) {
-        if (str1.length > str2.length) {
-            var shorter = str2
-            var longer = str1
-        }
-        else {
+        if (str1.length <= str2.length) {
             var shorter = str1
             var longer = str2
+        }
+        else {
+            var shorter = str2
+            var longer = str1
         }
         var m = new difflib.SequenceMatcher(null, shorter, longer);
         var blocks = m.getMatchingBlocks();
         var scores = [];
-
         for (var b = 0; b < blocks.length; b++) {
-            var long_start = (blocks[1] - blocks[0]) > 0 ? (blocks[1] - blocks[0]) : 0;
+            var long_start = (blocks[b][1] - blocks[b][0]) > 0 ? (blocks[b][1] - blocks[b][0]) : 0;
             var long_end = long_start + shorter.length;
             var long_substr = longer.substring(long_start,long_end);
             var m2 = new difflib.SequenceMatcher(null, shorter, long_substr);
