@@ -152,6 +152,7 @@
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
+        options.partial = true;
         str1 = _process_and_sort(str1);
         str2 = _process_and_sort(str2);
         return _partial_ratio(str1, str2, options);
