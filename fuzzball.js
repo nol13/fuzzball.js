@@ -158,10 +158,7 @@
     }
 
     function WRatio(str1, str2, options_p) {
-        /**```js
-fuzz.ratio("this is a test", "this is a test!")
-        100
-```
+        /**
          * Calculate weighted ratio of the two strings, taking best score of various methods.
          *
          * @param str1 String the first string.
