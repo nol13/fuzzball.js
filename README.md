@@ -122,9 +122,9 @@ Other scoreing options:
 partial_token_set_ratio, partial_token_sort_ratio, WRatio 
 (WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
 
-Processing
+Pre-Processing
 
-Is run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can still only run once)
+Is run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once)
 
 ```
 fuzz.full_process("myt^eXt!")
