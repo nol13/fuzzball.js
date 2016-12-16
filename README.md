@@ -116,3 +116,7 @@ Distance (Levenshtein distance without any ratio calculations)
 fuzz.distance("fuzzy was a bear", "fozzy was a bear")
         1
 ```
+
+Other scoering options:
+
+partial_token_set_ratio, partial_token_sort_ratio, WRatio (WRatio is weighted based on relative string length, runs tests based on relativ length and returns top score)

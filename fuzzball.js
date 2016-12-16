@@ -277,6 +277,8 @@
     }
 
     function _ratio(str1, str2, options) {
+        if (!_validate(str1)) return 0;
+        if (!_validate(str2)) return 0;
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 1 if not specified
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance = _lev_distance(str1, str2, options);
@@ -285,6 +287,8 @@
     }
 
     function _partial_ratio(str1, str2, options) {
+        if (!_validate(str1)) return 0;
+        if (!_validate(str2)) return 0;
         if (str1.length <= str2.length) {
             var shorter = str1
             var longer = str2
