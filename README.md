@@ -28,7 +28,7 @@ fuzz.ratio("this is a test", "this is a test!")
         100
 
 // eh, don't need to clean it up..
-var options = {full_process: false}; //non-alphanumeric will not be converted whitespace if false, default true
+var options = {full_process: false}; //non-alphanumeric will not be converted to whitespace if false, default true
 fuzz.ratio("this is a test", "this is a test!", options) 
         97
 ```
