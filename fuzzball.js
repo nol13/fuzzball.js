@@ -237,7 +237,7 @@
             if (result > cutoff) results.push([choices[c],result]); //prob don't need to build full list if a limit.. TODO: optimize?
         } 
         results = results.sort(function(a,b){return b[1]-a[1];}); // using this for now..
-        return results;//.slice(0, parseInt(limit));
+        return results.slice(0, parseInt(limit));
     }
 
 /** Main Scoring Code */
