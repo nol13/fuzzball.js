@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    var difflib = require('difflib');
+    var difflib;
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -189,15 +189,15 @@
         if (len_ratio > 8) partial_scale = .6;
 
         if (try_partial) {
-            var partial = _partial_ratio(str1, str2) * partial_scale;
+            var partial = _partial_ratio(str1, str2, options) * partial_scale;
             var ptsor = partial_token_sort_ratio(str1, str2, options) * unbase_scale * partial_scale;
             var ptser = partial_token_set_ratio(str1, str2, options) * unbase_scale * partial_scale;
-            return Math.max(base, ptsor, ptser);
+            return Math.round(Math.max(base, partial, ptsor, ptser));
         }
         else {
             var tsor = token_sort_ratio(str1, str2, options) * unbase_scale;
-            var tser = token_sort_ratio(str1, str2, options) * unbase_scale;
-            return Math.max(base, tsor, tser);
+            var tser = token_set_ratio(str1, str2, options) * unbase_scale;
+            return Math.round(Math.max(base, tsor, tser));
         }
     }
 
@@ -291,6 +291,7 @@
     }
 
     function _partial_ratio(str1, str2, options) {
+        if (!difflib) difflib = require('difflib');
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (str1.length <= str2.length) {
@@ -302,14 +303,15 @@
             var longer = str1
         }
         var m = new difflib.SequenceMatcher(null, shorter, longer);
-        var blocks = m.getMatchingBlocks();
+        var blocks = m.getMatchingBlocks(); //matches difflib behavior
         var scores = [];
         for (var b = 0; b < blocks.length; b++) {
             var long_start = (blocks[b][1] - blocks[b][0]) > 0 ? (blocks[b][1] - blocks[b][0]) : 0;
             var long_end = long_start + shorter.length;
             var long_substr = longer.substring(long_start,long_end);
-            var m2 = new difflib.SequenceMatcher(null, shorter, long_substr);
-            var r = m2.ratio();
+            //var m2 = new difflib.SequenceMatcher(null, shorter, long_substr);
+            //var r = m2.ratio() //matches difflib/without python-levenshein alternate behavior
+            var r = _ratio(shorter,long_substr,options)/100;
             if (r > 0.995) return 100;
             else scores.push(r);
         }
