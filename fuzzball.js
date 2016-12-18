@@ -391,7 +391,7 @@
     }
     
     /**
-     * from stackoverflow, of course. Question #1885557,#16227294
+     * from stackoverflow, of course. Question #1885557,#16227294, for now, faster way?
      */
     function _intersect(a, b) {
     var d = {};
@@ -407,7 +407,7 @@
 }
 
     function _difference(a, b) {
-        return a.filter(function(x) { return b.indexOf(x) < 0 }); // TODO: faster implementation
+        return a.filter(function(x) { return b.indexOf(x) < 0 }).filter(function (e, i, c) { return c.indexOf(e) === i; }); // TODO: faster implementation
     }
 
     function _validate(str) {
