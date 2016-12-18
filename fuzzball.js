@@ -391,7 +391,7 @@
     }
     
     /**
-     * from stackoverflow, of course. Question #1885557
+     * from stackoverflow, of course. Question #1885557,#16227294
      */
     function _intersect(a, b) {
     var d = {};
@@ -403,7 +403,7 @@
         if (d[a[j]]) 
             results.push(a[j]);
     }
-    return results;
+    return results.filter(function (e, i, c) { return c.indexOf(e) === i; });
 }
 
     function _difference(a, b) {
