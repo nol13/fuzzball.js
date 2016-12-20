@@ -10,7 +10,8 @@ Try it out: <https://runkit.com/npm/fuzzball>
 Requirements
 ============
 
--  difflib.js   (for the scorers that use partial_ratio)
+-  difflib.js
+-  heap.js
 
 Installation
 ============
@@ -94,13 +95,13 @@ results = fuzz.extract(query, choices);
 
 Less simple: array of objects with a processor function + options (all except query and choices are optional)
 
-Processor function takes each choice and outputs the string which will be used for scoring
+Processor function takes each choice and outputs the string which will be used for scoring. Default scorer is ratio.
 ```
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var scorer = fuzz.partial_ratio;
-var processor = function(choice) {return choice['modelnumber']}
-var limit = 2; // max number of results
+var processor = function(choice) {return choice['modelnumber']}  // null = no processor, if just an array of strings
+var limit = 2; // max number of results, 0 = no limit
 var cutoff = 50; // lowest score to return
 var options = {}; // (can specify non-default values for full_process, useCollator, force_ascii, subcost)
 

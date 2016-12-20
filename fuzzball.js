@@ -1,6 +1,7 @@
 (function () {
     'use strict';
-    var difflib;
+    var difflib = require('difflib');
+    var Heap = require('heap');
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -230,18 +231,23 @@
         if (!cutoff || typeof cutoff !== "number") { cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
-        if (!limit || typeof limit !== "number") limit = choices.length;
         var results = [];
         var anyblank = false;
         for (var c = 0; c < choices.length; c++) {
             var mychoice = pre_processor(processor(choices[c]), options.force_ascii);
             if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
             var result = scorer(query, mychoice, options);
-            if (result > cutoff) results.push([choices[c],result]); //prob don't need to build full list if a limit.. TODO: optimize?
+            if (result > cutoff) results.push([choices[c],result]);
         } 
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
-        results = results.sort(function(a,b){return b[1]-a[1];}); // using this for now..
-        return results.slice(0, parseInt(limit));
+        if (limit && typeof limit === "number" && limit > 0 && limit < choices.length) {
+            var cmp = function(a, b) { return a[1] - b[1]; }
+            results = Heap.nlargest(results, limit, cmp);
+        }
+        else {
+            results = results.sort(function(a,b){return b[1]-a[1];});
+        }
+        return results;
     }
 
 /** Main Scoring Code */
@@ -291,7 +297,6 @@
     }
 
     function _partial_ratio(str1, str2, options) {
-        if (!difflib) difflib = require('difflib');
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (str1.length <= str2.length) {
@@ -396,17 +401,17 @@
      * from stackoverflow, of course. Question #1885557,#16227294, for now, faster way?
      */
     function _intersect(a, b) {
-    var d = {};
-    var results = [];
-    for (var i = 0; i < b.length; i++) {
-        d[b[i]] = true;
+        var d = {};
+        var results = [];
+        for (var i = 0; i < b.length; i++) {
+            d[b[i]] = true;
+        }
+        for (var j = 0; j < a.length; j++) {
+            if (d[a[j]])
+                results.push(a[j]);
+        }
+        return results.filter(function (e, i, c) { return c.indexOf(e) === i; });
     }
-    for (var j = 0; j < a.length; j++) {
-        if (d[a[j]]) 
-            results.push(a[j]);
-    }
-    return results.filter(function (e, i, c) { return c.indexOf(e) === i; });
-}
 
     function _difference(a, b) {
         return a.filter(function(x) { return b.indexOf(x) < 0 }).filter(function (e, i, c) { return c.indexOf(e) === i; }); // TODO: faster implementation
