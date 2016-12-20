@@ -29,6 +29,18 @@ fuzz.ratio("this is a test", "this is a test");
         100
 ```
 
+**Browser**
+
+```js
+<script src="fuzzball_browser.js"></script>
+```
+```js
+<script>
+var fuzz = require('fuzzball');
+alert(fuzz.ratio("hello world", "hiyyo wyrld"));
+</script>
+```
+
 **Simple Ratio**
 
 ```js
