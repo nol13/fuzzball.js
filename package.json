@@ -4,7 +4,8 @@
   "description": "Easy to use and powerful fuzzy string matching, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
-    "fuzzball.js"
+    "fuzzball.js",
+    "fuzzball_browser.js"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
