@@ -107,7 +107,7 @@ fuzz.full_process("myt^eXt!");
         myt ext
 ```
 
-**International** (a.k.a non-ascii)
+**International** (a.k.a. non-ascii)
 
 ```js
 // currently full_process must be set to false if useCollator is true
