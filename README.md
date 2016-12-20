@@ -3,14 +3,14 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations, with a slight modification to match the behavior of python-Levenshtein. (substitutions are weighted 2 instead of 1 in ratio calculations. can specify an options.subcost to override)
+This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations. (with a slight modification to match the behavior of python-Levenshtein where substitutions are weighted 2 instead of 1 in ratio calculations. or specify an options.subcost to override)
 
 Try it out: <https://runkit.com/npm/fuzzball>
 
 Requirements
 ============
 
--  difflib.js
+-  jsdifflib
 -  heap.js
 
 Installation
@@ -23,66 +23,93 @@ Using NPM
 Usage
 =====
 
-```javascript
+```js
 var fuzz = require('fuzzball');
-fuzz.ratio("this is a test", "this is a test!")
+fuzz.ratio("this is a test", "this is a test");
         100
+```
 
+**Simple Ratio**
+
+```js
+fuzz.ratio("this is a test", "this is a test!"); // "!" stripped in pre-processing by default
+        100
+```
+
+**Partial Ratio**
+
+```js
+fuzz.partial_ratio("this is a test", "this is a test!");
+        100
+fuzz.partial_ratio("this is a test", "this is a test again!"); //still 100, substring of 2nd is a perfect match of the first
+        100
+```
+
+**Token Sort Ratio**
+
+```js
+fuzz.ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear");
+        91
+fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear");
+        100
+```
+
+**Token Set Ratio** 
+
+```js
+fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
+        84
+fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
+        100
+```
+
+**Distance** (Levenshtein distance without any ratio calculations)
+
+```js
+fuzz.distance("fuzzy was a bear", "fozzy was a bear");
+        1
+```
+
+**Other Scoring Options**
+
+  * partial_token_set_ratio
+  * partial_token_sort_ratio
+  * WRatio
+(WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
+
+
+**Pre-Processing**
+
+```js
 // eh, don't need to clean it up..
 var options = {full_process: false}; //non-alphanumeric will not be converted to whitespace if false, default true
-fuzz.ratio("this is a test", "this is a test!", options) 
+fuzz.ratio("this is a test", "this is a test!", options);
         97
 ```
 
-Simple Ratio
+Pre-processing run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once)
 
-```
-fuzz.ratio("this is a test", "this is a test!")
-        100
-```
-
-Partial Ratio
-
-```
-fuzz.partial_ratio("this is a test", "this is a test!")
-        100
-fuzz.partial_ratio("this is a test", "this is a test again!") //still 100
-        100
+```js
+fuzz.full_process("myt^eXt!");
+        myt ext
 ```
 
-Token Sort Ratio
+**International**
 
-```
-fuzz.ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
-        91
-fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear")
-        100
-```
-
-Token Set Ratio
-
-```
-fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
-        84
-fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
-        100
-```
-
-International
-
-```
-// full_process must be set to false if useCollator is true
+```js
+// currently full_process must be set to false if useCollator is true
 // or non-roman alphanumeric will be removed (got a good locale-specific alphanumeric check in js?)
 var options = {full_process: false, useCollator: true};
-fuzz.ratio("this is ä test", "this is a test", options)
+fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
 
-Extract (search a list of choices for top results)
+**Extract** (search a list of choices for top results)
 
 Simple: array of strings
-```
+
+```js
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
 
@@ -96,7 +123,8 @@ results = fuzz.extract(query, choices);
 Less simple: array of objects with a processor function + options (all except query and choices are optional)
 
 Processor function takes each choice and outputs the string which will be used for scoring. Default scorer is ratio.
-```
+
+```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var scorer = fuzz.partial_ratio;
@@ -109,25 +137,4 @@ results = fuzz.extract(query, choices, scorer, processor, limit, cutoff, options
 
 [ [ { id: 345, modelnumber: '123abc' }, 67 ],
  [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
-```
-
-Distance (Levenshtein distance without any ratio calculations)
-
-```
-fuzz.distance("fuzzy was a bear", "fozzy was a bear")
-        1
-```
-
-Other scoreing options:
-
-partial_token_set_ratio, partial_token_sort_ratio, WRatio 
-(WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
-
-Pre-Processing
-
-Is run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once)
-
-```
-fuzz.full_process("myt^eXt!")
-        myt ext
 ```
