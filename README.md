@@ -3,9 +3,9 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of <https://github.com/seatgeek/fuzzywuzzy>. Uses fast-levenshtein <https://github.com/hiddentao/fast-levenshtein> for distance calculations. (with a slight modification to match the behavior of python-Levenshtein where substitutions are weighted 2 instead of 1 in ratio calculations. or specify an options.subcost to override)
+This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) for distance calculations. (with a slight modification to match the behavior of python-Levenshtein where substitutions are weighted 2 instead of 1 in ratio calculations. or specify an options.subcost to override)
 
-Try it out: <https://runkit.com/npm/fuzzball>
+Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
 Requirements
 ============
@@ -77,6 +77,7 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
   * WRatio
 (WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
 
+Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
 
 **Pre-Processing**
 

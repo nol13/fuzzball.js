@@ -1,7 +1,7 @@
 {
   "name": "fuzzball",
   "version": "0.1.18",
-  "description": "Fuzzy string matching, ported from the fuzzywuzzy Python library.",
+  "description": "Easy to use and powerful fuzzy string matching, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
     "fuzzball.js"
@@ -18,9 +18,11 @@
     "levenshtein",
     "string",
     "fuzzy",
+    "matching",
     "search",
     "ratio",
-    "distance"
+    "distance",
+    "fuzzywuzzy"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0"
