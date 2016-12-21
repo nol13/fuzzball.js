@@ -140,13 +140,14 @@ Processor function takes each choice and outputs the string which will be used f
 ```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
-var scorer = fuzz.partial_ratio;
-var processor = function(choice) {return choice['modelnumber']}  // null = no processor, if just an array of strings
-var limit = 2; // max number of results, 0 = no limit
-var cutoff = 50; // lowest score to return
-var options = {}; // (can specify non-default values for full_process, useCollator, force_ascii, subcost)
+var options = {
+        scorer: fuzz.partial_ratio,
+        processor: function(choice) {return choice['modelnumber']},
+        limit: 2, // max number of results, default: no limit
+        cutoff: 50 // lowest score to return, default: 0
+};
 
-results = fuzz.extract(query, choices, scorer, processor, limit, cutoff, options);
+results = fuzz.extract(query, choices, options);
 
 [ [ { id: 345, modelnumber: '123abc' }, 67 ],
  [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]

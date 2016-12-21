@@ -202,16 +202,17 @@
         }
     }
 
-    function extract(query, choices, scorer, processor, limit, cutoff, options_p) {
+    function extract(query, choices, options_p) {
         /**
          * Return the top scoring items from an array of choices
          *
          * @param query String the search term.
          * @param choices [String] array of strings, or array of objects if processor is supplied
-         * @param processor function (optional) that takes each choice and outputs a string to be used for Scoring
-         * @param limit Integer (optional) max number of results to return, returns all if not supplied
-         * @param cutoff Integer minimum score that will get returned
          * @param [options_p] Additional options.
+         * @param [options_p.scorer] function that takes two strings and returns a score
+         * @param [options_p.processor] function that takes each choice and outputs a string to be used for Scoring
+         * @param [options_p.limit] Integer (optional) max number of results to return, returns all if not supplied
+         * @param [options_p.cutoff] Integer minimum score that will get returned
          * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
          * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
@@ -222,27 +223,27 @@
         query = options.full_process ? full_process(query, options.force_ascii) : query;
         if (query.length === 0) console.log("Processed query is empty string");
         if (!choices || choices.length === 0) console.log("No choices");
-        if (processor && typeof processor !== "function") console.log("Invalid Processor");
-        if (!processor) processor = function(x) {return x;}
-        if (!scorer || typeof scorer !== "function") {
-            scorer = QRatio;
+        if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
+        if (!options.processor) options.processor = function(x) {return x;}
+        if (!options.scorer || typeof options.scorer !== "function") {
+            options.scorer = QRatio;
             console.log("Using default scorer");
         }
-        if (!cutoff || typeof cutoff !== "number") { cutoff = -1;}
+        if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
         var results = [];
         var anyblank = false;
         for (var c = 0; c < choices.length; c++) {
-            var mychoice = pre_processor(processor(choices[c]), options.force_ascii);
+            var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
             if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
-            var result = scorer(query, mychoice, options);
-            if (result > cutoff) results.push([choices[c],result]);
+            var result = options.scorer(query, mychoice, options);
+            if (result > options.cutoff) results.push([choices[c],result]);
         } 
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
-        if (limit && typeof limit === "number" && limit > 0 && limit < choices.length) {
+        if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < choices.length) {
             var cmp = function(a, b) { return a[1] - b[1]; }
-            results = Heap.nlargest(results, limit, cmp);
+            results = Heap.nlargest(results, options.limit, cmp);
         }
         else {
             results = results.sort(function(a,b){return b[1]-a[1];});
