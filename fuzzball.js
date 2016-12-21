@@ -290,7 +290,12 @@
     function _ratio(str1, str2, options) {
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
-        //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 1 if not specified
+        if (options.difflib_ratio) {
+            var m = new difflib.SequenceMatcher(null, str1, str2);
+            var r = m.ratio();
+            return Math.round(100 * r);
+        }
+        //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance = _lev_distance(str1, str2, options);
         var lensum = str1.length + str2.length ; //TODO: account for unicode double byte astral stuff
@@ -309,19 +314,17 @@
             var longer = str1
         }
         var m = new difflib.SequenceMatcher(null, shorter, longer);
-        var blocks = m.getMatchingBlocks(); //matches difflib behavior
+        var blocks = m.getMatchingBlocks();
         var scores = [];
         for (var b = 0; b < blocks.length; b++) {
             var long_start = (blocks[b][1] - blocks[b][0]) > 0 ? (blocks[b][1] - blocks[b][0]) : 0;
             var long_end = long_start + shorter.length;
             var long_substr = longer.substring(long_start,long_end);
-            //var m2 = new difflib.SequenceMatcher(null, shorter, long_substr);
-            //var r = m2.ratio() //matches difflib/without python-levenshein alternate behavior
-            var r = _ratio(shorter,long_substr,options)/100;
-            if (r > 0.995) return 100;
+            var r = _ratio(shorter,long_substr,options);
+            if (r > 99.5) return 100;
             else scores.push(r);
         }
-        return Math.round(100 * Math.max.apply(null, scores));
+        return Math.max.apply(null, scores);
     }
 
     function _process_and_sort(str) {

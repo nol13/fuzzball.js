@@ -3,7 +3,7 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) for distance calculations. (with a slight modification to match the behavior of python-Levenshtein where substitutions are weighted 2 instead of 1 in ratio calculations. or specify an options.subcost to override)
+This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) for distance calculations.
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
@@ -117,7 +117,6 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-
 **Extract** (search a list of choices for top results)
 
 Simple: array of strings
@@ -153,3 +152,9 @@ results = fuzz.extract(query, choices, options);
   [ { id: 345, modelnumber: '123abc' }, 67 ] ]
 
 ```
+
+**Alternate Ratio Calculation**
+
+If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.difflib_ratio = true. In python-Levenshtein they set the substitution cost to 2 when calculating ratios, which I follow. The distance function still uses a cost of 1 by default though, you can override either by passing in an options.subcost.
+
+The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
