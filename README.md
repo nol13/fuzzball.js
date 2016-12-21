@@ -133,9 +133,9 @@ results = fuzz.extract(query, choices);
   [ 'brown bear', 60 ] ]
 ```
 
-Less simple: array of objects with a processor function + options (all except query and choices are optional)
+Less simple: array of objects with options
 
-Processor function takes each choice and outputs the string which will be used for scoring. Default scorer is ratio.
+Processor function takes a choice and returns a string which will be used for scoring. Default scorer is ratio.
 
 ```js
 var query = "126abzx";
@@ -149,6 +149,7 @@ var options = {
 
 results = fuzz.extract(query, choices, options);
 
-[ [ { id: 345, modelnumber: '123abc' }, 67 ],
- [ { id: 347, modelnumber: '456abdzx' }, 57 ] ]
+[ [ { id: 347, modelnumber: '456abdzx' }, 71 ],
+  [ { id: 345, modelnumber: '123abc' }, 67 ] ]
+
 ```
