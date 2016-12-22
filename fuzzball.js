@@ -2,6 +2,7 @@
     'use strict';
     var difflib = require('difflib');
     var Heap = require('heap');
+    var damlev = require('damlev');
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -258,6 +259,7 @@
         else if (options.ratio_alg === "fast_levenshtein") return fast_levenshtein(str1, str2, options); //keeping till leven edits fully tested
         else if (options.ratio_alg === "sift3") return sift3Distance(str1, str2, options)
         else if (options.ratio_alg === "sift4") return sift4Distance(str1, str2, options)
+        else if (options.ratio_alg === "damlev") return damlev.default(str1, str2)
         else return _leven(str1, str2, options);
     }
 
@@ -339,7 +341,7 @@
 
     // arrays to re-use
     var prevRow = [], str2Char = [];
-    
+
     var collator;
     try {
         collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
@@ -603,6 +605,7 @@
         return Math.round(Math.max(l1, l2) - lcss + trans); //add the cost of transpositions to the final result
     }
 
+
 /**    Utils   */
 
     
@@ -656,6 +659,7 @@
 
     var fuzzball = {
         distance: distance,
+        damlev: damlev.default,
         ratio: QRatio,
         partial_ratio: partial_ratio,
         token_set_ratio: token_set_ratio,

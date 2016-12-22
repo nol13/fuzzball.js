@@ -5,11 +5,17 @@
   "main": "fuzzball.js",
   "files": [
     "fuzzball.js",
-    "fuzzball_browser.js"
+    "fuzzball_browser.js",
+    "fuzzball_browser.min.js"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
-    "heap": ">=0.2.0"
+    "heap": ">=0.2.0",
+    "damlev": ">=1.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^1.0.0",
+    "uglify-js": "^1.0.0"
   },
   "repository": {
     "type": "git",
@@ -22,9 +28,13 @@
     "matching",
     "search",
     "ratio",
-    "distance",
-    "fuzzywuzzy"
+    "distance"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
-  "license": "GPL-2.0"
+  "license": "GPL-2.0",
+   "scripts": {
+    "uglify": "uglifyjs fuzzball_browser.js > fuzzball_browser.min.js",
+    "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./fuzzball.js:fuzzball > fuzzball_browser.js",
+    "build": "npm run browserify && npm run uglify"
+  }
 }
