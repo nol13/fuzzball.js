@@ -1,6 +1,6 @@
 {
   "name": "fuzzball",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Easy to use and powerful fuzzy string matching, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
@@ -32,7 +32,7 @@
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
-   "scripts": {
+  "scripts": {
     "uglify": "uglifyjs fuzzball_browser.js > fuzzball_browser.min.js",
     "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./fuzzball.js:fuzzball > fuzzball_browser.js",
     "build": "npm run browserify && npm run uglify"
