@@ -254,7 +254,8 @@
 /** Main Scoring Code */
 
     function _lev_distance(str1, str2, options) {
-        return fast_levenshtein(str1, str2, options);
+        return _leven(str1, str2, options);
+        //return fast_levenshtein(str1, str2, options); //keeping till leven edits fully tested
     }
 
     function _token_set(str1, str2, options) {
@@ -335,7 +336,13 @@
 
     // arrays to re-use
     var prevRow = [], str2Char = [];
-
+    
+    var collator;
+    try {
+        collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
+    } catch (err) {
+        console.log("Collator could not be initialized and wouldn't be used");
+    }
     function fast_levenshtein(str1, str2, options) {
         var useCollator = (options && collator && options.useCollator);
         var subcost = 1;
@@ -392,14 +399,62 @@
         return nextCol;
     }
 
+    // testing if faster than fast-levenshtein..
+    /** from https://github.com/sindresorhus/leven slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
+    var arr = [];
+    var charCodeCache = [];
+
+    var _leven = function (a, b, options) {
+        var useCollator = (options && collator && options.useCollator);
+        var subcost = 1;
+        //to match behavior of python-Levenshtein and fuzzywuzzy
+        if (options.subcost && typeof options.subcost === "number") subcost = options.subcost;
+
+        if (a === b) {
+            return 0;
+        }
+
+        var aLen = a.length;
+        var bLen = b.length;
+
+        if (aLen === 0) {
+            return bLen;
+        }
+
+        if (bLen === 0) {
+            return aLen;
+        }
+
+        var bCharCode;
+        var ret;
+        var tmp;
+        var tmp2;
+        var i = 0;
+        var j = 0;
+
+        while (i < aLen) {
+            charCodeCache[i] = a.charCodeAt(i);
+            arr[i] = ++i;
+        }
+
+        while (j < bLen) {
+            bCharCode = b.charCodeAt(j);
+            tmp = j++;
+            ret = j;
+
+            for (i = 0; i < aLen; i++) {
+                tmp2 = useCollator ? (0 === collator.compare(String.fromCharCode(bCharCode), String.fromCharCode(charCodeCache[i])) ? tmp : tmp + subcost) : bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
+                //tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
+                tmp = arr[i];
+                ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+            }
+        }
+
+        return ret;
+    };
+
 /**    Utils   */
 
-    var collator;
-    try {
-        collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
-    } catch (err) {
-        console.log("Collator could not be initialized and wouldn't be used");
-    }
     
     /**
      * from stackoverflow, of course. Question #1885557,#16227294, for now, faster way?
