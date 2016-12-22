@@ -100,7 +100,7 @@ fuzz.ratio("this is a test", "this is a test!", options);
         97
 ```
 
-Pre-processing run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once)
+Pre-processing run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once to avoid the performance overhead)
 
 ```js
 fuzz.full_process("myt^eXt!");
@@ -153,8 +153,13 @@ results = fuzz.extract(query, choices, options);
 
 ```
 
-**Alternate Ratio Calculation**
+**Alternate Ratio Calculations**
 
-If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.difflib_ratio = true. In python-Levenshtein they set the substitution cost to 2 when calculating ratios, which I follow. The distance function still uses a cost of 1 by default though, you can override either by passing in an options.subcost.
+If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein they set the substitution cost to 2 when calculating ratios, which I follow, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost.
 
-The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
+The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details. This usually performs a good deal faster than the default calculation in my testing.
+
+You may also try out the sift3 or sift4 algorithms from mailcheck [described here](https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html)
+These are very fast algorithms that sometimes give "good enough" results. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. Still testing these, but would only recommend at this time if performance is more important than accuracy.
+
+Setting options.useCollator only works at this time if using the default algorithm.
