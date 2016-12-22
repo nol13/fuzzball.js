@@ -141,8 +141,8 @@ Processor function takes a choice and returns a string which will be used for sc
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var options = {
-        scorer: fuzz.partial_ratio,
-        processor: function(choice) {return choice['modelnumber']},
+        scorer: fuzz.partial_ratio, // any function that takes two strings and returns a score
+        processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string
         limit: 2, // max number of results, default: no limit
         cutoff: 50 // lowest score to return, default: 0
 };
