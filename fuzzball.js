@@ -3,6 +3,8 @@
     var difflib = require('difflib');
     var Heap = require('heap');
     var damlev = require('damlev');
+    var _intersect = require('lodash.intersection');
+    var _difference = require('lodash.difference');
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -653,27 +655,6 @@
 
 
 /**    Utils   */
-
-    
-    /**
-     * from stackoverflow, of course. Question #1885557,#16227294, for now, faster way?
-     */
-    function _intersect(a, b) {
-        var d = {};
-        var results = [];
-        for (var i = 0; i < b.length; i++) {
-            d[b[i]] = true;
-        }
-        for (var j = 0; j < a.length; j++) {
-            if (d[a[j]])
-                results.push(a[j]);
-        }
-        return results.filter(function (e, i, c) { return c.indexOf(e) === i; });
-    }
-
-    function _difference(a, b) {
-        return a.filter(function(x) { return b.indexOf(x) < 0 }).filter(function (e, i, c) { return c.indexOf(e) === i; }); // TODO: faster implementation
-    }
 
     function _validate(str) {
         if (typeof str === "string" && str.length > 0) return true;

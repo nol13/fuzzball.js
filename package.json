@@ -9,9 +9,11 @@
     "fuzzball_browser.min.js"
   ],
   "dependencies": {
+    "damlev": ">=1.0.0",
     "difflib": ">=0.2.4",
     "heap": ">=0.2.0",
-    "damlev": ">=1.0.0"
+    "lodash.difference": "^4.5.0",
+    "lodash.intersection": "^4.4.0"
   },
   "devDependencies": {
     "browserify": "^1.0.0",
@@ -34,7 +36,7 @@
   "license": "GPL-2.0",
   "scripts": {
     "uglify": "uglifyjs fuzzball_browser.js > fuzzball_browser.min.js",
-    "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./fuzzball.js:fuzzball > fuzzball_browser.js",
+    "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./node_modules/lodash.intersection/index.js  -r ./node_modules/lodash.difference/index.js -r ./fuzzball.js:fuzzball > fuzzball_browser.js",
     "build": "npm run browserify && npm run uglify"
   }
 }

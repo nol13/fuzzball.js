@@ -13,6 +13,8 @@ Dependencies
 -  jsdifflib
 -  heap.js
 -  damlev
+-  lodash.intersection
+-  lodash.difference
 
 Installation
 ============
