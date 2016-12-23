@@ -3,7 +3,7 @@ Fuzzball.js
 
 Easy to use and powerful fuzzy string matching. 
 
-This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to optionally use a collator or to alter the substition cost to match python_Levenshtein's ratio calculations, see below)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to optionally use a collator or to alter the substition cost to match python_Levenshtein's ratio calculations, see below)
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
@@ -173,7 +173,7 @@ Setting options.useCollator only works at this time if using the default algorit
 
 **Performance Optimization**
 
-If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false; 
+If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. 
 
 If using either "token_sort" scorer, you can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
 
@@ -206,3 +206,5 @@ var options = {
 };
 var results = fuzz.extract(query, choices, options);
 ```
+
+If just using the basic ratio still not fast enough.. there are some nice bk-tree packages, but don't think the set/sort algorithms satisfy all of the assumptions for using that.(?)

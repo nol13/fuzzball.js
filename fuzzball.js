@@ -260,20 +260,20 @@
                 options.proc_sorted = true;
                 if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
                 else {
-                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                     mychoice = _process_and_sort(mychoice);
                 }
                 var result = options.scorer(proc_sorted_query, mychoice, options);
             }
             else if (tset) {
-                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                 if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
                 else options.tokens = [query_tokens, tokenize(mychoice)]
                 //query and mychoice only used for validation here
                 var result = options.scorer(query, mychoice, options);
             }
             else {
-                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                 if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
                 var result = options.scorer(query, mychoice, options);
             }
@@ -657,12 +657,12 @@
 /**    Utils   */
 
     function _validate(str) {
-        if (typeof str === "string" && str.length > 0) return true;
+        if ((typeof str === "string" || str instanceof String) && str.length > 0) return true;
         else return false;
     }
 
     function full_process(str, force_ascii) {
-        if (typeof str !== "string") return "";
+        if (!(str instanceof String) && typeof str !== "string") return "";
         // Non-ascii won't turn into whitespace if force_ascii
         if (force_ascii !== false) str = str.replace(/[^\x00-\x7F]/g, "");
         // Non-alphanumeric (roman alphabet) to whitespace
