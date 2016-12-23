@@ -3267,8 +3267,10 @@ Class Differ:
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
-        str1 = _process_and_sort(str1);
-        str2 = _process_and_sort(str2);
+        if (!options.proc_sorted) {
+            str1 = _process_and_sort(str1);
+            str2 = _process_and_sort(str2);
+        }
         return _ratio(str1, str2, options);
     }
 
@@ -3291,8 +3293,10 @@ Class Differ:
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         options.partial = true;
-        str1 = _process_and_sort(str1);
-        str2 = _process_and_sort(str2);
+        if (!options.proc_sorted) {
+            str1 = _process_and_sort(str1);
+            str2 = _process_and_sort(str2);
+        }
         return _partial_ratio(str1, str2, options);
     }
 
@@ -3357,8 +3361,7 @@ Class Differ:
          * @return Integer the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        query = options.full_process ? full_process(query, options.force_ascii) : query;
-        if (query.length === 0) console.log("Processed query is empty string");
+
         if (!choices || choices.length === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
@@ -3369,12 +3372,45 @@ Class Differ:
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
+        options.full_process = false;
+        query = pre_processor(query, options.force_ascii);
+        if (query.length === 0) console.log("Processed query is empty string");
         var results = [];
         var anyblank = false;
+        var tsort = false;
+        var tset = false;
+        if (options.scorer.name === "token_sort_ratio" || options.scorer.name === "partial_token_sort_ratio") {
+            var proc_sorted_query = _process_and_sort(query);
+            tsort = true;
+        }
+        else if (options.scorer.name === "token_set_ratio" || options.scorer.name === "partial_token_set_ratio") {
+            var query_tokens = tokenize(query);
+            tset = true;
+        }
         for (var c = 0; c < choices.length; c++) {
-            var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-            if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
-            var result = options.scorer(query, mychoice, options);
+            options.tokens = undefined;
+            options.proc_sorted = false;
+            if (tsort) {
+                options.proc_sorted = true;
+                if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
+                else {
+                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                    mychoice = _process_and_sort(mychoice);
+                }
+                var result = options.scorer(proc_sorted_query, mychoice, options);
+            }
+            else if (tset) {
+                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
+                else options.tokens = [query_tokens, tokenize(mychoice)]
+                //query and mychoice only used for validation here
+                var result = options.scorer(query, mychoice, options);
+            }
+            else {
+                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii).valueOf();
+                if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
+                var result = options.scorer(query, mychoice, options);
+            }
             if (result > options.cutoff) results.push([choices[c],result]);
         } 
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
@@ -3401,8 +3437,14 @@ Class Differ:
 
     function _token_set(str1, str2, options) {
 
-        var tokens1 = str1.match(/\S+/g);
-        var tokens2 = str2.match(/\S+/g);
+        if (!options.tokens) {
+            var tokens1 = tokenize(str1);
+            var tokens2 = tokenize(str2);
+        }
+        else {
+            var tokens1 = options.tokens[0];
+            var tokens2 = options.tokens[1];
+        }
 
         var intersection = _intersect(tokens1, tokens2);
         var diff1to2 = _difference(tokens1, tokens2);
@@ -3471,6 +3513,10 @@ Class Differ:
 
     function _process_and_sort(str) {
         return str.match(/\S+/g).sort().join(" ").trim();
+    }
+
+     function tokenize(str) {
+        return str.match(/\S+/g);
     }
 
     /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
@@ -3773,7 +3819,7 @@ Class Differ:
     function full_process(str, force_ascii) {
         if (typeof str !== "string") return "";
         // Non-ascii won't turn into whitespace if force_ascii
-        if (force_ascii) str = str.replace(/[^\x00-\x7F]/g, "");
+        if (force_ascii !== false) str = str.replace(/[^\x00-\x7F]/g, "");
         // Non-alphanumeric (roman alphabet) to whitespace
         return str.replace(/\W|_/g,' ').toLowerCase().trim();
     }
@@ -3804,7 +3850,9 @@ Class Differ:
         partial_token_sort_ratio: partial_token_sort_ratio,
         WRatio: WRatio,
         full_process: full_process,
-        extract: extract        
+        extract: extract,
+        process_and_sort: _process_and_sort,
+        tokenize: tokenize
     };
 
     // amd

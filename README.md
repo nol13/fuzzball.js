@@ -126,7 +126,7 @@ Simple: array of strings
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
 
-results = fuzz.extract(query, choices);
+var results = fuzz.extract(query, choices);
 
 [ [ 'polar bear', 100 ],
   [ 'koala bear', 80 ],
@@ -147,7 +147,7 @@ var options = {
         cutoff: 50 // lowest score to return, default: 0
 };
 
-results = fuzz.extract(query, choices, options);
+var results = fuzz.extract(query, choices, options);
 
 [ [ { id: 347, modelnumber: '456abdzx' }, 71 ],
   [ { id: 345, modelnumber: '123abc' }, 67 ] ]
@@ -158,7 +158,7 @@ results = fuzz.extract(query, choices, options);
 
 If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with some tweaks to leven, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost. (and I also bolted on a bit of the collator code from fast-levenshtein)
 
-The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details. This usually performs faster than the default Levenshtein based calculation in my testing.
+The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
 
 To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
 (also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
@@ -167,3 +167,40 @@ You may also try out the sift3 or sift4 algorithms from mailcheck [described her
 These are very fast algorithms that sometimes give "good enough" results. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. Still testing these, but would only recommend at this time if performance is more important than accuracy.
 
 Setting options.useCollator only works at this time if using the default algorithm.
+
+
+**Performance Optimization**
+
+If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false; 
+
+If using either "token_sort" scorer, you can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
+
+```js
+var query = fuzz.full_process("126-Abzx");
+var choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+for (var c in choices) {
+        choices[c].proc_sorted = fuzz.process_and_sort(fuzz.full_process(choices[c].modelnumber));
+}
+var options = {
+        scorer: fuzz.token_sort_ratio,
+        processor: function(choice) {return choice['modelnumber']}, //choice.proc_sorted will override this
+        full_process: false
+};
+var results = fuzz.extract(query, choices, options);
+```
+
+If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running tokenize() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
+
+```js
+var query = fuzz.full_process("126-Abzx");
+var choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+for (var c in choices) {
+        choices[c].tokens = fuzz.tokenize(fuzz.full_process(choices[c].modelnumber));
+}
+var options = {
+        scorer: fuzz.token_set_ratio,
+        processor: function(choice) {return choice['modelnumber']}, //choice.tokens will override this
+        full_process: false
+};
+var results = fuzz.extract(query, choices, options);
+```
