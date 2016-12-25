@@ -15,6 +15,7 @@ Dependencies
 -  damlev
 -  lodash.intersection
 -  lodash.difference
+-  lodash.uniq
 
 Installation
 ============

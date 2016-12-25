@@ -5,18 +5,22 @@
   "main": "fuzzball.js",
   "files": [
     "fuzzball.js",
-    "fuzzball_browser.js",
-    "fuzzball_browser.min.js"
+    "dist/fuzzball_browser.js",
+    "dist/fuzzball_browser.min.js",
+    "test/test.js",
+    "test/testdata.js"
   ],
   "dependencies": {
     "damlev": ">=1.0.0",
     "difflib": ">=0.2.4",
     "heap": ">=0.2.0",
     "lodash.difference": "^4.5.0",
-    "lodash.intersection": "^4.4.0"
+    "lodash.intersection": "^4.4.0",
+    "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {
     "browserify": "^1.0.0",
+    "mocha": "^3.2.0",
     "uglify-js": "^1.0.0"
   },
   "repository": {
@@ -35,8 +39,9 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "uglify": "uglifyjs fuzzball_browser.js > fuzzball_browser.min.js",
-    "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./node_modules/lodash.intersection/index.js  -r ./node_modules/lodash.difference/index.js -r ./fuzzball.js:fuzzball > fuzzball_browser.js",
-    "build": "npm run browserify && npm run uglify"
+    "uglify": "uglifyjs ./dist/fuzzball_browser.js > ./dist/fuzzball_browser.min.js",
+    "browserify": "browserify -r ./node_modules/difflib/lib/difflib.js -r ./node_modules/heap/lib/heap.js -r ./node_modules/damlev/damlev.js -r ./node_modules/lodash.intersection/index.js -r ./node_modules/lodash.difference/index.js -r ./node_modules/lodash.uniq/index.js -r ./fuzzball.js:fuzzball > ./dist/fuzzball_browser.js",
+    "build": "npm run browserify && npm run uglify",
+    "test": "mocha"
   }
 }

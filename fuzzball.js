@@ -5,6 +5,7 @@
     var damlev = require('damlev');
     var _intersect = require('lodash.intersection');
     var _difference = require('lodash.difference');
+    var _uniq = require('lodash.uniq');
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -180,8 +181,10 @@
          * @return Integer the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = full_process(str1, options.force_ascii);
-        str2 = full_process(str2, options.force_ascii);
+        //str1 = full_process(str1, options.force_ascii);  //fuzzywuzzy runs no matter what, reason? going by options.full_process
+        //str2 = full_process(str2, options.force_ascii);
+        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
+        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         options.full_process = false;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
@@ -312,9 +315,9 @@
             var tokens2 = options.tokens[1];
         }
 
-        var intersection = _intersect(tokens1, tokens2);
-        var diff1to2 = _difference(tokens1, tokens2);
-        var diff2to1 = _difference(tokens2, tokens1);
+        var intersection = _uniq(_intersect(tokens1, tokens2));
+        var diff1to2 = _uniq(_difference(tokens1, tokens2));
+        var diff2to1 = _uniq(_difference(tokens2, tokens1));
 
         var sorted_sect = intersection.sort().join(" ");
         var sorted_1to2 = diff1to2.sort().join(" ");
@@ -325,7 +328,6 @@
         sorted_sect = sorted_sect.trim();
         combined_1to2 = combined_1to2.trim();
         combined_2to1 = combined_2to1.trim();
-
         var ratio_func = _ratio;
         if (options.partial) ratio_func = _partial_ratio;
 
