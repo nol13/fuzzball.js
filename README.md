@@ -1,9 +1,11 @@
+[![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js)
+
 Fuzzball.js
 ==========
 
 Easy to use and powerful fuzzy string matching. 
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to optionally use a collator or to alter the substition cost to match python_Levenshtein's ratio calculations, see below)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, see below)
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
@@ -157,20 +159,6 @@ var results = fuzz.extract(query, choices, options);
 
 ```
 
-**Alternate Ratio Calculations**
-
-If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with some tweaks to leven, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost. (and I also bolted on a bit of the collator code from fast-levenshtein)
-
-The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
-
-To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
-(also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
-
-You may also try out the sift3 or sift4 algorithms from mailcheck [described here](https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html)
-These are very fast algorithms that sometimes give "good enough" results. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. Still testing these, but would only recommend at this time if performance is more important than accuracy.
-
-Setting options.useCollator only works at this time if using the default algorithm.
-
 
 **Performance Optimization**
 
@@ -209,3 +197,19 @@ var results = fuzz.extract(query, choices, options);
 ```
 
 If just using the basic ratio still not fast enough.. there are some nice bk-tree packages, but don't think the set/sort algorithms satisfy all of the assumptions for using that.(?)
+
+
+**Alternate Ratio Calculations**
+
+
+If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to the leven algorithm, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost. (bolted on a bit of the collator code from fast-levenshtein into leven as well)
+
+The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
+
+To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
+(also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
+
+You may also try out the sift3 or sift4 algorithms from mailcheck [described here](https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html)
+These are very fast algorithms that sometimes give "good enough" results. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. Still testing these, but would only recommend at this time if performance is more important than accuracy.
+
+Setting options.useCollator only works at this time if using the default algorithm.
