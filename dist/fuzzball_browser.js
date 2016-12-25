@@ -6594,9 +6594,9 @@ module.exports = uniq;
             var tokens2 = options.tokens[1];
         }
 
-        var intersection = _uniq(_intersect(tokens1, tokens2));
-        var diff1to2 = _uniq(_difference(tokens1, tokens2));
-        var diff2to1 = _uniq(_difference(tokens2, tokens1));
+        var intersection = _intersect(tokens1, tokens2);
+        var diff1to2 = _difference(tokens1, tokens2);
+        var diff2to1 = _difference(tokens2, tokens1);
 
         var sorted_sect = intersection.sort().join(" ");
         var sorted_1to2 = diff1to2.sort().join(" ");
@@ -6663,7 +6663,8 @@ module.exports = uniq;
     }
 
      function tokenize(str) {
-        return str.match(/\S+/g);
+        //uniqe tokens
+        return _uniq(str.match(/\S+/g));
     }
 
     /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
@@ -6978,7 +6979,7 @@ module.exports = uniq;
         full_process: full_process,
         extract: extract,
         process_and_sort: _process_and_sort,
-        tokenize: tokenize
+        unique_tokens: tokenize
     };
 
     // amd
