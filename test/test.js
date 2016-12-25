@@ -14,9 +14,9 @@ describe('full_process', function () {
 });
 
 describe('Scorer Identity Tests', function () {
-    for (var scorer of scorers) {
-        var tmpscorer = scorer;
-        describe('Scorer: ' + scorer.name, function () {
+    for (var scorer in scorers) {
+        var tmpscorer = scorers[scorer];
+        describe('Scorer: ' + tmpscorer.name, function () {
 
             it('should return 0 if either string is empty', function () {
                 assert.equal(0, tmpscorer("", "striiing"));
