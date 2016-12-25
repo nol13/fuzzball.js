@@ -180,13 +180,13 @@ var options = {
 var results = fuzz.extract(query, choices, options);
 ```
 
-If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running tokenize() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
+If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
 
 ```js
 var query = fuzz.full_process("126-Abzx");
 var choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
 for (var c in choices) {
-        choices[c].tokens = fuzz.tokenize(fuzz.full_process(choices[c].modelnumber));
+        choices[c].tokens = fuzz.unique_tokens(fuzz.full_process(choices[c].modelnumber));
 }
 var options = {
         scorer: fuzz.token_set_ratio,
