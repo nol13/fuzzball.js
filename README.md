@@ -26,25 +26,22 @@ Using NPM
 
     npm install fuzzball
 
+Browser
+
+```html
+<script src="fuzzball_browser.min.js"></script>
+<script>
+var fuzz = require('fuzzball');
+</script>
+```
+
 Usage
 =====
 
 ```js
 var fuzz = require('fuzzball');
-fuzz.ratio("this is a test", "this is a test");
-        100
-```
-
-**Browser**
-
-```js
-<script src="fuzzball_browser.min.js"></script>
-```
-```js
-<script>
-var fuzz = require('fuzzball');
-alert(fuzz.ratio("hello world", "hiyyo wyrld"));
-</script>
+fuzz.ratio("hello world", "hiyyo wyrld");
+        64
 ```
 
 **Simple Ratio**
@@ -54,17 +51,18 @@ fuzz.ratio("this is a test", "this is a test!"); // "!" stripped in pre-processi
         100
 ```
 
-**Partial Ratio**
+**Partial Ratio** 
+
+Highest scoring substring of the longer string vs. the shorter string.
 
 ```js
-fuzz.partial_ratio("this is a test", "this is a test!");
-        100
 fuzz.partial_ratio("this is a test", "this is a test again!"); //still 100, substring of 2nd is a perfect match of the first
         100
 ```
 
 **Token Sort Ratio**
 
+Tokenized, sorted, and then recombined before scoring.
 ```js
 fuzz.ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear");
         91
@@ -74,6 +72,7 @@ fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear");
 
 **Token Set Ratio** 
 
+Highest of 3 scores comparing the set intersection, intersection + difference 1 to 2, and intersection + difference 2 to 1.
 ```js
 fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
         84
@@ -81,8 +80,9 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
         100
 ```
 
-**Distance** (Levenshtein distance without any ratio calculations)
+**Distance**
 
+Unmodified Levenshtein distance without any additional ratio calculations (for Damerau–Levenshtein use fuzz.damlev)
 ```js
 fuzz.distance("fuzzy was a bear", "fozzy was a bear");
         1
@@ -99,6 +99,7 @@ Blog post with overview of scoring algorithms can be found [**here**](http://cha
 
 **Pre-Processing**
 
+Pre-processing run by default unless options.full_process is set to false.
 ```js
 // eh, don't need to clean it up..
 var options = {full_process: false}; //non-alphanumeric will not be converted to whitespace if false, default true
@@ -106,8 +107,7 @@ fuzz.ratio("this is a test", "this is a test!", options);
         97
 ```
 
-Pre-processing run by default unless options.full_process is set to false, but can run separately as well. (so if searching same list repeatedly can only run once to avoid the performance overhead)
-
+Or run separately.. (say if searching a long list repeatedly, can avoid some performance overhead)
 ```js
 fuzz.full_process("myt^eXt!");
         myt ext
@@ -123,7 +123,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-**Extract** (search a list of choices for top results)
+**Batch Extract** (search list of choices for top results)
 
 Simple: array of strings
 
@@ -140,8 +140,7 @@ var results = fuzz.extract(query, choices);
 
 Less simple: array of objects with options
 
-Processor function takes a choice and returns a string which will be used for scoring. Default scorer is ratio.
-
+Processor function takes a choice and returns the string which will be used for scoring. Default scorer is ratio.
 ```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
@@ -158,6 +157,8 @@ var results = fuzz.extract(query, choices, options);
   [ { id: 345, modelnumber: '123abc' }, 67 ] ]
 
 ```
+
+The processor function will only run on choices so if your function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior. 
 
 
 **Performance Optimization**
