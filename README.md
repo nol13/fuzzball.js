@@ -9,8 +9,7 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
-Dependencies
-============
+# Dependencies
 
 -  jsdifflib
 -  heap.js
@@ -19,8 +18,7 @@ Dependencies
 -  lodash.difference
 -  lodash.uniq
 
-Installation
-============
+# Installation
 
 Using NPM
 
@@ -35,8 +33,7 @@ var fuzz = require('fuzzball');
 </script>
 ```
 
-Usage
-=====
+# Usage
 
 ```js
 var fuzz = require('fuzzball');
@@ -97,7 +94,7 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
 
-**Pre-Processing**
+### Pre-Processing
 
 Pre-processing run by default unless options.full_process is set to false.
 ```js
@@ -113,7 +110,7 @@ fuzz.full_process("myt^eXt!");
         myt ext
 ```
 
-**International** (a.k.a. non-ascii)
+### International (a.k.a. non-ascii)
 
 ```js
 // currently full_process must be set to false if useCollator is true
@@ -123,9 +120,9 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-**Batch Extract** (search list of choices for top results)
+### Batch Extract (search list of choices for top results)
 
-Simple: array of strings
+**Simple:** array of strings
 
 ```js
 var query = "polar bear";
@@ -138,7 +135,7 @@ var results = fuzz.extract(query, choices);
   [ 'brown bear', 60 ] ]
 ```
 
-Less simple: array of objects with options
+**Less simple:** array of objects with options
 
 Processor function takes a choice and returns the string which will be used for scoring. Default scorer is ratio.
 ```js
@@ -161,7 +158,7 @@ var results = fuzz.extract(query, choices, options);
 The processor function will only run on choices so if your function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior. 
 
 
-**Performance Optimization**
+### Performance Optimization
 
 If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. 
 
@@ -200,7 +197,7 @@ var results = fuzz.extract(query, choices, options);
 If just using the basic ratio still not fast enough.. there are some nice bk-tree packages, but don't think the set/sort algorithms satisfy all of the assumptions for using that.(?)
 
 
-**Alternate Ratio Calculations**
+### Alternate Ratio Calculations
 
 
 If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to the leven algorithm, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost. (bolted on a bit of the collator code from fast-levenshtein into leven as well)
