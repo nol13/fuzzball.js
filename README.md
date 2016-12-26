@@ -165,7 +165,7 @@ The processor function will only run on choices so if your function modifies tex
 
 If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. 
 
-If using either "token_sort" scorer, you can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
+If using either "token_sort" scorer, you can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 var query = fuzz.full_process("126-Abzx");
@@ -181,7 +181,7 @@ var options = {
 var results = fuzz.extract(query, choices, options);
 ```
 
-If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)" )
+If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 var query = fuzz.full_process("126-Abzx");
