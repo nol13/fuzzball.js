@@ -124,7 +124,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
 
 **Simple:** array of strings, or object in form of {key: "string"}
 
-With choices array
+With array of strings
 ```js
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
@@ -137,7 +137,7 @@ var results = fuzz.extract(query, choices);
   [ 'brown bear', 60, '0' ] ]
 ```
 
-With choices object
+With object
 ```js
 var query = "polar bear";
 var choicesObj = {id1: "brown bear", id2: "polar bear", id3: "koala bear"};
@@ -151,9 +151,9 @@ var results = fuzz.extract(query, choicesObj);
 
 ```
 
-**Less simple:** array of objects, or object in form of {key: object}, with processor function + options
+**Less simple:** array of objects, or object in form of {key: choice}, with processor function + options
 
-Processor function takes a choice and returns the string which will be used for scoring. Default scorer is ratio.
+Processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string. Default scorer is ratio.
 ```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
@@ -166,12 +166,19 @@ var options = {
 
 var results = fuzz.extract(query, choices, options);
 
+// [choice, score, index/key]
 [ [ { id: 347, modelnumber: '456abdzx' }, 71, '2' ],
   [ { id: 345, modelnumber: '123abc' }, 67, '0' ] ]
 
 ```
 
-The processor function will only run on choices so if your function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior. 
+The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior. 
+
+Possibly will have better built-in support for scoring across multiple fields in the future, but can do stuff like..
+
+```js
+var processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
+```
 
 
 ### Performance Optimization
