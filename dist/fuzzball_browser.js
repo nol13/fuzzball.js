@@ -6509,7 +6509,8 @@ module.exports = uniq;
          * @return Integer the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        var numchoices = Object.keys(choices).length;
+        var numchoices = choices && choices.length ? choices.length : Object.keys(choices).length;
+        console.log(numchoices);
         if (!choices || numchoices === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
