@@ -6509,8 +6509,12 @@ module.exports = uniq;
          * @return Integer the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        var numchoices = choices && choices.length ? choices.length : Object.keys(choices).length;
-        console.log(numchoices);
+        var isArray = false;
+        if (choices && choices.length && Array.isArray(choices)) {
+            var numchoices = choices.length;
+            isArray = true; //if array don't check hasOwnProperty every time below
+        }
+        else var numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
@@ -6536,9 +6540,9 @@ module.exports = uniq;
             var query_tokens = tokenize(query);
             tset = true;
         }
-        
+
         for (var c in choices) {
-            if (choices.hasOwnProperty(c)) {
+            if (isArray || choices.hasOwnProperty(c)) {
                 options.tokens = undefined;
                 options.proc_sorted = false;
                 if (tsort) {
@@ -7011,6 +7015,12 @@ module.exports = uniq;
             };
         } ());
     }
+    // isArray polyfill
+    if (typeof Array.isArray === 'undefined') {
+        Array.isArray = function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Array]';
+        }
+    };
 
     var fuzzball = {
         distance: distance,
