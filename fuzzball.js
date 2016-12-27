@@ -217,7 +217,7 @@
          * Return the top scoring items from an array of choices
          *
          * @param query String the search term.
-         * @param choices [String] array of strings, or array of objects if processor is supplied
+         * @param choices [String] array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param [options_p] Additional options.
          * @param [options_p.scorer] function that takes two strings and returns a score
          * @param [options_p.processor] function that takes each choice and outputs a string to be used for Scoring
@@ -230,8 +230,8 @@
          * @return Integer the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-
-        if (!choices || choices.length === 0) console.log("No choices");
+        var numchoices = Object.keys(choices).length;
+        if (!choices || numchoices === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
         if (!options.scorer || typeof options.scorer !== "function") {
@@ -256,34 +256,37 @@
             var query_tokens = tokenize(query);
             tset = true;
         }
-        for (var c = 0; c < choices.length; c++) {
-            options.tokens = undefined;
-            options.proc_sorted = false;
-            if (tsort) {
-                options.proc_sorted = true;
-                if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
+        
+        for (var c in choices) {
+            if (choices.hasOwnProperty(c)) {
+                options.tokens = undefined;
+                options.proc_sorted = false;
+                if (tsort) {
+                    options.proc_sorted = true;
+                    if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
+                    else {
+                        var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = _process_and_sort(mychoice);
+                    }
+                    var result = options.scorer(proc_sorted_query, mychoice, options);
+                }
+                else if (tset) {
+                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
+                    else options.tokens = [query_tokens, tokenize(mychoice)]
+                    //query and mychoice only used for validation here
+                    var result = options.scorer(query, mychoice, options);
+                }
                 else {
                     var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                    mychoice = _process_and_sort(mychoice);
+                    if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
+                    var result = options.scorer(query, mychoice, options);
                 }
-                var result = options.scorer(proc_sorted_query, mychoice, options);
+                if (result > options.cutoff) results.push([choices[c], result, c]);
             }
-            else if (tset) {
-                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
-                else options.tokens = [query_tokens, tokenize(mychoice)]
-                //query and mychoice only used for validation here
-                var result = options.scorer(query, mychoice, options);
-            }
-            else {
-                var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
-                var result = options.scorer(query, mychoice, options);
-            }
-            if (result > options.cutoff) results.push([choices[c],result]);
-        } 
+        }
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
-        if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < choices.length) {
+        if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices) {
             var cmp = function(a, b) { return a[1] - b[1]; }
             results = Heap.nlargest(results, options.limit, cmp);
         }

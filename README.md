@@ -122,20 +122,36 @@ fuzz.ratio("this is ä test", "this is a test", options);
 
 ### Batch Extract (search list of choices for top results)
 
-**Simple:** array of strings
+**Simple:** array of strings, or object in form of {key: "string"}
 
+With choices array
 ```js
 var query = "polar bear";
 var choices = ["brown bear", "polar bear", "koala bear"];
 
 var results = fuzz.extract(query, choices);
 
-[ [ 'polar bear', 100 ],
-  [ 'koala bear', 80 ],
-  [ 'brown bear', 60 ] ]
+// [choice, score, index]
+[ [ 'polar bear', 100, '1' ],
+  [ 'koala bear', 80, '2' ],
+  [ 'brown bear', 60, '0' ] ]
 ```
 
-**Less simple:** array of objects with options
+With choices object
+```js
+var query = "polar bear";
+var choicesObj = {id1: "brown bear", id2: "polar bear", id3: "koala bear"};
+
+var results = fuzz.extract(query, choicesObj);
+
+// [choice, score, key]
+[ [ 'polar bear', 100, 'id2' ],
+  [ 'koala bear', 80, 'id3' ],
+  [ 'brown bear', 60, 'id1' ] ]
+
+```
+
+**Less simple:** array of objects, or object in form of {key: object}, with processor function + options
 
 Processor function takes a choice and returns the string which will be used for scoring. Default scorer is ratio.
 ```js
@@ -150,8 +166,8 @@ var options = {
 
 var results = fuzz.extract(query, choices, options);
 
-[ [ { id: 347, modelnumber: '456abdzx' }, 71 ],
-  [ { id: 345, modelnumber: '123abc' }, 67 ] ]
+[ [ { id: 347, modelnumber: '456abdzx' }, 71, '2' ],
+  [ { id: 345, modelnumber: '123abc' }, 67, '0' ] ]
 
 ```
 
