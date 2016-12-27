@@ -6711,30 +6711,55 @@ module.exports = uniq;
         // calculate current row distance from previous row
         for (i = 0; i < str1Len; ++i) {
             nextCol = i + 1;
+            if (!useCollator) {
+                for (j = 0; j < str2Len; ++j) {
+                    curCol = nextCol;
 
-            for (j = 0; j < str2Len; ++j) {
-                curCol = nextCol;
+                    // substution
+                    var strCmp = str1.charCodeAt(i) === str2Char[j];
 
-                // substution
-                var strCmp = useCollator ? (0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]))) : str1.charCodeAt(i) === str2Char[j];
+                    nextCol = prevRow[j] + (strCmp ? 0 : subcost);
 
-                nextCol = prevRow[j] + (strCmp ? 0 : subcost);
+                    // insertion
+                    tmp = curCol + 1;
+                    if (nextCol > tmp) {
+                        nextCol = tmp;
+                    }
+                    // deletion
+                    tmp = prevRow[j + 1] + 1;
+                    if (nextCol > tmp) {
+                        nextCol = tmp;
+                    }
 
-                // insertion
-                tmp = curCol + 1;
-                if (nextCol > tmp) {
-                    nextCol = tmp;
+                    // copy current col value into previous (in preparation for next iteration)
+                    prevRow[j] = curCol;
                 }
-                // deletion
-                tmp = prevRow[j + 1] + 1;
-                if (nextCol > tmp) {
-                    nextCol = tmp;
-                }
 
-                // copy current col value into previous (in preparation for next iteration)
-                prevRow[j] = curCol;
             }
+            else {
+                for (j = 0; j < str2Len; ++j) {
+                    curCol = nextCol;
 
+                    // substution
+                    var strCmp = 0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]));
+
+                    nextCol = prevRow[j] + (strCmp ? 0 : subcost);
+
+                    // insertion
+                    tmp = curCol + 1;
+                    if (nextCol > tmp) {
+                        nextCol = tmp;
+                    }
+                    // deletion
+                    tmp = prevRow[j + 1] + 1;
+                    if (nextCol > tmp) {
+                        nextCol = tmp;
+                    }
+
+                    // copy current col value into previous (in preparation for next iteration)
+                    prevRow[j] = curCol;
+                }
+            }
             // copy last col value into previous (in preparation for next iteration)
             prevRow[j] = nextCol;
         }
@@ -6779,20 +6804,32 @@ module.exports = uniq;
             charCodeCache[i] = a.charCodeAt(i);
             arr[i] = ++i;
         }
-
-        while (j < bLen) {
-            bCharCode = b.charCodeAt(j);
-            tmp = j++;
-            ret = j;
-
-            for (i = 0; i < aLen; i++) {
-                tmp2 = useCollator ? (0 === collator.compare(String.fromCharCode(bCharCode), String.fromCharCode(charCodeCache[i])) ? tmp : tmp + subcost) : bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
-                //tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
-                tmp = arr[i];
-                ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+        if (!useCollator) {  //checking for collator inside while 2x slower
+            while (j < bLen) {
+                bCharCode = b.charCodeAt(j);
+                tmp = j++;
+                ret = j;
+                for (i = 0; i < aLen; i++) {
+                    tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
+                    tmp = arr[i];
+                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+                }
             }
         }
+        else {
+            while (j < bLen) {
+                bCharCode = b.charCodeAt(j);
+                tmp = j++;
+                ret = j;
 
+                for (i = 0; i < aLen; i++) {
+                    tmp2 = 0 === collator.compare(String.fromCharCode(bCharCode), String.fromCharCode(charCodeCache[i])) ? tmp : tmp + subcost;
+                    //tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
+                    tmp = arr[i];
+                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+                }
+            }
+        }
         return ret;
     };
 
