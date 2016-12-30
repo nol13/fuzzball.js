@@ -6414,8 +6414,8 @@ module.exports = uniq;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (!options.proc_sorted) {
-            str1 = _process_and_sort(str1);
-            str2 = _process_and_sort(str2);
+            str1 = process_and_sort(str1);
+            str2 = process_and_sort(str2);
         }
         return _ratio(str1, str2, options);
     }
@@ -6440,8 +6440,8 @@ module.exports = uniq;
         if (!_validate(str2)) return 0;
         options.partial = true;
         if (!options.proc_sorted) {
-            str1 = _process_and_sort(str1);
-            str2 = _process_and_sort(str2);
+            str1 = process_and_sort(str1);
+            str2 = process_and_sort(str2);
         }
         return _partial_ratio(str1, str2, options);
     }
@@ -6493,7 +6493,7 @@ module.exports = uniq;
 
     function extract(query, choices, options_p) {
         /**
-         * Return the top scoring items from an array of choices
+         * Return the top scoring items from an array (or assoc array) of choices
          *
          * @param query String the search term.
          * @param choices [String] array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
@@ -6510,11 +6510,12 @@ module.exports = uniq;
          */
         var options = _clone_and_set_option_defaults(options_p);
         var isArray = false;
+        var numchoices;
         if (choices && choices.length && Array.isArray(choices)) {
-            var numchoices = choices.length;
+            numchoices = choices.length;
             isArray = true; //if array don't check hasOwnProperty every time below
         }
-        else var numchoices = Object.keys(choices).length;
+        else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
@@ -6533,7 +6534,7 @@ module.exports = uniq;
         var tsort = false;
         var tset = false;
         if (options.scorer.name === "token_sort_ratio" || options.scorer.name === "partial_token_sort_ratio") {
-            var proc_sorted_query = _process_and_sort(query);
+            var proc_sorted_query = process_and_sort(query);
             tsort = true;
         }
         else if (options.scorer.name === "token_set_ratio" || options.scorer.name === "partial_token_set_ratio") {
@@ -6550,7 +6551,7 @@ module.exports = uniq;
                     if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
                     else {
                         var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        mychoice = _process_and_sort(mychoice);
+                        mychoice = process_and_sort(mychoice);
                     }
                     var result = options.scorer(proc_sorted_query, mychoice, options);
                 }
@@ -6666,7 +6667,7 @@ module.exports = uniq;
         return Math.max.apply(null, scores);
     }
 
-    function _process_and_sort(str) {
+    function process_and_sort(str) {
         return str.match(/\S+/g).sort().join(" ").trim();
     }
 
@@ -6690,7 +6691,7 @@ module.exports = uniq;
         var useCollator = (options && collator && options.useCollator);
         var subcost = 1;
         //to match behavior of python-Levenshtein and fuzzywuzzy
-        if (options.subcost && typeof options.subcost === "number") subcost = options.subcost;
+        if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
         var str1Len = str1.length,
             str2Len = str2.length;
 
@@ -6776,7 +6777,7 @@ module.exports = uniq;
         var useCollator = (options && collator && options.useCollator);
         var subcost = 1;
         //to match behavior of python-Levenshtein and fuzzywuzzy
-        if (options.subcost && typeof options.subcost === "number") subcost = options.subcost;
+        if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
 
         if (a === b) {
             return 0;
@@ -7071,7 +7072,7 @@ module.exports = uniq;
         WRatio: WRatio,
         full_process: full_process,
         extract: extract,
-        process_and_sort: _process_and_sort,
+        process_and_sort: process_and_sort,
         unique_tokens: tokenize
     };
 
@@ -7094,4 +7095,5 @@ module.exports = uniq;
         window.fuzzball = fuzzball;
     }
 } ());
+
 },{"damlev":"/node_modules/damlev/damlev.js","difflib":2,"heap":3,"lodash.difference":"/node_modules/lodash.difference/index.js","lodash.intersection":"/node_modules/lodash.intersection/index.js","lodash.uniq":"/node_modules/lodash.uniq/index.js"}]},{},[]);
