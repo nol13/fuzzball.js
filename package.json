@@ -34,7 +34,8 @@
     "matching",
     "search",
     "ratio",
-    "distance"
+    "distance",
+    "compare"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",

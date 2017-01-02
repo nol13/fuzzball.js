@@ -15,14 +15,14 @@
         /**
          * Calculate levenshtein distance of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein distance (0 and above).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -35,14 +35,14 @@
         /**
          * Calculate levenshtein ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -56,14 +56,14 @@
         /**
          * Calculate partial levenshtein ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -77,14 +77,14 @@
         /**
          * Calculate token set ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -98,14 +98,14 @@
         /**
          * Calculate partial token ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -120,14 +120,14 @@
         /**
          * Calculate token sort ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -145,14 +145,14 @@
         /**
          * Calculate partial token sort ratio of the two strings.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
@@ -171,14 +171,14 @@
         /**
          * Calculate weighted ratio of the two strings, taking best score of various methods.
          *
-         * @param str1 String the first string.
-         * @param str2 String the second string.
-         * @param [options_p] Additional options.
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         //str1 = full_process(str1, options.force_ascii);  //fuzzywuzzy runs no matter what, reason? going by options.full_process
@@ -216,18 +216,18 @@
         /**
          * Return the top scoring items from an array (or assoc array) of choices
          *
-         * @param query String the search term.
-         * @param choices [String] array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
-         * @param [options_p] Additional options.
-         * @param [options_p.scorer] function that takes two strings and returns a score
-         * @param [options_p.processor] function that takes each choice and outputs a string to be used for Scoring
-         * @param [options_p.limit] Integer (optional) max number of results to return, returns all if not supplied
-         * @param [options_p.cutoff] Integer minimum score that will get returned
-         * @param [options_p.useCollator] Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param [options_p.full_process] Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param [options_p.force_ascii] Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
-         * @param [options_p.subcost] Substitution cost, default 1 for distance, 2 for all ratios
-         * @return Integer the levenshtein ratio (0-100).
+         * @param {string} query - the search term.
+         * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
+         * @param {Object} [options_p] - Additional options.
+         * @param {function} [options_p.scorer] - takes two strings and returns a score
+         * @param {function} [options_p.processor] - takes each choice and outputs a string to be used for Scoring
+         * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
+         * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         var isArray = false;
