@@ -9,22 +9,14 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
-# Dependencies
-
--  jsdifflib
--  heap.js
--  damlev
--  lodash.intersection
--  lodash.difference
--  lodash.uniq
 
 # Installation
 
-Using NPM
+**Using NPM**
 
     npm install fuzzball
 
-Browser
+**Browser**
 
 ```html
 <script src="fuzzball_browser.min.js"></script>
@@ -32,6 +24,7 @@ Browser
 var fuzz = require('fuzzball');
 </script>
 ```
+You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios or any alternative algorithms.
 
 # Usage
 
