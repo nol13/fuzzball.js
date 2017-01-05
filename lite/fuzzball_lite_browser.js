@@ -549,36 +549,38 @@ module.exports = require('./lib/heap');
             var query_tokens = tokenize(query);
             tset = true;
         }
-
+        var idx, mychoice, result;
         for (var c in choices) {
             if (isArray || choices.hasOwnProperty(c)) {
                 options.tokens = undefined;
                 options.proc_sorted = false;
                 if (tsort) {
                     options.proc_sorted = true;
-                    if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
+                    if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
-                        var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                         mychoice = process_and_sort(mychoice);
                     }
-                    var result = options.scorer(proc_sorted_query, mychoice, options);
+                    result = options.scorer(proc_sorted_query, mychoice, options);
                 }
                 else if (tset) {
-                    var mychoice = "x"; //dummy string so it validates
+                    mychoice = "x"; //dummy string so it validates
                     if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                         options.tokens = [query_tokens, tokenize(mychoice)]
                     }
                     //query and mychoice only used for validation here
-                    var result = options.scorer(query, mychoice, options);
+                    result = options.scorer(query, mychoice, options);
                 }
                 else {
-                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                     if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
-                    var result = options.scorer(query, mychoice, options);
+                    result = options.scorer(query, mychoice, options);
                 }
-                if (result > options.cutoff) results.push([choices[c], result, c]);
+                if (isArray) idx = parseInt(c);
+                else idx = c;
+                if (result > options.cutoff) results.push([choices[c], result, idx]);
             }
         }
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
@@ -648,7 +650,6 @@ module.exports = require('./lib/heap');
     }
 
      function tokenize(str) {
-        //uniqe tokens
         return _uniq(str.match(/\S+/g));
     }
 

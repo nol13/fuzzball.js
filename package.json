@@ -17,7 +17,10 @@
     "difflib": ">=0.2.4",
     "heap": ">=0.2.0",
     "lodash.difference": "^4.5.0",
+    "lodash.foreach": "^4.5.0",
     "lodash.intersection": "^4.4.0",
+    "lodash.isarray": "^4.0.0",
+    "lodash.keys": "^4.2.0",
     "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {

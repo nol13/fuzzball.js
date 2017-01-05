@@ -125,9 +125,9 @@ var choices = ["brown bear", "polar bear", "koala bear"];
 var results = fuzz.extract(query, choices);
 
 // [choice, score, index]
-[ [ 'polar bear', 100, '1' ],
-  [ 'koala bear', 80, '2' ],
-  [ 'brown bear', 60, '0' ] ]
+[ [ 'polar bear', 100, 1 ],
+  [ 'koala bear', 80, 2 ],
+  [ 'brown bear', 60, 0 ] ]
 ```
 
 With object
@@ -160,8 +160,8 @@ var options = {
 var results = fuzz.extract(query, choices, options);
 
 // [choice, score, index/key]
-[ [ { id: 347, modelnumber: '456abdzx' }, 71, '2' ],
-  [ { id: 345, modelnumber: '123abc' }, 67, '0' ] ]
+[ [ { id: 347, modelnumber: '456abdzx' }, 71, 2 ],
+  [ { id: 345, modelnumber: '123abc' }, 67, 0 ] ]
 
 ```
 

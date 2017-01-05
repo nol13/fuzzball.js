@@ -3,13 +3,17 @@
     var difflib = require('difflib');
     var Heap = require('heap');
     var damlev = require('damlev');
-    var _intersect = require('lodash.intersection');
+    var _intersect = require('lodash.intersection'); //for whatever reason lodash a bit faster when included as individual packages
     var _difference = require('lodash.difference');
     var _uniq = require('lodash.uniq');
-/** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
+    var _forEach = require('lodash.foreach');
+    var _keys = require('lodash.keys');
+    var _isArray = require('lodash.isarray');
+    
+    /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
-/** Public functions */
+    /** Public functions */
 
     function distance(str1, str2, options_p) {
         /**
@@ -230,13 +234,11 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        var isArray = false;
         var numchoices;
-        if (choices && choices.length && Array.isArray(choices)) {
+        if (_isArray(choices)) {
             numchoices = choices.length;
-            isArray = true; //if array don't check hasOwnProperty every time below
         }
-        else numchoices = Object.keys(choices).length;
+        else numchoices = _keys(choices).length;
         if (!choices || numchoices === 0) console.log("No choices");
         if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
         if (!options.processor) options.processor = function(x) {return x;}
@@ -263,37 +265,37 @@
             tset = true;
         }
 
-        for (var c in choices) {
-            if (isArray || choices.hasOwnProperty(c)) {
-                options.tokens = undefined;
-                options.proc_sorted = false;
-                if (tsort) {
-                    options.proc_sorted = true;
-                    if (choices[c].proc_sorted) var mychoice = choices[c].proc_sorted;
-                    else {
-                        var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        mychoice = process_and_sort(mychoice);
-                    }
-                    var result = options.scorer(proc_sorted_query, mychoice, options);
-                }
-                else if (tset) {
-                    var mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
-                    else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        options.tokens = [query_tokens, tokenize(mychoice)]
-                    }
-                    //query and mychoice only used for validation here
-                    var result = options.scorer(query, mychoice, options);
-                }
+        var result, mychoice;
+        _forEach(choices, function (value, key) {
+            options.tokens = undefined;
+            options.proc_sorted = false;
+            if (tsort) {
+                options.proc_sorted = true;
+                if (value.proc_sorted) mychoice = value.proc_sorted;
                 else {
-                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                    if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
-                    var result = options.scorer(query, mychoice, options);
+                    mychoice = pre_processor(options.processor(value), options.force_ascii);
+                    mychoice = process_and_sort(mychoice);
                 }
-                if (result > options.cutoff) results.push([choices[c], result, c]);
+                result = options.scorer(proc_sorted_query, mychoice, options);
             }
-        }
+            else if (tset) {
+                mychoice = "x"; //dummy string so it validates
+                if (value.tokens) options.tokens = [query_tokens, value.tokens];
+                else {
+                    mychoice = pre_processor(options.processor(value), options.force_ascii);
+                    options.tokens = [query_tokens, tokenize(mychoice)]
+                }
+                //query and mychoice only used for validation here
+                result = options.scorer(query, mychoice, options);
+            }
+            else {
+                mychoice = pre_processor(options.processor(value), options.force_ascii);
+                if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
+                result = options.scorer(query, mychoice, options);
+            }
+            if (result > options.cutoff) results.push([value, result, key]);
+        });
+
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices) {
             var cmp = function(a, b) { return a[1] - b[1]; }
@@ -396,7 +398,6 @@
     }
 
      function tokenize(str) {
-        //uniqe tokens
         return _uniq(str.match(/\S+/g));
     }
 
@@ -778,12 +779,6 @@
             };
         } ());
     }
-    // isArray polyfill
-    if (typeof Array.isArray === 'undefined') {
-        Array.isArray = function (obj) {
-            return Object.prototype.toString.call(obj) === '[object Array]';
-        }
-    };
 
     var fuzzball = {
         distance: distance,
