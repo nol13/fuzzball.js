@@ -24,7 +24,7 @@ Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios or any alternative algorithms.
+You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios which require difflib or any alternative algorithms.
 
 # Usage
 

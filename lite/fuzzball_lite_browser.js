@@ -564,9 +564,12 @@ module.exports = require('./lib/heap');
                     var result = options.scorer(proc_sorted_query, mychoice, options);
                 }
                 else if (tset) {
-                    var mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    var mychoice = "x"; //dummy string so it validates
                     if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
-                    else options.tokens = [query_tokens, tokenize(mychoice)]
+                    else {
+                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        options.tokens = [query_tokens, tokenize(mychoice)]
+                    }
                     //query and mychoice only used for validation here
                     var result = options.scorer(query, mychoice, options);
                 }
