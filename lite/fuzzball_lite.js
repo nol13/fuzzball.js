@@ -418,6 +418,8 @@
         unique_tokens: tokenize
     };
 
+     module.exports = fuzzball;
+     /*  //need to make handle dependencies right, just using module.exports for now
     // amd
     if (typeof define !== "undefined" && define !== null && define.amd) {
         define(function () {
@@ -435,5 +437,5 @@
     // browser main thread
     else if (typeof window !== "undefined" && window !== null) {
         window.fuzzball = fuzzball;
-    }
+    } */
 } ());

@@ -8082,6 +8082,8 @@ function hasOwnProperty(obj, prop) {
         unique_tokens: tokenize
     };
 
+     module.exports = fuzzball;
+     /*  //need to make handle dependencies right, just using module.exports for now
     // amd
     if (typeof define !== "undefined" && define !== null && define.amd) {
         define(function () {
@@ -8099,7 +8101,7 @@ function hasOwnProperty(obj, prop) {
     // browser main thread
     else if (typeof window !== "undefined" && window !== null) {
         window.fuzzball = fuzzball;
-    }
+    } */
 } ());
 
 },{"damlev":2,"difflib":3,"heap":5,"lodash.difference":7,"lodash.foreach":8,"lodash.intersection":9,"lodash.isarray":10,"lodash.keys":11,"lodash.uniq":12}]},{},[]);

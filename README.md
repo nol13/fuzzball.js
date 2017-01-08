@@ -16,7 +16,7 @@ Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
     npm install fuzzball
 
-**Browser**
+**Browser** (using pre-built standalone version)
 
 ```html
 <script src="fuzzball_browser.min.js"></script>

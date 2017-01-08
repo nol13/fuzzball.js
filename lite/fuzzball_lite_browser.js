@@ -821,6 +821,8 @@ module.exports = require('./lib/heap');
         unique_tokens: tokenize
     };
 
+     module.exports = fuzzball;
+     /*  //need to make handle dependencies right, just using module.exports for now
     // amd
     if (typeof define !== "undefined" && define !== null && define.amd) {
         define(function () {
@@ -838,7 +840,7 @@ module.exports = require('./lib/heap');
     // browser main thread
     else if (typeof window !== "undefined" && window !== null) {
         window.fuzzball = fuzzball;
-    }
+    } */
 } ());
 
 },{"./lodash.custom.min.js":1,"heap":2}]},{},[]);
