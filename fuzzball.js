@@ -311,10 +311,12 @@
 
     function _lev_distance(str1, str2, options) {
         if (!options.ratio_alg) return _leven(str1, str2, options);
-        else if (options.ratio_alg === "fast_levenshtein") return fast_levenshtein(str1, str2, options); //keeping till leven edits fully tested
-        else if (options.ratio_alg === "sift3") return (2 * sift3Distance(str1, str2, options))
-        else if (options.ratio_alg === "sift4") return (2 * sift4Distance(str1, str2, options))
-        else if (options.ratio_alg === "damlev") return (2 * damlev.default(str1, str2))
+        var mult = 1;
+        if (options.forRatio) mult = 2;  // set in _ratio but not in distance
+        if (options.ratio_alg === "fast_levenshtein") return (mult * fast_levenshtein(str1, str2, options)); //keeping till leven edits fully tested
+        else if (options.ratio_alg === "sift3") return (mult * sift3Distance(str1, str2, options))
+        else if (options.ratio_alg === "sift4") return (mult * sift4Distance(str1, str2, options))
+        else if (options.ratio_alg === "damlev") return (mult * damlev.default(str1, str2))
         else return _leven(str1, str2, options);
     }
 
@@ -363,6 +365,7 @@
         }
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
         if (typeof options.subcost === "undefined") options.subcost = 2;
+        options.forRatio = true;
         var levdistance = _lev_distance(str1, str2, options);
         var lensum = str1.length + str2.length ; //TODO: account for unicode double byte astral stuff
         return Math.round(100 * ((lensum - levdistance)/lensum));
