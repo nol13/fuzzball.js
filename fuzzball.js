@@ -312,9 +312,9 @@
     function _lev_distance(str1, str2, options) {
         if (!options.ratio_alg) return _leven(str1, str2, options);
         else if (options.ratio_alg === "fast_levenshtein") return fast_levenshtein(str1, str2, options); //keeping till leven edits fully tested
-        else if (options.ratio_alg === "sift3") return sift3Distance(str1, str2, options)
-        else if (options.ratio_alg === "sift4") return sift4Distance(str1, str2, options)
-        else if (options.ratio_alg === "damlev") return damlev.default(str1, str2)
+        else if (options.ratio_alg === "sift3") return (2 * sift3Distance(str1, str2, options))
+        else if (options.ratio_alg === "sift4") return (2 * sift4Distance(str1, str2, options))
+        else if (options.ratio_alg === "damlev") return (2 * damlev.default(str1, str2))
         else return _leven(str1, str2, options);
     }
 

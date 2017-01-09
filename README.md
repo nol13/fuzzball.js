@@ -216,9 +216,11 @@ If just using the basic ratio still not fast enough.. there are some nice bk-tre
 ### Alternate Ratio Calculations
 
 
-If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to the leven algorithm, however the distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost. (bolted on a bit of the collator code from fast-levenshtein into leven as well)
+If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details. This mirrors the behavior of fuzzywuzzy when not using python-Levenshtein.
 
-The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details.
+Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length).
+
+The default behavior, following the behavior of In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to leven's distance algorithm, however the fuzz.distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost, though it my not be a good idea. (bolted on a bit of the collator code from fast-levenshtein into leven as well) For the other options below distance is doubled in the formula above.
 
 To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
 (also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
