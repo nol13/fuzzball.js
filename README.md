@@ -220,12 +220,12 @@ If you want to use difflib's ratio function for all ratio calculations, which di
 
 Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length).
 
-The default behavior, following the behavior of In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to leven's distance algorithm, however the fuzz.distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost, though it my not be a good idea. (bolted on a bit of the collator code from fast-levenshtein into leven as well) For the other options below distance is doubled in the formula above.
+The default behavior, following the behavior of In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to leven's distance algorithm, however the fuzz.distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost, though it may not be a good idea. (bolted on a bit of the collator code from fast-levenshtein into leven as well) For the other options below distance is doubled in the formula above.
 
 To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
 (also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
 
 You may also try out the sift3 or sift4 algorithms from mailcheck [described here](https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html)
-These are very fast algorithms that sometimes give "good enough" results. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. Still testing these, but would only recommend at this time if performance is more important than accuracy.
+Still testing these out and they seem to work reasonably well, probably would only recommend them unless speed is more important than accuracy though. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. In my unscientific benchmarks sift3 is ~35% faster than default levin calculation and sift4 ~35% slower.
 
 Setting options.useCollator only works at this time if using the default algorithm.
