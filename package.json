@@ -54,5 +54,6 @@
     "build:lite": "npm run lodash:lite && npm run browserify:lite && npm run uglify:lite",
     "build": "npm run build:reg && npm run build:lite",
     "test": "mocha"
-  }
+  },
+  "runkitExample": "var fuzz = require('fuzzball');"
 }
