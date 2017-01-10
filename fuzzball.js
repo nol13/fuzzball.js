@@ -296,11 +296,11 @@
         });
 
         if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
-        if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices) {
+        if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
             var cmp = function(a, b) { return a[1] - b[1]; }
             results = Heap.nlargest(results, options.limit, cmp);
         }
-        else {
+        else if (!options.unsorted) {
             results = results.sort(function(a,b){return b[1]-a[1];});
         }
         return results;

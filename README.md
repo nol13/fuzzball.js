@@ -146,15 +146,16 @@ var results = fuzz.extract(query, choicesObj);
 
 **Less simple:** array of objects, or object in form of {key: choice}, with processor function + options
 
-Processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string. Default scorer is ratio.
+Optional processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string. Default scorer is ratio.
 ```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var options = {
-        scorer: fuzz.partial_ratio, // any function that takes two strings and returns a score
-        processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string
-        limit: 2, // max number of results, default: no limit
-        cutoff: 50 // lowest score to return, default: 0
+        scorer: fuzz.partial_ratio, // any function that takes two strings and returns a score, default: ratio
+        processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
+        limit: 2, // max number of top results to return, default: no limit / 0.
+        cutoff: 50, // lowest score to return, default: 0
+        unsorted: false // results won't be sorted if true, default: false. If true limit will be ignored.
 };
 
 var results = fuzz.extract(query, choices, options);
@@ -165,7 +166,7 @@ var results = fuzz.extract(query, choices, options);
 
 ```
 
-The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior. 
+The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior.
 
 Possibly will have better built-in support for scoring across multiple fields in the future, but can do stuff like..
 
