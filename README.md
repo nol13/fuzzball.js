@@ -24,7 +24,7 @@ Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios which require difflib or any alternative algorithms.
+You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios which require difflib.
 
 # Usage
 
@@ -72,7 +72,7 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
 
 **Distance**
 
-Unmodified Levenshtein distance without any additional ratio calculations (for Damerau–Levenshtein use fuzz.damlev)
+Unmodified Levenshtein distance without any additional ratio calculations.
 ```js
 fuzz.distance("fuzzy was a bear", "fozzy was a bear");
         1
@@ -216,16 +216,8 @@ If just using the basic ratio still not fast enough.. there are some nice bk-tre
 ### Alternate Ratio Calculations
 
 
-If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. See the documentation of the relevant project for details. This mirrors the behavior of fuzzywuzzy when not using python-Levenshtein.
+If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. Difflib uses the formula 2.0*M / T  where M is the number of matches, and T is the total number of elements in both sequences. This mirrors the behavior of fuzzywuzzy when not using python-Levenshtein.
 
-Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length).
-
-The default behavior, following the behavior of In python-Levenshtein the substitution cost is set to 2 when calculating ratios, which I follow with a small modification to leven's distance algorithm, however the fuzz.distance function still uses a cost of 1 by default. You can override either by passing in an options.subcost, though it may not be a good idea. (bolted on a bit of the collator code from fast-levenshtein into leven as well) For the other options below distance is doubled in the formula above.
-
-To use [damlev's](https://github.com/WatchBeam/damlev) Damerau–Levenshtein distance implementaion use: options.ratio_alg = "damlev".
-(also exposed directly for convenience: fuzz.damlev("string1", "string2"); )
-
-You may also try out the sift3 or sift4 algorithms from mailcheck [described here](https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html)
-Still testing these out and they seem to work reasonably well, probably would only recommend them unless speed is more important than accuracy though. Set options.ratio_alg to "sift3" or "sift4" accodingly. Also may optionally specify options.maxOffset if using either of these. In my unscientific benchmarks sift3 is ~35% faster than default levin calculation and sift4 ~35% slower.
+Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of in python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default if just calculating distance and not a ration. (bolted on a bit of the collator code from fast-levenshtein into the leven code as well)
 
 Setting options.useCollator only works at this time if using the default algorithm.

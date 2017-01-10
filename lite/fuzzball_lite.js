@@ -26,7 +26,7 @@
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        return _lev_distance(str1, str2, options);
+        return _leven(str1, str2, options);
     }
 
     function QRatio(str1, str2, options_p) {
@@ -193,10 +193,6 @@
 
 /** Main Scoring Code */
 
-    function _lev_distance(str1, str2, options) {
-      return _leven(str1, str2, options); // was more options so separate func still, may add back
-    }
-
     function _token_set(str1, str2, options) {
 
         if (!options.tokens) {
@@ -237,7 +233,7 @@
         if (!_validate(str2)) return 0;
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
         if (typeof options.subcost === "undefined") options.subcost = 2;
-        var levdistance = _lev_distance(str1, str2, options);
+        var levdistance = _leven(str1, str2, options);
         var lensum = str1.length + str2.length ; //TODO: account for unicode double byte astral stuff
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }

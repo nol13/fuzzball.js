@@ -2,7 +2,6 @@
     'use strict';
     var difflib = require('difflib');
     var Heap = require('heap');
-    var damlev = require('damlev');
     var _intersect = require('lodash.intersection'); //for whatever reason lodash a bit faster when included as individual packages
     var _difference = require('lodash.difference');
     var _uniq = require('lodash.uniq');
@@ -32,7 +31,7 @@
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        return _lev_distance(str1, str2, options);
+        return _leven(str1, str2, options);
     }
 
     function QRatio(str1, str2, options_p) {
@@ -309,17 +308,6 @@
 
 /** Main Scoring Code */
 
-    function _lev_distance(str1, str2, options) {
-        if (!options.ratio_alg) return _leven(str1, str2, options);
-        var mult = 1;
-        if (options.forRatio) mult = 2;  // set in _ratio but not in distance
-        if (options.ratio_alg === "fast_levenshtein") return (mult * fast_levenshtein(str1, str2, options)); //keeping till leven edits fully tested
-        else if (options.ratio_alg === "sift3") return (mult * sift3Distance(str1, str2, options))
-        else if (options.ratio_alg === "sift4") return (mult * sift4Distance(str1, str2, options))
-        else if (options.ratio_alg === "damlev") return (mult * damlev.default(str1, str2))
-        else return _leven(str1, str2, options);
-    }
-
     function _token_set(str1, str2, options) {
 
         if (!options.tokens) {
@@ -358,7 +346,7 @@
     function _ratio(str1, str2, options) {
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
-        if (options.ratio_alg && options.ratio_alg === "difflib") { //checking for other variants in _lev_distance too
+        if (options.ratio_alg && options.ratio_alg === "difflib") {
             var m = new difflib.SequenceMatcher(null, str1, str2);
             var r = m.ratio();
             return Math.round(100 * r);
@@ -366,7 +354,7 @@
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
         if (typeof options.subcost === "undefined") options.subcost = 2;
         options.forRatio = true;
-        var levdistance = _lev_distance(str1, str2, options);
+        var levdistance = _leven(str1, str2, options);
         var lensum = str1.length + str2.length ; //TODO: account for unicode double byte astral stuff
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }
@@ -406,97 +394,13 @@
 
     /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
 
-    // arrays to re-use
-    var prevRow = [], str2Char = [];
-
     var collator;
     try {
         collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
     } catch (err) {
         console.log("Collator could not be initialized and wouldn't be used");
     }
-    function fast_levenshtein(str1, str2, options) {
-        var useCollator = (options && collator && options.useCollator);
-        var subcost = 1;
-        //to match behavior of python-Levenshtein and fuzzywuzzy
-        if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
-        var str1Len = str1.length,
-            str2Len = str2.length;
 
-        // base cases
-        if (str1Len === 0) return str2Len;
-        if (str2Len === 0) return str1Len;
-
-        // two rows
-        var curCol, nextCol, i, j, tmp;
-
-        // initialise previous row
-        for (i = 0; i < str2Len; ++i) {
-            prevRow[i] = i;
-            str2Char[i] = str2.charCodeAt(i);
-        }
-        prevRow[str2Len] = str2Len;
-
-        // calculate current row distance from previous row
-        for (i = 0; i < str1Len; ++i) {
-            nextCol = i + 1;
-            if (!useCollator) {
-                for (j = 0; j < str2Len; ++j) {
-                    curCol = nextCol;
-
-                    // substution
-                    var strCmp = str1.charCodeAt(i) === str2Char[j];
-
-                    nextCol = prevRow[j] + (strCmp ? 0 : subcost);
-
-                    // insertion
-                    tmp = curCol + 1;
-                    if (nextCol > tmp) {
-                        nextCol = tmp;
-                    }
-                    // deletion
-                    tmp = prevRow[j + 1] + 1;
-                    if (nextCol > tmp) {
-                        nextCol = tmp;
-                    }
-
-                    // copy current col value into previous (in preparation for next iteration)
-                    prevRow[j] = curCol;
-                }
-
-            }
-            else {
-                for (j = 0; j < str2Len; ++j) {
-                    curCol = nextCol;
-
-                    // substution
-                    var strCmp = 0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]));
-
-                    nextCol = prevRow[j] + (strCmp ? 0 : subcost);
-
-                    // insertion
-                    tmp = curCol + 1;
-                    if (nextCol > tmp) {
-                        nextCol = tmp;
-                    }
-                    // deletion
-                    tmp = prevRow[j + 1] + 1;
-                    if (nextCol > tmp) {
-                        nextCol = tmp;
-                    }
-
-                    // copy current col value into previous (in preparation for next iteration)
-                    prevRow[j] = curCol;
-                }
-            }
-            // copy last col value into previous (in preparation for next iteration)
-            prevRow[j] = nextCol;
-        }
-
-        return nextCol;
-    }
-
-    // testing if faster than fast-levenshtein..
     /** from https://github.com/sindresorhus/leven slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
     var arr = [];
     var charCodeCache = [];
@@ -561,154 +465,6 @@
         }
         return ret;
     };
-
-    /** from https://github.com/mailcheck/mailcheck */
-    function sift3Distance(s1, s2, options) {
-        if (s1 == null || s1.length === 0) {
-            if (s2 == null || s2.length === 0) {
-                return 0;
-            } else {
-                return s2.length;
-            }
-        }
-
-        if (s2 == null || s2.length === 0) {
-            return s1.length;
-        }
-
-        var c = 0;
-        var offset1 = 0;
-        var offset2 = 0;
-        var lcs = 0;
-        var maxOffset;
-        if (options.maxOffset && typeof options.maxOffset === "number") {
-            maxOffset = options.maxOffset;
-        }
-        else {
-            maxOffset = 5; //default
-        }
-
-        while ((c + offset1 < s1.length) && (c + offset2 < s2.length)) {
-            if (s1.charAt(c + offset1) == s2.charAt(c + offset2)) {
-                lcs++;
-            } else {
-                offset1 = 0;
-                offset2 = 0;
-                for (var i = 0; i < maxOffset; i++) {
-                    if ((c + i < s1.length) && (s1.charAt(c + i) == s2.charAt(c))) {
-                        offset1 = i;
-                        break;
-                    }
-                    if ((c + i < s2.length) && (s1.charAt(c) == s2.charAt(c + i))) {
-                        offset2 = i;
-                        break;
-                    }
-                }
-            }
-            c++;
-        }
-        return (s1.length + s2.length) / 2 - lcs;
-    }
-
-    /** from https://github.com/mailcheck/mailcheck */
-    function sift4Distance(s1, s2, options) {
-        // sift4: https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html
-        var maxOffset;
-        if (options.maxOffset && typeof options.maxOffset === "number") {
-            maxOffset = options.maxOffset;
-        }
-        else {
-            maxOffset = 5; //default
-        }
-
-        if (!s1 || !s1.length) {
-            if (!s2) {
-                return 0;
-            }
-            return s2.length;
-        }
-
-        if (!s2 || !s2.length) {
-            return s1.length;
-        }
-
-        var l1 = s1.length;
-        var l2 = s2.length;
-
-        var c1 = 0;  //cursor for string 1
-        var c2 = 0;  //cursor for string 2
-        var lcss = 0;  //largest common subsequence
-        var local_cs = 0; //local common substring
-        var trans = 0;  //number of transpositions ('ab' vs 'ba')
-        var offset_arr = [];  //offset pair array, for computing the transpositions
-
-        while ((c1 < l1) && (c2 < l2)) {
-            if (s1.charAt(c1) == s2.charAt(c2)) {
-                local_cs++;
-                var isTrans = false;
-                //see if current match is a transposition
-                var i = 0;
-                while (i < offset_arr.length) {
-                    var ofs = offset_arr[i];
-                    if (c1 <= ofs.c1 || c2 <= ofs.c2) {
-                        // when two matches cross, the one considered a transposition is the one with the largest difference in offsets
-                        isTrans = Math.abs(c2 - c1) >= Math.abs(ofs.c2 - ofs.c1);
-                        if (isTrans) {
-                            trans++;
-                        } else {
-                            if (!ofs.trans) {
-                                ofs.trans = true;
-                                trans++;
-                            }
-                        }
-                        break;
-                    } else {
-                        if (c1 > ofs.c2 && c2 > ofs.c1) {
-                            offset_arr.splice(i, 1);
-                        } else {
-                            i++;
-                        }
-                    }
-                }
-                offset_arr.push({
-                    c1: c1,
-                    c2: c2,
-                    trans: isTrans
-                });
-            } else {
-                lcss += local_cs;
-                local_cs = 0;
-                if (c1 != c2) {
-                    c1 = c2 = Math.min(c1, c2);  //using min allows the computation of transpositions
-                }
-                //if matching characters are found, remove 1 from both cursors (they get incremented at the end of the loop)
-                //so that we can have only one code block handling matches 
-                for (var j = 0; j < maxOffset && (c1 + j < l1 || c2 + j < l2); j++) {
-                    if ((c1 + j < l1) && (s1.charAt(c1 + j) == s2.charAt(c2))) {
-                        c1 += j - 1;
-                        c2--;
-                        break;
-                    }
-                    if ((c2 + j < l2) && (s1.charAt(c1) == s2.charAt(c2 + j))) {
-                        c1--;
-                        c2 += j - 1;
-                        break;
-                    }
-                }
-            }
-            c1++;
-            c2++;
-            // this covers the case where the last match is on the last token in list, so that it can compute transpositions correctly
-            if ((c1 >= l1) || (c2 >= l2)) {
-                lcss += local_cs;
-                local_cs = 0;
-                c1 = c2 = Math.min(c1, c2);
-            }
-        }
-        lcss += local_cs;
-        return Math.round(Math.max(l1, l2) - lcss + trans); //add the cost of transpositions to the final result
-    }
-
 
 /**    Utils   */
 
@@ -785,7 +541,6 @@
 
     var fuzzball = {
         distance: distance,
-        damlev: damlev.default,
         ratio: QRatio,
         partial_ratio: partial_ratio,
         token_set_ratio: token_set_ratio,
@@ -800,23 +555,4 @@
     };
 
      module.exports = fuzzball;
-     /*  //need to make handle dependencies right, just using module.exports for now
-    // amd
-    if (typeof define !== "undefined" && define !== null && define.amd) {
-        define(function () {
-            return fuzzball;
-        });
-    }
-    // commonjs
-    else if (typeof module !== "undefined" && module !== null && typeof exports !== "undefined" && module.exports === exports) {
-        module.exports = fuzzball;
-    }
-    // web worker
-    else if (typeof self !== "undefined" && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
-        self.fuzzball = fuzzball;
-    }
-    // browser main thread
-    else if (typeof window !== "undefined" && window !== null) {
-        window.fuzzball = fuzzball;
-    } */
 } ());
