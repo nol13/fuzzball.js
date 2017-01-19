@@ -506,7 +506,7 @@ module.exports = require('./lib/heap');
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
-         * @param {function} [options_p.scorer] - takes two strings and returns a score
+         * @param {function} [options_p.scorer] - takes two strings, or string and object, and returns a score
          * @param {function} [options_p.processor] - takes each choice and outputs a string to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
@@ -514,7 +514,7 @@ module.exports = require('./lib/heap');
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @returns {number} - the levenshtein ratio (0-100).
+         * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         var isArray = false;
@@ -529,14 +529,18 @@ module.exports = require('./lib/heap');
         if (!options.processor) options.processor = function(x) {return x;}
         if (!options.scorer || typeof options.scorer !== "function") {
             options.scorer = QRatio;
-            console.log("Using default scorer");
+            console.log("Using default scorer 'ratio'");
         }
+        var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
-        options.full_process = false;
-        query = pre_processor(query, options.force_ascii);
-        if (query.length === 0) console.log("Processed query is empty string");
+        var proc_query = pre_processor(query, options.force_ascii);
+        if (!isCustom) { // if custom scorer func let scorer handle it
+            options.full_process = false;
+            query = proc_query
+        }
+        if (proc_query.length === 0) console.log("Processed query is empty string");
         var results = [];
         var anyblank = false;
         var tsort = false;
@@ -573,9 +577,14 @@ module.exports = require('./lib/heap');
                     //query and mychoice only used for validation here
                     result = options.scorer(query, mychoice, options);
                 }
+                else if (isCustom) {
+                    // options.full_process should be unmodified, don't pre-process here since mychoice maybe not string
+                    mychoice = options.processor(choices[c]);
+                    result = options.scorer(query, mychoice, options);
+                }
                 else {
                     mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                    if (typeof mychoice !== "string" || (typeof mychoice === "string" && mychoice.length === 0)) anyblank = true;
+                    if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
                     result = options.scorer(query, mychoice, options);
                 }
                 if (isArray) idx = parseInt(c);
@@ -757,6 +766,25 @@ module.exports = require('./lib/heap');
         if (!(typeof optclone.force_ascii !== 'undefined' && optclone.force_ascii === false)) optclone.force_ascii = true ;
         return optclone;
     }
+
+    function _isCustomFunc(func) {
+        if (typeof func === "function" && (
+            func.name === "token_set_ratio" ||
+            func.name === "partial_token_set_ratio" ||
+            func.name === "token_sort_ratio" ||
+            func.name === "partial_token_sort_ratio" ||
+            func.name === "QRatio" ||
+            func.name === "WRatio" ||
+            func.name === "distance" ||
+            func.name === "partial_ratio"
+        )) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     //polyfill for Object.keys
     // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
     if (!Object.keys) {
@@ -818,25 +846,6 @@ module.exports = require('./lib/heap');
     };
 
      module.exports = fuzzball;
-     /*  //need to make handle dependencies right, just using module.exports for now
-    // amd
-    if (typeof define !== "undefined" && define !== null && define.amd) {
-        define(function () {
-            return fuzzball;
-        });
-    }
-    // commonjs
-    else if (typeof module !== "undefined" && module !== null && typeof exports !== "undefined" && module.exports === exports) {
-        module.exports = fuzzball;
-    }
-    // web worker
-    else if (typeof self !== "undefined" && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
-        self.fuzzball = fuzzball;
-    }
-    // browser main thread
-    else if (typeof window !== "undefined" && window !== null) {
-        window.fuzzball = fuzzball;
-    } */
 } ());
 
 },{"./lodash.custom.min.js":1,"heap":2}]},{},[]);

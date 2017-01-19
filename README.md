@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js)
 
-Fuzzball.js
+![alt tag](fuzzballlogo.jpg)
 ==========
 
 Easy to use and powerful fuzzy string matching. 
@@ -117,6 +117,8 @@ fuzz.ratio("this is ä test", "this is a test", options);
 
 **Simple:** array of strings, or object in form of {key: "string"}
 
+The scorer defaults to fuzz.ratio if not specified.
+
 With array of strings
 ```js
 var query = "polar bear";
@@ -141,12 +143,11 @@ var results = fuzz.extract(query, choicesObj);
 [ [ 'polar bear', 100, 'id2' ],
   [ 'koala bear', 80, 'id3' ],
   [ 'brown bear', 60, 'id1' ] ]
-
 ```
 
 **Less simple:** array of objects, or object in form of {key: choice}, with processor function + options
 
-Optional processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string. Default scorer is ratio.
+Optional processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string.
 ```js
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
@@ -163,16 +164,32 @@ var results = fuzz.extract(query, choices, options);
 // [choice, score, index/key]
 [ [ { id: 347, modelnumber: '456abdzx' }, 71, 2 ],
   [ { id: 345, modelnumber: '123abc' }, 67, 0 ] ]
-
 ```
 
 The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior.
 
-Possibly will have better built-in support for scoring across multiple fields in the future, but can do stuff like..
+**Multiple Fields** 
+
+If you want to use more than one field for scoring, can do stuff like combine two fields in a processor function before scoring.
 
 ```js
 var processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
 ```
+
+For more complex behavior you can provide a custom scorer, say for a weighted score of two fields, or scoring two fields and returning the score of the highest. In this case each choice can be whatever you want as long as the scorer can accept it.
+
+```js
+var query = "rob smith"
+var choices = [{first: "bob", last: "smith"},{first: "rob", last: "ronker"},{first: "chad", last: "ochocinco"}]
+function myCustomScorer(query, choice, options) { 
+        return fuzz.ratio(query, choice.first, options) * .4 + 
+                fuzz.ratio(query, choice.last, options) * .6;
+}
+var options = {scorer: myCustomScorer}
+var results = fuzz.extract(query, choices, options);
+```
+
+(if you still wanted to use a separate processor function for whatever reason, the processor function would need to return something your scorer accepts)
 
 
 ### Performance Optimization
