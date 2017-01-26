@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js)
 
-![alt tag](fuzzballlogo.jpg)
+![feed me strings!](fuzzballlogo.jpg)
 ==========
 
 Easy to use and powerful fuzzy string matching. 

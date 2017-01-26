@@ -1,5 +1,6 @@
 var assert = require('assert');
 var fuzz = require('../fuzzball');
+var fuzzlite = require('../lite/fuzzball_lite');
 var data = require('./testdata');
 var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio]
 
@@ -84,5 +85,136 @@ describe('Extract', function () {
         assert.equal(results[1][1], 67);
         assert.equal(results.length, 2);
         assert.equal(results[0][0].modelnumber, '456abdzx');
+    });
+});
+
+describe('Extract with pre-calculated tokens', function () {
+    it('should return true if pre-calculating tokens and using dummy string doesnt effect token_set_ratio', function () {
+        var query = "126 abz x";
+        var choices = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+        var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+
+        for (var c in choices2) {
+            choices2[c].tokens = fuzz.unique_tokens(fuzz.full_process(choices2[c].modelnumber));
+            choices2[c].modelnumber = "0";
+        }
+        var options = {
+            scorer: fuzz.token_set_ratio,
+            processor: function (choice) { return choice['modelnumber'] },
+            limit: 2,
+            cutoff: 50
+        };
+        var results = fuzz.extract(query, choices, options);
+        var results2 = fuzz.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+    });
+    it('should return true if pre-calculating tokens and not using processor function doesnt affect token_set_ratio results', function () {
+        var query = "126 abz x";
+        var choices = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+        var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+
+        for (var c in choices2) {
+            choices2[c].tokens = fuzz.unique_tokens(fuzz.full_process(choices2[c].modelnumber));
+            choices2[c].modelnumber = "0";
+        }
+        var options = {
+            scorer: fuzz.token_set_ratio,
+            processor: function (choice) { return choice['modelnumber'] },
+            limit: 2,
+            cutoff: 50
+        };
+        var options2 = {
+            scorer: fuzz.token_set_ratio,
+            limit: 2,
+            cutoff: 50
+        };
+        var results = fuzz.extract(query, choices, options);
+        var results2 = fuzz.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+    });
+        it('should return true if pre-calculating tokens and using dummy string doesnt effect token_sort_ratio', function () {
+        var query = "126 abz x";
+        var choices = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+        var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+
+        for (var c in choices2) {
+            choices2[c].proc_sorted = fuzz.process_and_sort(fuzz.full_process(choices2[c].modelnumber));
+            choices2[c].modelnumber = "0";
+        }
+        var options = {
+            scorer: fuzz.token_sort_ratio,
+            processor: function (choice) { return choice['modelnumber'] },
+            limit: 2,
+            cutoff: 50
+        };
+        var results = fuzz.extract(query, choices, options);
+        var results2 = fuzz.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+    });
+    it('should return true if pre-calculating tokens and not using processor function doesnt affect token_sort_ratio results', function () {
+        var query = "126 abz x";
+        var choices = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+        var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+
+        for (var c in choices2) {
+            choices2[c].proc_sorted = fuzz.process_and_sort(fuzz.full_process(choices2[c].modelnumber));
+            choices2[c].modelnumber = "0";
+        }
+        var options = {
+            scorer: fuzz.token_sort_ratio,
+            processor: function (choice) { return choice['modelnumber'] },
+            limit: 2,
+            cutoff: 50
+        };
+        var options2 = {
+            scorer: fuzz.token_sort_ratio,
+            limit: 2,
+            cutoff: 50
+        };
+        var results = fuzz.extract(query, choices, options);
+        var results2 = fuzz.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+    });
+});
+
+describe('fullball_lite', function () {
+    it('should return true if fullball_lite scorers give same results', function () {
+        assert.equal(fuzz.ratio("this is a test", "this is a test!"), fuzzlite.ratio("this is a test", "this is a test!"));
+        assert.equal(fuzz.ratio("this isnt a test", "this is a test!"), fuzzlite.ratio("this isnt a test", "this is a test!"));
+        assert.equal(fuzz.token_set_ratio("this isnt a test", "this is a test!"), fuzzlite.token_set_ratio("this isnt a test", "this is a test!"));
+        assert.equal(fuzz.token_sort_ratio("this isnt a test", "this is a test!"), fuzzlite.token_sort_ratio("this isnt a test", "this is a test!"));
+    });
+    it('should return true if in lite extract pre-calculating tokens and using dummy string gives same results', function () {
+        var query = "126 abz x";
+        var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
+
+        for (var c in choices2) {
+            choices2[c].tokens = fuzz.unique_tokens(fuzz.full_process(choices2[c].modelnumber));
+            choices2[c].modelnumber = "0";
+        }
+        var options = {
+            scorer: fuzz.token_set_ratio,
+            processor: function (choice) { return choice['modelnumber'] },
+            limit: 2,
+            cutoff: 50
+        };
+        var results = fuzz.extract(query, choices2, options);
+        var results2 = fuzzlite.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
 });
