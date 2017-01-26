@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js)
 
-![feed me strings!](fuzzballlogo.jpg)
+![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
 
 Easy to use and powerful fuzzy string matching. 
