@@ -194,9 +194,9 @@ var results = fuzz.extract(query, choices, options);
 
 ### Performance Optimization
 
-If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. 
+If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (If running async or from stream currently would have to just use the standalone. Also, if you wanted to use an alternate tokenizer could sub them for the functions used below)
 
-If using either "token_sort" scorer, you can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
+If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 var query = fuzz.full_process("126-Abzx");
@@ -212,7 +212,20 @@ var options = {
 var results = fuzz.extract(query, choices, options);
 ```
 
-If using either "token_set" scorer, you can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
+If using either "token_sort" scorer as standalone functions: Set options.proc_sorted = true and process both strings beforehand.
+
+```js
+var str1 = "Abe Lincoln";
+var str2 = "Lincoln, Abe";
+
+str1 = fuzz.process_and_sort(fuzz.full_process(str1));
+str2 = fuzz.process_and_sort(fuzz.full_process(str2));
+fuzz.token_sort_ratio(str1, str2, {proc_sorted: true});
+        100
+
+```
+
+If using either "token_set" scorer with extract: You can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 var query = fuzz.full_process("126-Abzx");
@@ -227,6 +240,23 @@ var options = {
 };
 var results = fuzz.extract(query, choices, options);
 ```
+
+If using either "token_set" scorer as standalone functions: Tokenize both strings beforehand and attach them to options.tokens as a two element array.
+
+```js
+var str1 = "fluffy head man";
+var str2 = "heady fluffy head";
+
+str1_tokens = fuzz.unique_tokens(fuzz.full_process(str1));
+str2_tokens = fuzz.unique_tokens(fuzz.full_process(str2));
+
+var options = {tokens: [str1_tokens, str2_tokens]};
+
+// still have to include first two args for validation but they won't be used for scoring
+fuzz.token_set_ratio(str1, str2, options);
+        85
+```
+
 
 If just using the basic ratio still not fast enough.. there are some nice bk-tree packages, but don't think the set/sort algorithms satisfy all of the assumptions for using that.(?)
 
