@@ -14,7 +14,9 @@ Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
 **Using NPM**
 
-    npm install fuzzball
+```
+npm install fuzzball
+```
 
 **Browser** (using pre-built standalone version)
 
@@ -28,10 +30,18 @@ You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need 
 
 # Usage
 
+**Basic Usage**
+
 ```js
 var fuzz = require('fuzzball');
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
+
+fuzz.extract("hello world", ["hello world", "hiyyo wyrld", "hello goodbye"]);
+
+[ [ 'hello world', 100, 0 ],
+  [ 'hello goodbye', 67, 2 ],
+  [ 'hiyyo wyrld', 64, 1 ] ]
 ```
 
 **Simple Ratio**
@@ -105,9 +115,11 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
+If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed (got a good locale-specific alphanumeric check in js?)
+
+Astral symbol code points beyond BMP are currently not fully supported. Won't fail but they will be treated as multiple characters.
+
 ```js
-// currently full_process must be set to false if useCollator is true
-// or non-roman alphanumeric will be removed (got a good locale-specific alphanumeric check in js?)
 var options = {full_process: false, useCollator: true};
 fuzz.ratio("this is ä test", "this is a test", options);
         100
