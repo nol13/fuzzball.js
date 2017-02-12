@@ -3,7 +3,7 @@
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
 
-Easy to use and powerful fuzzy string matching, now with full unicode support! 
+Easy to use and powerful fuzzy string matching with unicode support.
 
 This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, see below)
 
@@ -115,7 +115,7 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. Setting useCollator to true will have a considerable impact on performance. (got a good locale-specific alphanumeric check in js?)
+If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. Setting useCollator to true will have a considerable impact on performance. (got a good locale-specific alphanumeric check in js?) Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 ```js
 var options = {full_process: false, useCollator: true};
@@ -283,6 +283,6 @@ If just using the basic ratio still not fast enough.. there are some nice bk-tre
 
 If you want to use difflib's ratio function for all ratio calculations, which differs slightly from the default python-Levenshtein style behavior, you can specify options.ratio_alg = "difflib". The difflib calculation is a bit different in that it's based on matching characters rather than true minimum edit distance, but the results are usually pretty similar. Difflib uses the formula 2.0*M / T  where M is the number of matches, and T is the total number of elements in both sequences. This mirrors the behavior of fuzzywuzzy when not using python-Levenshtein.
 
-Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio. (bolted on a bit of the collator code from fast-levenshtein into the leven code as well)
+Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio.
 
 Setting options.useCollator only works at this time if using the default algorithm.
