@@ -30,7 +30,8 @@
     "browserify": "^1.0.0",
     "mocha": "^3.2.0",
     "uglify-js": "^1.0.0",
-    "lodash-cli": "^4.17.4"
+    "lodash-cli": "^4.17.4",
+    "nsp": "^2.6.2"
   },
   "repository": {
     "type": "git",
@@ -57,7 +58,8 @@
     "build:reg": "npm run browserify && npm run uglify",
     "build:lite": "npm run lodash:lite && npm run browserify:lite && npm run uglify:lite",
     "build": "npm run build:reg && npm run build:lite",
-    "test": "mocha"
+    "test": "mocha && npm run nsp",
+    "nsp": "node_modules/nsp/bin/nsp check"
   },
   "runkitExample": "var fuzz = require('fuzzball');"
 }
