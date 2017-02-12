@@ -4,10 +4,9 @@
     var _intersect = require('./lodash.custom.min.js').intersection;
     var _difference = require('./lodash.custom.min.js').difference;
     var _uniq = require('./lodash.custom.min.js').uniq;
-    var stringLength = require('string-length');
+    var _toArray = require('./lodash.custom.min.js').toArray;
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
-    var chars = require('unicode-string/chars');
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -248,7 +247,7 @@
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance = _leven(str1, str2, options);
         var lensum;
-        if (options.astral) lensum = stringLength(str1) + stringLength(str2);
+        if (options.astral) lensum = _toArray(str1).length + _toArray(str2).length
         else lensum = str1.length + str2.length;
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }
@@ -348,8 +347,8 @@
         if (a === b) {
             return 0;
         }
-        var achars = chars(a);
-        var bchars = chars(b)
+        var achars = _toArray(a);
+        var bchars = _toArray(b);
         var aLen = achars.length;
         var bLen = bchars.length;
 

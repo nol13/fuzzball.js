@@ -8,10 +8,9 @@
     var _forEach = require('lodash.foreach');
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
-    var stringLength = require('string-length');
+    var _toArray = require('lodash.toarray');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
-    var chars = require('unicode-string/chars');
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -369,7 +368,7 @@
         options.forRatio = true;
         var levdistance = _leven(str1, str2, options);
         var lensum;
-        if (options.astral) lensum = stringLength(str1) + stringLength(str2);
+        if (options.astral) lensum = _toArray(str1).length + _toArray(str2).length
         else lensum = str1.length + str2.length;
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }
@@ -490,8 +489,8 @@
         if (a === b) {
             return 0;
         }
-        var achars = chars(a);
-        var bchars = chars(b)
+        var achars = _toArray(a);
+        var bchars = _toArray(b);
         var aLen = achars.length;
         var bLen = bchars.length;
 

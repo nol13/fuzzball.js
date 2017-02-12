@@ -3,7 +3,7 @@
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
 
-Easy to use and powerful fuzzy string matching. 
+Easy to use and powerful fuzzy string matching, now with full unicode support! 
 
 This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, see below)
 
@@ -26,7 +26,7 @@ npm install fuzzball
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (27kB, 8kB compressed) but doesn't include the partial ratios which require difflib.
+You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (29kB, 9kB compressed) but doesn't include the partial ratios which require difflib.
 
 # Usage
 
@@ -240,7 +240,6 @@ str1 = fuzz.process_and_sort(fuzz.full_process(str1));
 str2 = fuzz.process_and_sort(fuzz.full_process(str2));
 fuzz.token_sort_ratio(str1, str2, {proc_sorted: true});
         100
-
 ```
 
 If using either "token_set" scorer with extract: You can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")

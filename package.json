@@ -21,11 +21,10 @@
     "lodash.intersection": "^4.4.0",
     "lodash.isarray": "^4.0.0",
     "lodash.keys": "^4.2.0",
+    "lodash.toarray": "^4.4.0",
     "lodash.uniq": "^4.5.0",
-    "string-length": "^1.0.1",
     "string.fromcodepoint": "^0.2.1",
-    "string.prototype.codepointat": "^0.2.0",
-    "unicode-string": "^1.0.0"
+    "string.prototype.codepointat": "^0.2.0"
   },
   "devDependencies": {
     "browserify": "^1.0.0",
@@ -50,7 +49,7 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./lite/lodash.custom.min.js",
+    "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "browserify:lite": "browserify -r ./lite/fuzzball_lite.js:fuzzball > ./lite/fuzzball_lite_browser.js",
     "uglify:lite": "uglifyjs ./lite/fuzzball_lite_browser.js > ./lite/fuzzball_lite_browser.min.js",
     "uglify": "uglifyjs ./dist/fuzzball_browser.js > ./dist/fuzzball_browser.min.js",
