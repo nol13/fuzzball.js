@@ -218,3 +218,16 @@ describe('fullball_lite', function () {
         assert.equal(results[1][2], results2[1][2]);
     });
 });
+
+describe('astral', function () {
+    it('should return true if astral treated properly', function () {
+        var options = {astral:true, full_process:false};
+        assert.equal(fuzz.ratio("aa🐴", "aab", options), fuzz.ratio("aad", "aab", options));
+        assert.equal(fuzz.ratio("aa🐴a", "aaba", options), fuzz.ratio("aada", "aaba", options));
+    });
+    it('should return true if astral treated properly lite', function () {
+        var options = { astral: true, full_process: false };
+        assert.equal(fuzzlite.ratio("aa🐴", "aab", options), fuzzlite.ratio("aad", "aab", options));
+        assert.equal(fuzzlite.ratio("aa🐴a", "aaba", options), fuzzlite.ratio("aada", "aaba", options));
+    });
+});

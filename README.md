@@ -26,7 +26,7 @@ npm install fuzzball
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (20kB vs. 80kB) but doesn't include the partial ratios which require difflib.
+You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (27kB, 8kB compressed) but doesn't include the partial ratios which require difflib.
 
 # Usage
 
@@ -115,14 +115,20 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed (got a good locale-specific alphanumeric check in js?)
-
-Astral symbol code points beyond BMP are currently not fully supported. Won't fail but they will be treated as multiple characters.
+If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. Setting useCollator to true will have a considerable impact on performance. (got a good locale-specific alphanumeric check in js?)
 
 ```js
 var options = {full_process: false, useCollator: true};
 fuzz.ratio("this is ä test", "this is a test", options);
         100
+```
+
+If your strings contain astral symbols/code points beyond BMP, set astral to true. It won't fail if you don't set this, but those symbols will be treated as multiple characters. This will impact performance as well, but not nearly as much as useCollator does. 
+
+```js
+var options = {full_process: false, astral: true};
+fuzz.ratio("ab🐴c", "ab🐴d", options);
+        75
 ```
 
 ### Batch Extract (search list of choices for top results)
