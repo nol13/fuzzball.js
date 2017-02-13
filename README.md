@@ -115,7 +115,7 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. Setting useCollator to true will have a considerable impact on performance. (got a good locale-specific alphanumeric check in js?) Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
+If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. (got a good locale-specific alphanumeric check in js?) Setting useCollator to true will have a considerable impact on performance. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 ```js
 var options = {full_process: false, useCollator: true};
