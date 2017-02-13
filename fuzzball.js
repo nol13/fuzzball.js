@@ -34,7 +34,8 @@
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        return _leven(str1, str2, options);
+        if (options.astral) return _iLeven(str1, str2, options);
+        else return _leven(str1, str2, options);
     }
 
     function QRatio(str1, str2, options_p) {
@@ -365,11 +366,15 @@
         }
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
         if (typeof options.subcost === "undefined") options.subcost = 2;
-        options.forRatio = true;
-        var levdistance = _leven(str1, str2, options);
-        var lensum;
-        if (options.astral) lensum = _toArray(str1).length + _toArray(str2).length
-        else lensum = str1.length + str2.length;
+        var levdistance, lensum;
+        if (options.astral) {
+            levdistance = _iLeven(str1, str2, options);
+            lensum = _toArray(str1).length + _toArray(str2).length
+        }
+        else {
+            levdistance = _leven(str1, str2, options);
+            lensum = str1.length + str2.length;
+        }
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }
 
@@ -420,7 +425,6 @@
     var charCodeCache = [];
 
     var _leven = function (a, b, options) {
-        if (options.astral) return _iLeven(a, b, options);
         var useCollator = (options && collator && options.useCollator);
         var subcost = 1;
         //to match behavior of python-Levenshtein and fuzzywuzzy

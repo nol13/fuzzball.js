@@ -3,9 +3,9 @@
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
 
-Easy to use and powerful fuzzy string matching with unicode support.
+Easy to use and powerful fuzzy string matching.
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, see below)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to support unicode and collation, see below)
 
 Try it out on [runkit](https://runkit.com/npm/fuzzball)!
 
