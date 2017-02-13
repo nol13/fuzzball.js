@@ -13,7 +13,6 @@
     "lite/fuzzball_lite_browser.min.js"
   ],
   "dependencies": {
-    "code-point-at": "^1.1.0",
     "difflib": ">=0.2.4",
     "heap": ">=0.2.0",
     "lodash.difference": "^4.5.0",
