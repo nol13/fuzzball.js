@@ -30,14 +30,15 @@ You can use the file __fuzzball_lite_browser.min.js__ instead if you don't need 
 
 # Usage
 
-**Basic Usage**
+**Quick Overview**
 
 ```js
 var fuzz = require('fuzzball');
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
-fuzz.extract("hello world", ["hello world", "hiyyo wyrld", "hello goodbye"]);
+var options = {};
+fuzz.extract("hello world", ["hello world", "hiyyo wyrld", "hello goodbye"], options);
 
 [ [ 'hello world', 100, 0 ],
   [ 'hello goodbye', 67, 2 ],
@@ -115,7 +116,9 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-If useCollator is set to true, or if otherwise comparing non-ascii characters, full_process must be set to false or non-roman alphanumeric characters will be removed. (got a good locale-specific alphanumeric check in js?) Setting useCollator to true will have a considerable impact on performance. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
+To use collation when calculating edit distance, set useCollator to true.
+
+If useCollator is set to true, or if otherwise comparing non-ascii characters,, full_process **must** be set to false or non-roman alphanumeric characters will be stripped out.  Setting useCollator to true will have an impact on performance. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 ```js
 var options = {full_process: false, useCollator: true};
@@ -123,7 +126,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-If your strings contain astral symbols/code points beyond BMP, set astral to true. It won't fail if you don't set this, but those symbols will be treated as multiple characters. This will impact performance as well, but not nearly as much as useCollator does. 
+If your strings contain astral symbols/code points beyond the basic multilingual plane (BMP), set astral to true. It won't outright fail if you don't set astral to true, but those symbols will be treated as multiple characters so the ratio will be off a bit. (uses charCodeAt() vs. codePointAt() internally) This will have a slight impact on performance, which is why is off by default, but not as much as useCollator. 
 
 ```js
 var options = {full_process: false, astral: true};
@@ -274,8 +277,6 @@ fuzz.token_set_ratio(str1, str2, options);
         85
 ```
 
-
-If just using the basic ratio still not fast enough.. there are some nice bk-tree packages, but don't think the set/sort algorithms satisfy all of the assumptions for using that.(?)
 
 
 ### Alternate Ratio Calculations
