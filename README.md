@@ -40,6 +40,7 @@ fuzz.ratio("hello world", "hiyyo wyrld");
 var options = {};
 fuzz.extract("hello world", ["hello world", "hiyyo wyrld", "hello goodbye"], options);
 
+// [choice, score, index/key]
 [ [ 'hello world', 100, 0 ],
   [ 'hello goodbye', 67, 2 ],
   [ 'hiyyo wyrld', 64, 1 ] ]
