@@ -253,12 +253,11 @@
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
-        var proc_query = pre_processor(query, options.force_ascii);
         if (!isCustom) { // if custom scorer func let scorer handle it
+            query = pre_processor(query, options.force_ascii);
             options.full_process = false;
-            query = proc_query
+            if (query.length === 0) console.log("Processed query is empty string");
         }
-        if (proc_query.length === 0) console.log("Processed query is empty string");
         var results = [];
         var anyblank = false;
         var tsort = false;

@@ -1,8 +1,7 @@
-[![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js)
+ [![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
-
 Easy to use and powerful fuzzy string matching.
 
 This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to support unicode and collation, see below)
@@ -27,20 +26,21 @@ You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't 
 
 # Usage
 
-**Quick Overview**
+**Basic Overview**
 
 ```js
 var fuzz = require('fuzzball');
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
-var options = {};
-fuzz.extract("hello world", ["hello world", "hiyyo wyrld", "hello goodbye"], options);
+var options = {scorer: fuzz.token_set_ratio};
+var choices = ["Hood, Harry", "Mr. Minor", "Mr. Larry Hood"];
+fuzz.extract("mr. harry hood", choices, options);
 
 // [choice, score, index/key]
-[ [ 'hello world', 100, 0 ],
-  [ 'hello goodbye', 67, 2 ],
-  [ 'hiyyo wyrld', 64, 1 ] ]
+[ [ 'Hood, Harry', 100, 0 ],
+  [ 'Mr. Larry Hood', 92, 2 ],
+  [ 'Mr. Minor', 40, 1 ] ]
 ```
 
 **Simple Ratio**
@@ -114,9 +114,9 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-To use collation when calculating edit distance, set useCollator to true.
+To use collation when calculating edit distance, set useCollator to true, and full_process to false.
 
-If useCollator is set to true, or if otherwise comparing non-ascii characters,, full_process **must** be set to false or non-roman alphanumeric characters will be stripped out.  Setting useCollator to true will have an impact on performance. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
+If comparing non-ascii characters, full_process must be set to false, or non-roman alphanumeric characters will be stripped out.  Setting useCollator to true will have an impact on performance if you have a large number of choices. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 ```js
 var options = {full_process: false, useCollator: true};
@@ -124,7 +124,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-If your strings contain astral symbols/code points beyond the basic multilingual plane (BMP), set astral to true. It won't outright fail if you don't set astral to true, but those symbols will be treated as multiple characters so the ratio will be off a bit. (uses charCodeAt() vs. codePointAt() internally) This will have a slight impact on performance, which is why is off by default, but not as much as useCollator. 
+If your strings contain code points beyond the basic multilingual plane (BMP), set astral to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters so the ratio will be off a bit. (This will have a slight impact on performance, which is why it's turned off by default.) 
 
 ```js
 var options = {full_process: false, astral: true};
@@ -171,7 +171,7 @@ Optional processor function takes a choice and returns the string which will be 
 var query = "126abzx";
 var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
 var options = {
-        scorer: fuzz.partial_ratio, // any function that takes two strings and returns a score, default: ratio
+        scorer: fuzz.partial_ratio, // any function that takes two values and returns a score, default: ratio
         processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
         limit: 2, // max number of top results to return, default: no limit / 0.
         cutoff: 50, // lowest score to return, default: 0
@@ -195,14 +195,14 @@ If you want to use more than one field for scoring, can do stuff like combine tw
 var processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
 ```
 
-For more complex behavior you can provide a custom scorer, say for a weighted score of two fields, or scoring two fields and returning the score of the highest. In this case each choice can be whatever you want as long as the scorer can accept it.
+For more complex behavior you can provide a custom scorer, say for a weighted score of two fields, or to include additional types of data. When using a custom scorer both the query and each choice can be any type of value, as long as your scorer can handle the respective parameters correctly.
 
 ```js
-var query = "rob smith"
-var choices = [{first: "bob", last: "smith"},{first: "rob", last: "ronker"},{first: "chad", last: "ochocinco"}]
-function myCustomScorer(query, choice, options) { 
-        return fuzz.ratio(query, choice.first, options) * .4 + 
-                fuzz.ratio(query, choice.last, options) * .6;
+var query = {name: "tiger", gender: "female"}
+var choices = [{name: "tiger", gender: "female"},{name: "tigger", gender: "male"},{name: "lulav", gender: "female"}, {name: "chad ochocinco", gender: "male"}]
+function myCustomScorer(query, choice, options) {
+        if (query.gender !== choice.gender) return 0;
+        else return fuzz.ratio(query.name, choice.name, options);
 }
 var options = {scorer: myCustomScorer}
 var results = fuzz.extract(query, choices, options);
