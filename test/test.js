@@ -231,3 +231,28 @@ describe('astral', function () {
         assert.equal(fuzzlite.ratio("aa🐴a", "aaba", options), fuzzlite.ratio("aada", "aaba", options));
     });
 });
+
+describe('async', function () {
+    it('should return true if extractAsync with default options working', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzz.extractAsync(query, choices, {}, function(results){
+            assert.equal(results[0][1], 100);
+            assert.equal(results[1][1], 80);
+            assert.equal(results[2][1], 60);
+            assert.equal(results[1][0], 'koala bear');
+            done();
+        });
+    });
+    it('should return true if extractAsync lite with default options working', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzlite.extractAsync(query, choices, {}, function (results) {
+            assert.equal(results[0][1], 100);
+            assert.equal(results[1][1], 80);
+            assert.equal(results[2][1], 60);
+            assert.equal(results[1][0], 'koala bear');
+            done();
+        });
+    });
+});

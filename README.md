@@ -4,7 +4,7 @@
 ==========
 Easy to use and powerful fuzzy string matching.
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified to support unicode and collation, see below)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, with a bit of code taken from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein))
 
 # Installation
 
@@ -41,6 +41,8 @@ fuzz.extract("mr. harry hood", choices, options);
 [ [ 'Hood, Harry', 100, 0 ],
   [ 'Mr. Larry Hood', 92, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
+
+fuzz.extractAsync("mr. harry hood", choices, options, callback);
 ```
 
 **Simple Ratio**
@@ -114,9 +116,9 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-To use collation when calculating edit distance, set useCollator to true, and full_process to false.
+To use collation when calculating edit distance, set useCollator to true, and full_process to false. (got a good locale specific alphanumeric check in js?) 
 
-If comparing non-ascii characters, full_process must be set to false, or non-roman alphanumeric characters will be stripped out.  Setting useCollator to true will have an impact on performance if you have a large number of choices. Collator code borrowed from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
+If comparing non-ascii characters, full_process must be set to false, or non-roman alphanumeric characters will be stripped out. Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
 
 ```js
 var options = {full_process: false, useCollator: true};
@@ -133,6 +135,11 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 ```
 
 ### Batch Extract (search list of choices for top results)
+
+###### fuzz.extract(query, choices, options);
+
+###### fuzz.extractAsync(query, choices, options, callback); (internal loop will be non-blocking)
+
 
 **Simple:** array of strings, or object in form of {key: "string"}
 
@@ -213,7 +220,7 @@ var results = fuzz.extract(query, choices, options);
 
 ### Performance Optimization
 
-If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (If running async or from stream currently would have to just use the standalone. Also, if you wanted to use an alternate tokenizer could sub them for the functions used below)
+If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (Also, f you wanted to use an alternate tokenizer could sub them for the functions used below)
 
 If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 

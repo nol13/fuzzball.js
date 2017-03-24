@@ -56,7 +56,7 @@
     "browserify": "browserify -r ./fuzzball.js:fuzzball > ./dist/fuzzball_browser.js",
     "build:reg": "npm run browserify && npm run uglify",
     "build:lite": "npm run lodash:lite && npm run browserify:lite && npm run uglify:lite",
-    "build": "npm run build:reg && npm run build:lite",
+    "build": "npm test && npm run build:reg && npm run build:lite",
     "test": "mocha && npm run nsp",
     "nsp": "node_modules/nsp/bin/nsp check"
   },
