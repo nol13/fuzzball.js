@@ -9,6 +9,7 @@
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
+    require('setimmediate');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
     
@@ -411,11 +412,11 @@
                 else idx = c;
                 if (result > options.cutoff) results.push([choices[c], result, idx]);
             }
-            if (isArray && c < choices.length) {
-                setTimeout(function () { searchLoop(c + 1) }, 0);
+            if (isArray && c < choices.length - 1) {
+                setImmediate(function () { searchLoop(c + 1) })
             }
-            else if (i < keys.length) {
-                setTimeout(function () { searchLoop(keys[i + 1], i + 1) }, 0);
+            else if (i < keys.length - 1) {
+                setImmediate(function () { searchLoop(keys[i + 1], i + 1) });
             }
             else {
                 if (anyblank) console.log("One or more choices were empty. (post-processing if applied)")

@@ -22,7 +22,7 @@ npm install fuzzball
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version is optimized for a smaller file size (97kB vs. 29kB uncompressed) but doesn't include the partial ratios which require difflib.
+You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (36kB vs. 97kB uncompressed, runtime performance still prioritized over going any smaller though)
 
 # Usage
 
