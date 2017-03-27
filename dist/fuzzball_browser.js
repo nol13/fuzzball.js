@@ -8382,6 +8382,7 @@ function hasOwnProperty(obj, prop) {
     require('setimmediate');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
+    //var unorm = require('unorm');
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -8624,9 +8625,20 @@ function hasOwnProperty(obj, prop) {
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) pre_processor = full_process;
+        var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
             query = pre_processor(query, options.force_ascii);
             options.full_process = false;
+            if (options.astral && options.normalize) {
+                options.normalize = false;  // don't normalize again in ratio if doing here
+                if (String.prototype.normalize) {
+                    normalize = true
+                    query = query.normalize();
+                }
+                else {
+                    console.log("Normalization not supported in your environment");
+                }
+            }
             if (query.length === 0) console.log("Processed query is empty string");
         }
         var results = [];
@@ -8651,7 +8663,7 @@ function hasOwnProperty(obj, prop) {
                 if (value.proc_sorted) mychoice = value.proc_sorted;
                 else {
                     mychoice = pre_processor(options.processor(value), options.force_ascii);
-                    mychoice = process_and_sort(mychoice);
+                    mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                 }
                 result = options.scorer(proc_sorted_query, mychoice, options);
             }
@@ -8660,7 +8672,7 @@ function hasOwnProperty(obj, prop) {
                 if (value.tokens) options.tokens = [query_tokens, value.tokens];
                 else {
                     mychoice = pre_processor(options.processor(value), options.force_ascii);
-                    options.tokens = [query_tokens, tokenize(mychoice)]
+                    options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                 }
                 //query and mychoice only used for validation here
                 result = options.scorer(query, mychoice, options);
@@ -8673,6 +8685,7 @@ function hasOwnProperty(obj, prop) {
             else {
                 mychoice = pre_processor(options.processor(value), options.force_ascii);
                 if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
+                if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                 result = options.scorer(query, mychoice, options);
             }
             if (result > options.cutoff) results.push([value, result, key]);
@@ -8707,6 +8720,7 @@ function hasOwnProperty(obj, prop) {
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
+        
         var isArray = false;
         var numchoices;
         if (choices && choices.length && _isArray(choices)) {
@@ -8725,9 +8739,20 @@ function hasOwnProperty(obj, prop) {
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
         var pre_processor = function (choice, force_ascii) { return choice; }
         if (options.full_process) pre_processor = full_process;
+        var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
             query = pre_processor(query, options.force_ascii);
             options.full_process = false;
+            if (options.astral && options.normalize) {
+                options.normalize = false;  // don't normalize again in ratio if doing here
+                if (String.prototype.normalize) { 
+                    normalize = true 
+                    query = query.normalize();
+                }
+                else {
+                    console.log("Normalization not supported in your environment");
+                }
+            }
             if (query.length === 0) console.log("Processed query is empty string");
         }
         var results = [];
@@ -8754,7 +8779,7 @@ function hasOwnProperty(obj, prop) {
                     if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        mychoice = process_and_sort(mychoice);
+                        mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
                 }
@@ -8763,7 +8788,7 @@ function hasOwnProperty(obj, prop) {
                     if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        options.tokens = [query_tokens, tokenize(mychoice)]
+                        options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
                     //query and mychoice only used for validation here
                     result = options.scorer(query, mychoice, options);
@@ -8776,6 +8801,7 @@ function hasOwnProperty(obj, prop) {
                 else {
                     mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
+                    if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
                 }
                 if (isArray) idx = parseInt(c);
@@ -8839,6 +8865,7 @@ function hasOwnProperty(obj, prop) {
         return Math.max.apply(null, pairwise);
     }
 
+    var normalWarn = false;
     function _ratio(str1, str2, options) {
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
@@ -8851,6 +8878,18 @@ function hasOwnProperty(obj, prop) {
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance, lensum;
         if (options.astral) {
+            if (options.normalize) {
+                if (String.prototype.normalize) {
+                    str1 = str1.normalize();
+                    str2 = str2.normalize();
+                }
+                else {
+                    if (!normalWarn) { 
+                        console.log("Normalization not supported in your environment");
+                        normalWarn = true;
+                    }
+                }
+            }
             levdistance = _iLeven(str1, str2, options);
             lensum = _toArray(str1).length + _toArray(str2).length
         }
@@ -9056,6 +9095,10 @@ function hasOwnProperty(obj, prop) {
         }
         if (!(typeof optclone.full_process !== 'undefined' && optclone.full_process === false)) optclone.full_process = true;
         if (!(typeof optclone.force_ascii !== 'undefined' && optclone.force_ascii === false)) optclone.force_ascii = true ;
+        // normalize option not used unless astral is true, so true + no astral = no normalize
+        if (!(typeof optclone.normalize !== 'undefined' && optclone.normalize === false)) optclone.normalize = true;
+        if (typeof optclone.astral !== 'undefined' && optclone.astral === true) optclone.full_process = false;
+        if (typeof optclone.useCollator !== 'undefined' && optclone.useCollator === true) optclone.full_process = false;
         return optclone;
     }
 

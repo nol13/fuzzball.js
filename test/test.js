@@ -232,6 +232,73 @@ describe('astral', function () {
     });
 });
 
+describe('normalize', function () {
+    if (String.prototype.normalize) {
+        it('should return true if normalized properly', function () {
+            var options = { astral: true, full_process: false };
+            assert.equal(fuzz.ratio("mañana", "mañana", options), 100);
+            assert.equal(fuzz.ratio("polar bear mañana", "polar bear mañana", options), 100);
+        });
+        it('should return true if normalized properly lite', function () {
+            var options = { astral: true, full_process: false };
+            assert.equal(fuzzlite.ratio("mañana", "mañana", options), 100);
+            assert.equal(fuzzlite.ratio("polar bear mañana", "polar bear mañana", options), 100);
+        });
+        it('should return true if extractAsync with normalize working', function (done) {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            fuzz.extractAsync(query, choices, { astral: true }, function (results) {
+                assert.equal(results[0][1], 100);
+                done();
+            });
+        });
+        it('should return true if extractAsync with normalize working lite', function (done) {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            fuzzlite.extractAsync(query, choices, { astral: true }, function (results) {
+                assert.equal(results[0][1], 100);
+                done();
+            });
+        });
+        it('should return true if extract with normalize working', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzz.extract(query, choices, { astral: true });
+            assert.equal(results[0][1], 100);
+        });
+        it('should return true if extract with normalize working lite', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzzlite.extract(query, choices, { astral: true });
+            assert.equal(results[0][1], 100);
+        });
+        it('should return true if extract with normalize working with token_set_ratio', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzz.extract(query, choices, { astral: true, scorer: fuzz.token_set_ratio });
+            assert.equal(results[0][1], 100);
+        });
+        it('should return true if extract with normalize working with token_set_ratio lite', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzzlite.extract(query, choices, { astral: true, scorer: fuzzlite.token_set_ratio });
+            assert.equal(results[0][1], 100);
+        });
+        it('should return true if extract with normalize working with token_sort_ratio', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzz.extract(query, choices, { astral: true, scorer: fuzz.token_sort_ratio });
+            assert.equal(results[0][1], 100);
+        });
+        it('should return true if extract with normalize working with token_sort_ratio lite', function () {
+            var query = "polar bear mañana";
+            var choices = ["brown bear", "polar bear mañana", "koala bear"];
+            var results = fuzzlite.extract(query, choices, { astral: true, scorer: fuzzlite.token_sort_ratio });
+            assert.equal(results[0][1], 100);
+        });
+    }
+});
+
 describe('async', function () {
     it('should return true if extractAsync with default options working', function (done) {
         var query = "polar bear";

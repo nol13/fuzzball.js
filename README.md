@@ -116,9 +116,9 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
-To use collation when calculating edit distance, set useCollator to true, and full_process to false. (got a good locale specific alphanumeric check in js?) 
+To use collation when calculating edit distance, set **useCollator** to true. 
 
-If comparing non-ascii characters, full_process must be set to false, or non-roman alphanumeric characters will be stripped out. Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
+Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
 
 ```js
 var options = {full_process: false, useCollator: true};
@@ -126,13 +126,18 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-If your strings contain code points beyond the basic multilingual plane (BMP), set astral to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters so the ratio will be off a bit. (This will have a slight impact on performance, which is why it's turned off by default.) 
+If your strings contain code points beyond the basic multilingual plane (BMP), set **astral** to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters and the ratio will be off a bit. (This will have some impact on performance, which is why it is turned off by default.) 
 
 ```js
 var options = {full_process: false, astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
+
+If astral is true it will normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
+
+**If useCollator and/or astral is set to true, full_process will be set to false automatically.** (got a good locale specific alphanumeric check in js?)
+
 
 ### Batch Extract (search list of choices for top results)
 
