@@ -121,7 +121,7 @@ To use collation when calculating edit distance, set **useCollator** to true.
 Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
 
 ```js
-var options = {full_process: false, useCollator: true};
+var options = {useCollator: true};
 fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
@@ -129,7 +129,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
 If your strings contain code points beyond the basic multilingual plane (BMP), set **astral** to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters and the ratio will be off a bit. (This will have some impact on performance, which is why it is turned off by default.) 
 
 ```js
-var options = {full_process: false, astral: true};
+var options = {astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
