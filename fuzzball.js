@@ -11,14 +11,7 @@
     var _toArray = require('lodash.toarray');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
-    
-    // from https://github.com/sindresorhus/set-immediate-shim
-    var setImmediate = typeof setImmediate === 'function' ? setImmediate :
-        function setImmediate() {
-            var args = [].slice.apply(arguments);
-            args.splice(1, 0, 0);
-            setTimeout.apply(null, args);
-        };
+    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
