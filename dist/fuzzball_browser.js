@@ -8614,10 +8614,20 @@ function hasOwnProperty(obj, prop) {
             numchoices = choices.length;
         }
         else numchoices = _keys(choices).length;
-        if (!choices || numchoices === 0) console.log("No choices");
-        if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
-        if (!options.processor) options.processor = function(x) {return x;}
-        if (!options.scorer || typeof options.scorer !== "function") {
+        if (!choices || numchoices === 0) {
+            throw new Error("No choices");
+            return;
+        }
+        if (options.processor && typeof options.processor !== "function") {
+            throw new Error("Invalid Processor");
+            return;
+        }
+        if (!options.processor) options.processor = function (x) { return x; }
+        if (options.scorer && typeof options.scorer !== "function") {
+            throw new Error("Invalid Scorer");
+            return;
+        }
+        if (!options.scorer) {
             options.scorer = QRatio;
             console.log("Using default scorer 'ratio'");
         }
@@ -8717,7 +8727,7 @@ function hasOwnProperty(obj, prop) {
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @returns {Object[]} - array of choice results with their computed ratios (0-100).
+         * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
         

@@ -323,3 +323,42 @@ describe('async', function () {
         });
     });
 });
+
+describe('errors', function () {
+    it('should return error from extractAsync with no choices', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzz.extractAsync(query, [], {}, function (err, results) {
+            assert.equal(err.message, "No choices");
+            done();
+        });
+    });
+    it('should return error from extractAsync with no choices lite', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzlite.extractAsync(query, [], {}, function (err, results) {
+            assert.equal(err.message, "No choices");
+            done();
+        });
+    });
+    it('should return error from extract with no choices', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        try {
+            results = fuzz.extract(query, [], {});
+        }
+        catch (err) {
+            assert.equal(err.message, "No choices");
+        }
+    });
+    it('should return error from extract with no choices lite', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        try {
+            results = fuzzlite.extract(query, [], {});
+        }
+        catch (err) {
+            assert.equal(err.message, "No choices");
+        }
+    });
+});
