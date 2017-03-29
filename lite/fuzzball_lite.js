@@ -5,9 +5,17 @@
     var _difference = require('./lodash.custom.min.js').difference;
     var _uniq = require('./lodash.custom.min.js').uniq;
     var _toArray = require('./lodash.custom.min.js').toArray;
-    require('setimmediate');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
+
+    // from https://github.com/sindresorhus/set-immediate-shim
+    var setImmediate = typeof setImmediate === 'function' ? setImmediate :
+        function setImmediate() {
+            var args = [].slice.apply(arguments);
+            args.splice(1, 0, 0);
+            setTimeout.apply(null, args);
+        };
+        
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 

@@ -9,10 +9,16 @@
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
-    require('setimmediate');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
-    //var unorm = require('unorm');
+    
+    // from https://github.com/sindresorhus/set-immediate-shim
+    var setImmediate = typeof setImmediate === 'function' ? setImmediate :
+        function setImmediate() {
+            var args = [].slice.apply(arguments);
+            args.splice(1, 0, 0);
+            setTimeout.apply(null, args);
+        };
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
