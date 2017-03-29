@@ -247,7 +247,7 @@ describe('normalize', function () {
         it('should return true if extractAsync with normalize working', function (done) {
             var query = "polar bear mañana";
             var choices = ["brown bear", "polar bear mañana", "koala bear"];
-            fuzz.extractAsync(query, choices, { astral: true }, function (results) {
+            fuzz.extractAsync(query, choices, { astral: true }, function (err, results) {
                 assert.equal(results[0][1], 100);
                 done();
             });
@@ -255,7 +255,7 @@ describe('normalize', function () {
         it('should return true if extractAsync with normalize working lite', function (done) {
             var query = "polar bear mañana";
             var choices = ["brown bear", "polar bear mañana", "koala bear"];
-            fuzzlite.extractAsync(query, choices, { astral: true }, function (results) {
+            fuzzlite.extractAsync(query, choices, { astral: true }, function (err, results) {
                 assert.equal(results[0][1], 100);
                 done();
             });
@@ -303,7 +303,7 @@ describe('async', function () {
     it('should return true if extractAsync with default options working', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
-        fuzz.extractAsync(query, choices, {}, function(results){
+        fuzz.extractAsync(query, choices, {}, function(err, results){
             assert.equal(results[0][1], 100);
             assert.equal(results[1][1], 80);
             assert.equal(results[2][1], 60);
@@ -314,7 +314,7 @@ describe('async', function () {
     it('should return true if extractAsync lite with default options working', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
-        fuzzlite.extractAsync(query, choices, {}, function (results) {
+        fuzzlite.extractAsync(query, choices, {}, function (err, results) {
             assert.equal(results[0][1], 100);
             assert.equal(results[1][1], 80);
             assert.equal(results[2][1], 60);

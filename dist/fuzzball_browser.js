@@ -8728,10 +8728,20 @@ function hasOwnProperty(obj, prop) {
             isArray = true; //if array don't check hasOwnProperty every time below
         }
         else numchoices = Object.keys(choices).length;
-        if (!choices || numchoices === 0) console.log("No choices");
-        if (options.processor && typeof options.processor !== "function") console.log("Invalid Processor");
+        if (!choices || numchoices === 0) {
+            callback(new Error("No choices"));
+            return;
+        }
+        if (options.processor && typeof options.processor !== "function") {
+            callback(new Error("Invalid Processor"));
+            return;
+        }
         if (!options.processor) options.processor = function (x) { return x; }
-        if (!options.scorer || typeof options.scorer !== "function") {
+        if (options.scorer && typeof options.scorer !== "function") {
+            callback(new Error("Invalid Scorer"));
+            return;
+        }
+        if (!options.scorer) {
             options.scorer = QRatio;
             console.log("Using default scorer 'ratio'");
         }
@@ -8823,7 +8833,7 @@ function hasOwnProperty(obj, prop) {
                 else if (!options.unsorted) {
                     results = results.sort(function (a, b) { return b[1] - a[1]; });
                 }
-                callback(results);
+                callback(null, results);
             }
         }
     }

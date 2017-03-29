@@ -4,7 +4,7 @@
 ==========
 Easy to use and powerful fuzzy string matching.
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (slightly modified, with a bit of code taken from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein))
+This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (with a bit of code from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) patched on)
 
 # Installation
 
@@ -42,7 +42,7 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Larry Hood', 92, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
-fuzz.extractAsync("mr. harry hood", choices, options, callback);
+fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 ```
 
 **Simple Ratio**
@@ -143,8 +143,7 @@ If astral is true it will normalize your strings before scoring, as long as Stri
 
 ###### fuzz.extract(query, choices, options);
 
-###### fuzz.extractAsync(query, choices, options, callback); (internal loop will be non-blocking)
-
+###### fuzz.extractAsync(query, choices, options, function(err, results) { /* do stuff */ }); (internal loop will be non-blocking)
 
 **Simple:** array of strings, or object in form of {key: "string"}
 
