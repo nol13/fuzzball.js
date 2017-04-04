@@ -116,6 +116,10 @@ fuzz.full_process("myt^eXt!");
 
 ### International (a.k.a. non-ascii)
 
+If your text contains non-ascii characters set full_process to false or they will get stripped out. (got a good locale specific alphanumeric check in js?)
+
+**If useCollator and/or astral is set to true, full_process will be set to false automatically.** 
+
 To use collation when calculating edit distance, set **useCollator** to true. 
 
 Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
@@ -135,8 +139,6 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 ```
 
 If astral is true it will normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
-
-**If useCollator and/or astral is set to true, full_process will be set to false automatically.** (got a good locale specific alphanumeric check in js?)
 
 
 ### Batch Extract (search list of choices for top results)
