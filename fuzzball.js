@@ -9,6 +9,7 @@
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
+    var xre = require('./xregexp/index.js');
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
@@ -574,13 +575,6 @@
         return Math.max.apply(null, scores);
     }
 
-    function process_and_sort(str) {
-        return str.match(/\S+/g).sort().join(" ").trim();
-    }
-
-     function tokenize(str) {
-        return _uniq(str.match(/\S+/g));
-    }
 
     /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
 
@@ -723,12 +717,23 @@
         else return false;
     }
 
+    function process_and_sort(str) {
+        return str.match(/\S+/g).sort().join(" ").trim();
+    }
+
+    function tokenize(str) {
+        return _uniq(str.match(/\S+/g));
+    }
+
+    var alphaNumUnicode = xre('[^\\pN|\\pL|_]', 'g');
     function full_process(str, force_ascii) {
         if (!(str instanceof String) && typeof str !== "string") return "";
-        // Non-ascii won't turn into whitespace if force_ascii
-        if (force_ascii !== false) str = str.replace(/[^\x00-\x7F]/g, "");
-        // Non-alphanumeric (roman alphabet) to whitespace
-        return str.replace(/\W|_/g,' ').toLowerCase().trim();
+        // Non-ascii won't turn into whitespace if not force_ascii
+        if (force_ascii === true) {
+            str = str.replace(/[^\x00-\x7F]/g, "");
+            return str.replace(/\W|_/g,' ').toLowerCase().trim();
+        }
+        return xre.replace(str, alphaNumUnicode, ' ', 'all').toLowerCase().trim();
     }
 
     // clone/shallow copy whatev
@@ -743,11 +748,11 @@
             }
         }
         if (!(typeof optclone.full_process !== 'undefined' && optclone.full_process === false)) optclone.full_process = true;
-        if (!(typeof optclone.force_ascii !== 'undefined' && optclone.force_ascii === false)) optclone.force_ascii = true ;
+        if (!(typeof optclone.force_ascii !== 'undefined' && optclone.force_ascii === true)) optclone.force_ascii = false;
         // normalize option not used unless astral is true, so true + no astral = no normalize
         if (!(typeof optclone.normalize !== 'undefined' && optclone.normalize === false)) optclone.normalize = true;
         if (typeof optclone.astral !== 'undefined' && optclone.astral === true) optclone.full_process = false;
-        if (typeof optclone.useCollator !== 'undefined' && optclone.useCollator === true) optclone.full_process = false;
+      //  if (typeof optclone.useCollator !== 'undefined' && optclone.useCollator === true) optclone.full_process = false;
         return optclone;
     }
 

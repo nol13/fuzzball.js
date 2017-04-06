@@ -22,7 +22,7 @@ npm install fuzzball
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (40kB vs. 105kB uncompressed, runtime performance and browser compatibility still prioritized over going any smaller though)
+You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (60kB vs. 125kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future)
 
 # Usage
 
@@ -110,15 +110,14 @@ fuzz.ratio("this is a test", "this is a test!", options);
 
 Or run separately.. (say if searching a long list repeatedly, can avoid some performance overhead)
 ```js
-fuzz.full_process("myt^eXt!");
+// options.force_ascii will be passed in as 2nd param, default: false
+fuzz.full_process("myt^eäXt!");
+        myt eäxt
+fuzz.full_process("myt^eäXt!", true);
         myt ext
 ```
 
-### International (a.k.a. non-ascii)
-
-If your text contains non-ascii characters set full_process to false or they will get stripped out. (got a good locale specific alphanumeric check in js?)
-
-**If useCollator and/or astral is set to true, full_process will be set to false automatically.** 
+### International/Unicode Stuff
 
 To use collation when calculating edit distance, set **useCollator** to true. 
 
@@ -137,8 +136,9 @@ var options = {astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
+**If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
-If astral is true it will normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
+When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
 
 
 ### Batch Extract (search list of choices for top results)

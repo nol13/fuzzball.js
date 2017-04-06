@@ -235,12 +235,12 @@ describe('astral', function () {
 describe('normalize', function () {
     if (String.prototype.normalize) {
         it('should return true if normalized properly', function () {
-            var options = { astral: true, full_process: false };
+            var options = { astral: true };
             assert.equal(fuzz.ratio("mañana", "mañana", options), 100);
             assert.equal(fuzz.ratio("polar bear mañana", "polar bear mañana", options), 100);
         });
         it('should return true if normalized properly lite', function () {
-            var options = { astral: true, full_process: false };
+            var options = { astral: true };
             assert.equal(fuzzlite.ratio("mañana", "mañana", options), 100);
             assert.equal(fuzzlite.ratio("polar bear mañana", "polar bear mañana", options), 100);
         });
@@ -345,7 +345,7 @@ describe('errors', function () {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         try {
-            results = fuzz.extract(query, [], {});
+            var results = fuzz.extract(query, [], {});
         }
         catch (err) {
             assert.equal(err.message, "No choices");
@@ -355,10 +355,19 @@ describe('errors', function () {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         try {
-            results = fuzzlite.extract(query, [], {});
+            var results = fuzzlite.extract(query, [], {});
         }
         catch (err) {
             assert.equal(err.message, "No choices");
         }
+    });
+});
+
+describe('full_process with unicode alphanumeric regex', function () {
+    it('should have a with dots in output', function () {
+        assert.equal(fuzz.full_process("myt^eäXt!"), "myt eäxt");
+    });
+    it('should not have a with dots in output', function () {
+        assert.equal(fuzz.full_process("myt^eäXt!", true), "myt ext");
     });
 });
