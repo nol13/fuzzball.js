@@ -33,7 +33,7 @@ describe('Scorer Identity Tests', function () {
                     assert.equal(100, tmpscorer(data.strings[s], data.strings[s]));
                 }
                 for (var s in data.mixed_strings) {
-                    assert.equal(100, tmpscorer(data.mixed_strings[s], data.mixed_strings[s], { full_process: false, useCollator: false, ratio_alg: "leven" }));
+                    assert.equal(100, tmpscorer(data.mixed_strings[s], data.mixed_strings[s], { full_process: false}));
                 }
                 for (var s in data.a) {
                     assert.equal(100, tmpscorer(data.a[s][0], data.a[s][0], { full_process: false }));
@@ -371,3 +371,34 @@ describe('full_process with unicode alphanumeric regex', function () {
         assert.equal(fuzz.full_process("myt^eäXt!", true), "myt ext");
     });
 });
+
+describe('full_process with unicode alphanumeric regex lite', function () {
+    it('should have a with dots in output', function () {
+        assert.equal(fuzzlite.full_process("myt^eäXt!"), "myt eäxt");
+    });
+    it('should not have a with dots in output', function () {
+        assert.equal(fuzzlite.full_process("myt^eäXt!", true), "myt ext");
+    });
+});
+
+describe('collation', function () {
+    it('should be 100 with collation', function () {
+        assert.equal(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!", {useCollator: true}));
+    });
+    it('should not be 100 without collation', function () {
+        assert.notEqual(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!"));
+    });
+    it('should be 100 with collation lite', function () {
+        assert.equal(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!", { useCollator: true }));
+    });
+    it('should not be 100 without collation lite', function () {
+        assert.notEqual(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!"));
+    });
+    it('should be 100 with collation astral', function () {
+        assert.equal(100, fuzz.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral:true }));
+    });
+    it('should be 100 with collation astral lite', function () {
+        assert.equal(100, fuzzlite.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral: true }));
+    });
+});
+

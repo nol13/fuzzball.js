@@ -6,6 +6,15 @@ Easy to use and powerful fuzzy string matching.
 
 This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (with a bit of code from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) patched on)
 
+# Contents
+ * [Installation](#installation)
+ * [Usage and Scoring Overview](#usage)
+ * [Pre-Processing](#pre-processing)
+ * [International/Unicode Stuff](#internationalunicode-stuff)
+ * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
+ * [Performance Optimization](#performance-optimization)
+ * [Alternate Ratio Calculations](#alternate-ratio-calculations)
+
 # Installation
 
 **Using NPM**
@@ -57,7 +66,7 @@ fuzz.ratio("this is a test", "this is a test!"); // "!" stripped in pre-processi
 Highest scoring substring of the longer string vs. the shorter string.
 
 ```js
-fuzz.partial_ratio("this is a test", "this is a test again!"); //still 100, substring of 2nd is a perfect match of the first
+fuzz.partial_ratio("test", "testing"); //still 100, substring of 2nd is a perfect match of the first
         100
 ```
 
@@ -100,11 +109,11 @@ Blog post with overview of scoring algorithms can be found [**here**](http://cha
 
 ### Pre-Processing
 
-Pre-processing run by default unless options.full_process is set to false.
+Pre-processing to remove non-alphanumeric characters run by default unless options.full_process is set to false.
 ```js
 // eh, don't need to clean it up..
-var options = {full_process: false}; //non-alphanumeric will not be converted to whitespace if false, default true
-fuzz.ratio("this is a test", "this is a test!", options);
+// set options.force_ascii to true to remove all non-ascii letters as well, default: false
+fuzz.ratio("this is a test", "this is a test!", {full_process: false});
         97
 ```
 
