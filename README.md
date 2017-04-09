@@ -23,10 +23,10 @@ This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzyw
 npm install fuzzball
 ```
 
-**Browser** (using pre-built standalone version)
+**Browser** (using pre-built standalone version, charset must be utf-8)
 
 ```html
-<script src="fuzzball_browser.min.js"></script>
+<script charset="UTF-8" src="fuzzball_browser.min.js"></script>
 <script>
 var fuzz = require('fuzzball');
 </script>
@@ -130,7 +130,7 @@ fuzz.full_process("myt^eäXt!", true);
 
 To use collation when calculating edit distance, set **useCollator** to true. Will be ignored if Intl.Collator does not exist in your enviroment. (node 0.10 and under, IE10 and under)
 
-Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
+Setting useCollator to true will have an impact on performance, so if you have really large number of choices may be best to pre-process (i.e. lodash _.deburr) instead if possible.
 
 ```js
 var options = {useCollator: true};

@@ -9,10 +9,17 @@
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
-    var xre = require('./xregexp/index.js');
-    require('string.prototype.codepointat');
-    require('string.fromcodepoint');
+    var _iLeven = require('./lib/iLeven.js');
+    var _leven = require('./lib/leven.js');
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
+
+    var utils = require('./lib/utils.js')(_uniq);
+    var _validate = utils.validate;
+    var process_and_sort = utils.process_and_sort;
+    var tokenize = utils.tokenize;
+    var full_process = utils.full_process;
+    var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
+    var _isCustomFunc = utils.isCustomFunc;
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -28,7 +35,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein distance (0 and above).
          */
@@ -36,7 +43,7 @@
         str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
         str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        if (options.astral) return _iLeven(str1, str2, options);
+        if (options.astral) return _iLeven(str1, str2, options, _toArray);
         else return _leven(str1, str2, options);
     }
 
@@ -49,7 +56,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -70,7 +77,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -91,7 +98,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -112,7 +119,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -134,7 +141,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -159,7 +166,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -185,7 +192,7 @@
          * @param {Object} [options_p] - Additional options.
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {number} - the levenshtein ratio (0-100).
          */
@@ -234,7 +241,7 @@
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
@@ -355,7 +362,7 @@
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true TODO: Unicode stuff
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
@@ -540,7 +547,7 @@
                     }
                 }
             }
-            levdistance = _iLeven(str1, str2, options);
+            levdistance = _iLeven(str1, str2, options, _toArray);
             lensum = _toArray(str1).length + _toArray(str2).length
         }
         else {
@@ -575,204 +582,6 @@
         return Math.max.apply(null, scores);
     }
 
-
-    /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
-
-    var collator;
-    try {
-        collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
-    } catch (err) {
-        console.log("Collator could not be initialized and wouldn't be used");
-    }
-
-    /** from https://github.com/sindresorhus/leven slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
-    var arr = [];
-    var charCodeCache = [];
-
-    var _leven = function (a, b, options) {
-        var useCollator = (options && collator && options.useCollator);
-        var subcost = 1;
-        //to match behavior of python-Levenshtein and fuzzywuzzy
-        if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
-
-        if (a === b) {
-            return 0;
-        }
-
-        var aLen = a.length;
-        var bLen = b.length;
-
-        if (aLen === 0) {
-            return bLen;
-        }
-
-        if (bLen === 0) {
-            return aLen;
-        }
-
-        var bCharCode;
-        var ret;
-        var tmp;
-        var tmp2;
-        var i = 0;
-        var j = 0;
-
-        while (i < aLen) {
-            charCodeCache[i] = a.charCodeAt(i);
-            arr[i] = ++i;
-        }
-        if (!useCollator) {  //checking for collator inside while 2x slower
-            while (j < bLen) {
-                bCharCode = b.charCodeAt(j);
-                tmp = j++;
-                ret = j;
-                for (i = 0; i < aLen; i++) {
-                    tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
-                    tmp = arr[i];
-                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
-                }
-            }
-        }
-        else {
-            while (j < bLen) {
-                bCharCode = b.charCodeAt(j);
-                tmp = j++;
-                ret = j;
-
-                for (i = 0; i < aLen; i++) {
-                    tmp2 = 0 === collator.compare(String.fromCharCode(bCharCode), String.fromCharCode(charCodeCache[i])) ? tmp : tmp + subcost;
-                    tmp = arr[i];
-                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
-                }
-            }
-        }
-        return ret;
-    };
-    
-    var _iLeven = function (a, b, options) {
-        var useCollator = (options && collator && options.useCollator);
-        var subcost = 1;
-        //to match behavior of python-Levenshtein and fuzzywuzzy
-        if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
-
-        if (a === b) {
-            return 0;
-        }
-        var achars = _toArray(a);
-        var bchars = _toArray(b);
-        var aLen = achars.length;
-        var bLen = bchars.length;
-
-        if (aLen === 0) {
-            return bLen;
-        }
-
-        if (bLen === 0) {
-            return aLen;
-        }
-
-        var bCharCode;
-        var ret;
-        var tmp;
-        var tmp2;
-        var i = 0;
-        var j = 0;
-
-        while (i < aLen) {
-            charCodeCache[i] = achars[i].codePointAt(0);
-            arr[i] = ++i;
-        }
-        if (!useCollator) {  //checking for collator inside while 2x slower
-            while (j < bLen) {
-                bCharCode = bchars[j].codePointAt(0);
-                tmp = j++;
-                ret = j;
-                for (i = 0; i < aLen; i++) {
-                    tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + subcost;
-                    tmp = arr[i];
-                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
-                }
-            }
-        }
-        else {
-            while (j < bLen) {
-                bCharCode = bchars[j].codePointAt(0);
-                tmp = j++;
-                ret = j;
-
-                for (i = 0; i < aLen; i++) {
-                    tmp2 = 0 === collator.compare(String.fromCodePoint(bCharCode), String.fromCodePoint(charCodeCache[i])) ? tmp : tmp + subcost;
-                    tmp = arr[i];
-                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
-                }
-            }
-        }
-        return ret;
-    };
-
-/**    Utils   */
-
-    function _validate(str) {
-        if ((typeof str === "string" || str instanceof String) && str.length > 0) return true;
-        else return false;
-    }
-
-    function process_and_sort(str) {
-        return str.match(/\S+/g).sort().join(" ").trim();
-    }
-
-    function tokenize(str) {
-        return _uniq(str.match(/\S+/g));
-    }
-
-    var alphaNumUnicode = xre('[^\\pN|\\pL|_]', 'g');
-    function full_process(str, force_ascii) {
-        if (!(str instanceof String) && typeof str !== "string") return "";
-        // Non-ascii won't turn into whitespace if not force_ascii
-        if (force_ascii === true) {
-            str = str.replace(/[^\x00-\x7F]/g, "");
-            return str.replace(/\W|_/g,' ').toLowerCase().trim();
-        }
-        return xre.replace(str, alphaNumUnicode, ' ', 'all').toLowerCase().trim();
-    }
-
-    // clone/shallow copy whatev
-    function _clone_and_set_option_defaults(options) {
-        // don't run more than once if usign extract functions
-        if(options && options.isAClone) return options;
-        var optclone = {isAClone: true};
-        if (options) {
-            var i, keys = Object.keys(options);
-            for (i = 0; i < keys.length; i++) {
-                optclone[keys[i]] = options[keys[i]];
-            }
-        }
-        if (!(typeof optclone.full_process !== 'undefined' && optclone.full_process === false)) optclone.full_process = true;
-        if (!(typeof optclone.force_ascii !== 'undefined' && optclone.force_ascii === true)) optclone.force_ascii = false;
-        // normalize option not used unless astral is true, so true + no astral = no normalize
-        if (!(typeof optclone.normalize !== 'undefined' && optclone.normalize === false)) optclone.normalize = true;
-        if (typeof optclone.astral !== 'undefined' && optclone.astral === true) optclone.full_process = false;
-      //  if (typeof optclone.useCollator !== 'undefined' && optclone.useCollator === true) optclone.full_process = false;
-        return optclone;
-    }
-
-    function _isCustomFunc (func) {
-        if (typeof func === "function" && (
-            func.name === "token_set_ratio" ||
-            func.name === "partial_token_set_ratio" ||
-            func.name === "token_sort_ratio" ||
-            func.name === "partial_token_sort_ratio" ||
-            func.name === "QRatio" ||
-            func.name === "WRatio" ||
-            func.name === "distance" ||
-            func.name === "partial_ratio"
-        )) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
     //polyfill for Object.keys
     // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
     if (!Object.keys) {
