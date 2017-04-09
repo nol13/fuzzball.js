@@ -382,23 +382,26 @@ describe('full_process with unicode alphanumeric regex lite', function () {
 });
 
 describe('collation', function () {
-    it('should be 100 with collation', function () {
-        assert.equal(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!", {useCollator: true}));
-    });
-    it('should not be 100 without collation', function () {
-        assert.notEqual(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!"));
-    });
-    it('should be 100 with collation lite', function () {
-        assert.equal(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!", { useCollator: true }));
-    });
-    it('should not be 100 without collation lite', function () {
-        assert.notEqual(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!"));
-    });
-    it('should be 100 with collation astral', function () {
-        assert.equal(100, fuzz.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral:true }));
-    });
-    it('should be 100 with collation astral lite', function () {
-        assert.equal(100, fuzzlite.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral: true }));
-    });
+    // only test supported runtimes
+    if (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") {
+        it('should be 100 with collation', function () {
+            assert.equal(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!", { useCollator: true }));
+        });
+        it('should not be 100 without collation', function () {
+            assert.notEqual(100, fuzz.ratio("myt^eäXt!", "myt^eaXt!"));
+        });
+        it('should be 100 with collation lite', function () {
+            assert.equal(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!", { useCollator: true }));
+        });
+        it('should not be 100 without collation lite', function () {
+            assert.notEqual(100, fuzzlite.ratio("myt^eäXt!", "myt^eaXt!"));
+        });
+        it('should be 100 with collation astral', function () {
+            assert.equal(100, fuzz.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral: true }));
+        });
+        it('should be 100 with collation astral lite', function () {
+            assert.equal(100, fuzzlite.ratio("polar bear mañanä", "polar bear mañana", { useCollator: true, astral: true }));
+        });
+    }
 });
 

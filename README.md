@@ -128,7 +128,7 @@ fuzz.full_process("myt^eäXt!", true);
 
 ### International/Unicode Stuff
 
-To use collation when calculating edit distance, set **useCollator** to true. 
+To use collation when calculating edit distance, set **useCollator** to true. Will be ignored if Intl.Collator does not exist in your enviroment. (node 0.10 and under, IE10 and under)
 
 Setting useCollator to true will have an impact on performance, so if you have a _really_ large number of choices may be best to pre-process instead if possible.
 
