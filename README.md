@@ -101,7 +101,7 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
 
 **Other Scoring Options**
 
-  * partial_token_set_ratio
+  * partial_token_set_ratio (options.trySimple = true will add the partial_ratio to the test suite)
   * partial_token_sort_ratio
   * WRatio
 (WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
