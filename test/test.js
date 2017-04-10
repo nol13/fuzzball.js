@@ -405,3 +405,12 @@ describe('collation', function () {
     }
 });
 
+describe('trySimple', function () {
+    // only test supported runtimes
+    it('should match ratio with trySimple on', function () {
+        assert.equal(fuzz.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true }), fuzz.ratio('mr. harry hood', 'Mr.xarry wood'));
+    });
+    it('should match ratio with trySimple on lite', function () {
+        assert.equal(fuzzlite.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true }), fuzz.ratio('mr. harry hood', 'Mr.xarry wood'));
+    });
+});

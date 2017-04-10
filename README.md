@@ -89,6 +89,7 @@ fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
 fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
         100
 ```
+If you set options.trySimple to true it will add the simple ratio to the token_set_ratio test suite as well.
 
 **Distance**
 

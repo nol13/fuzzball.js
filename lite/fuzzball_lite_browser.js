@@ -3725,6 +3725,9 @@ if (!String.prototype.codePointAt) {
             ratio_func(sorted_sect, combined_2to1, options),
             ratio_func(combined_1to2, combined_2to1, options)
         ]
+        if (options.trySimple) {
+            pairwise.push(ratio_func(str1, str2, options));
+        }
         return Math.max.apply(null, pairwise);
     }
 
