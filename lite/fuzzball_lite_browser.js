@@ -3438,13 +3438,15 @@ if (!String.prototype.codePointAt) {
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
-         * @param {function} [options_p.scorer] - takes two strings, or string and object, and returns a score
-         * @param {function} [options_p.processor] - takes each choice and outputs a string to be used for Scoring
+         * @param {function} [options_p.scorer] - takes two values and returns a score
+         * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
+         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
@@ -3455,10 +3457,14 @@ if (!String.prototype.codePointAt) {
             numchoices = choices.length;
             isArray = true; //if array don't check hasOwnProperty every time below
         }
+        else if (!(choices instanceof Object)) {
+            throw new Error("Invalid choices");
+            return;
+        }
         else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) {
-            throw new Error("No choices");
-            return;
+            console && console.warn("No choices");
+            return [];
         }
         if (options.processor && typeof options.processor !== "function") {
             throw new Error("Invalid Processor");
@@ -3471,7 +3477,7 @@ if (!String.prototype.codePointAt) {
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            console.log("Using default scorer 'ratio'");
+            console && console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
@@ -3488,10 +3494,10 @@ if (!String.prototype.codePointAt) {
                     query = query.normalize();
                 }
                 else {
-                    console.log("Normalization not supported in your environment");
+                    console && console.warn("Normalization not supported in your environment");
                 }
             }
-            if (query.length === 0) console.log("Processed query is empty string");
+            if (query.length === 0) console && console.warn("Processed query is empty string");
         }
         var results = [];
         var anyblank = false;
@@ -3548,7 +3554,7 @@ if (!String.prototype.codePointAt) {
                 if (result > options.cutoff) results.push([choices[c], result, idx]);
             }
         }
-        if(anyblank) console.log("One or more choices were empty. (post-processing if applied)")
+        if (anyblank) console && console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
             var cmp = function(a, b) { return a[1] - b[1]; }
             results = Heap.nlargest(results, options.limit, cmp);
@@ -3566,13 +3572,15 @@ if (!String.prototype.codePointAt) {
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
-         * @param {function} [options_p.scorer] - takes two strings, or string and object, and returns a score
-         * @param {function} [options_p.processor] - takes each choice and outputs a string to be used for Scoring
+         * @param {function} [options_p.scorer] - takes two values and returns a score
+         * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
-         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
+         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
@@ -3583,9 +3591,14 @@ if (!String.prototype.codePointAt) {
             numchoices = choices.length;
             isArray = true; //if array don't check hasOwnProperty every time below
         }
+        else if (!(choices instanceof Object)) {
+            callback(new Error("Invalid choices"));
+            return;
+        }
         else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) {
-            callback(new Error("No choices"));
+            console && console.warn("No choices");
+            callback(null, []);
             return;
         }
         if (options.processor && typeof options.processor !== "function") {
@@ -3599,7 +3612,7 @@ if (!String.prototype.codePointAt) {
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            console.log("Using default scorer 'ratio'");
+            console && console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
@@ -3616,10 +3629,10 @@ if (!String.prototype.codePointAt) {
                     query = query.normalize();
                 }
                 else {
-                    console.log("Normalization not supported in your environment");
+                    console && console.warn("Normalization not supported in your environment");
                 }
             }
-            if (query.length === 0) console.log("Processed query is empty string");
+            if (query.length === 0) console && console.warn("Processed query is empty string");
         }
         var results = [];
         var anyblank = false;
@@ -3684,7 +3697,7 @@ if (!String.prototype.codePointAt) {
                 setImmediate(function () { searchLoop(keys[i + 1], i + 1) });
             }
             else {
-                if (anyblank) console.log("One or more choices were empty. (post-processing if applied)")
+                if (anyblank) console && console.log("One or more choices were empty. (post-processing if applied)")
                 if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
                     var cmp = function (a, b) { return a[1] - b[1]; }
                     results = Heap.nlargest(results, options.limit, cmp);
@@ -3752,7 +3765,7 @@ if (!String.prototype.codePointAt) {
                 }
                 else {
                     if (!normalWarn) {
-                        console.log("Normalization not supported in your environment");
+                        console && console.warn("Normalization not supported in your environment");
                         normalWarn = true;
                     }
                 }

@@ -353,40 +353,40 @@ describe('async', function () {
 });
 
 describe('errors', function () {
-    it('should return error from extractAsync with no choices', function (done) {
+    it('should return error from extractAsync with invalid choices', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
-        fuzz.extractAsync(query, [], {}, function (err, results) {
-            assert.equal(err.message, "No choices");
+        fuzz.extractAsync(query, 'not a valid choices obj', {}, function (err, results) {
+            assert.equal(err.message, "Invalid choices");
             done();
         });
     });
-    it('should return error from extractAsync with no choices lite', function (done) {
+    it('should return error from extractAsync with invalid choices lite', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
-        fuzzlite.extractAsync(query, [], {}, function (err, results) {
-            assert.equal(err.message, "No choices");
+        fuzzlite.extractAsync(query, 'not a valid choices obj', {}, function (err, results) {
+            assert.equal(err.message, "Invalid choices");
             done();
         });
     });
-    it('should return error from extract with no choices', function () {
+    it('should return error from extract with invalid choices', function () {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         try {
-            var results = fuzz.extract(query, [], {});
+            var results = fuzz.extract(query, 'not a valid choices obj', {});
         }
         catch (err) {
-            assert.equal(err.message, "No choices");
+            assert.equal(err.message, "Invalid choices");
         }
     });
-    it('should return error from extract with no choices lite', function () {
+    it('should return error from extract with invalid choices lite', function () {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         try {
-            var results = fuzzlite.extract(query, [], {});
+            var results = fuzzlite.extract(query, 'not a valid choices obj', {});
         }
         catch (err) {
-            assert.equal(err.message, "No choices");
+            assert.equal(err.message, "Invalid choices");
         }
     });
 });
