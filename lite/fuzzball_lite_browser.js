@@ -3463,7 +3463,7 @@ if (!String.prototype.codePointAt) {
         }
         else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) {
-            if (console) console.warn("No choices");
+            if (typeof console !== undefined) console.warn("No choices");
             return [];
         }
         if (options.processor && typeof options.processor !== "function") {
@@ -3477,7 +3477,7 @@ if (!String.prototype.codePointAt) {
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            if (console) console.log("Using default scorer 'ratio'");
+            if (typeof console !== undefined) console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
@@ -3494,10 +3494,10 @@ if (!String.prototype.codePointAt) {
                     query = query.normalize();
                 }
                 else {
-                    if (console) console.warn("Normalization not supported in your environment");
+                    if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                 }
             }
-            if (query.length === 0) if (console) console.warn("Processed query is empty string");
+            if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
         var anyblank = false;
@@ -3554,7 +3554,7 @@ if (!String.prototype.codePointAt) {
                 if (result > options.cutoff) results.push([choices[c], result, idx]);
             }
         }
-        if (anyblank) if (console) console.log("One or more choices were empty. (post-processing if applied)")
+        if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
             var cmp = function(a, b) { return a[1] - b[1]; }
             results = Heap.nlargest(results, options.limit, cmp);
@@ -3597,7 +3597,7 @@ if (!String.prototype.codePointAt) {
         }
         else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) {
-            if (console) console.warn("No choices");
+            if (typeof console !== undefined) console.warn("No choices");
             callback(null, []);
             return;
         }
@@ -3612,7 +3612,7 @@ if (!String.prototype.codePointAt) {
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            if (console) console.log("Using default scorer 'ratio'");
+            if (typeof console !== undefined) console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
@@ -3629,10 +3629,10 @@ if (!String.prototype.codePointAt) {
                     query = query.normalize();
                 }
                 else {
-                    if (console) console.warn("Normalization not supported in your environment");
+                    if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                 }
             }
-            if (query.length === 0) if (console) console.warn("Processed query is empty string");
+            if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
         var anyblank = false;
@@ -3697,7 +3697,7 @@ if (!String.prototype.codePointAt) {
                 setImmediate(function () { searchLoop(keys[i + 1], i + 1) });
             }
             else {
-                if (anyblank) if (console) console.log("One or more choices were empty. (post-processing if applied)")
+                if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
                 if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
                     var cmp = function (a, b) { return a[1] - b[1]; }
                     results = Heap.nlargest(results, options.limit, cmp);
@@ -3765,7 +3765,7 @@ if (!String.prototype.codePointAt) {
                 }
                 else {
                     if (!normalWarn) {
-                        if (console) console.warn("Normalization not supported in your environment");
+                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                         normalWarn = true;
                     }
                 }
