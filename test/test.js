@@ -110,6 +110,13 @@ describe('Extract with pre-calculated tokens', function () {
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
         assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzlite.extract(query, choices, options);
+        results2 = fuzzlite.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
     it('should return true if pre-calculating tokens and not using processor function doesnt affect token_set_ratio results', function () {
         var query = "126 abz x";
@@ -137,8 +144,15 @@ describe('Extract with pre-calculated tokens', function () {
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
         assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzlite.extract(query, choices, options);
+        results2 = fuzzlite.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
-        it('should return true if pre-calculating tokens and using dummy string doesnt effect token_sort_ratio', function () {
+    it('should return true if pre-calculating tokens and using dummy string doesnt effect token_sort_ratio', function () {
         var query = "126 abz x";
         var choices = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
         var choices2 = [{ id: 345, modelnumber: "123 abc" }, { id: 346, modelnumber: "123 efg" }, { id: 347, modelnumber: "456 ab dzx" }];
@@ -155,6 +169,13 @@ describe('Extract with pre-calculated tokens', function () {
         };
         var results = fuzz.extract(query, choices, options);
         var results2 = fuzz.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzlite.extract(query, choices, options);
+        results2 = fuzzlite.extract(query, choices2, options);
         assert.equal(results[0][1], results2[0][1]);
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
@@ -182,6 +203,13 @@ describe('Extract with pre-calculated tokens', function () {
         };
         var results = fuzz.extract(query, choices, options);
         var results2 = fuzz.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzlite.extract(query, choices, options);
+        results2 = fuzzlite.extract(query, choices2, options2);
         assert.equal(results[0][1], results2[0][1]);
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
