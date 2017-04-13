@@ -200,12 +200,15 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
+                    if (choices[c].tokens) {
+                        options.tokens = [query_tokens, choices[c].tokens];
+                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    }
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
-                        mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
+                        options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
-                    //query and mychoice only used for validation here
+                    //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
                 }
                 else if (isCustom) {
@@ -327,12 +330,15 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) options.tokens = [query_tokens, choices[c].tokens];
+                    if (choices[c].tokens) {
+                        options.tokens = [query_tokens, choices[c].tokens];
+                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    }
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
                         options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
-                    //query and mychoice only used for validation here
+                    //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
                 }
                 else if (isCustom) {
