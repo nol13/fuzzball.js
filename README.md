@@ -9,8 +9,8 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 # Contents
  * [Installation](#installation)
  * [Usage and Scoring Overview](#usage)
- * [Pre-Processing](#pre-processing)
  * [Wildcards](#wildcards)
+ * [Pre-Processing](#pre-processing)
  * [International/Unicode Stuff](#internationalunicode-stuff)
  * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
  * [Multiple Fields](#multiple-fields)
@@ -103,12 +103,23 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
 
 **Other Scoring Options**
 
+Not tests I personally use, but ymmv..
   * partial_token_set_ratio (options.trySimple = true will add the partial_ratio to the test suite)
   * partial_token_sort_ratio
-  * WRatio
-(WRatio is weighted based on relative string length, runs tests based on relative length and returns top score)
+  * WRatio (runs tests based on relative string length and returns weighted top score)
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
+
+### Wildcards
+
+Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating distance.
+
+```js
+var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
+fuzz.ratio('fuzzba*l', 'fuXxball', options);
+        100
+```
+Every character in the string will be treated as a wildcard. Wildcards are **case insensitive** unless options.full_process is set to false, and are **not currently supported** when astral is set to true. (see unicode section below) They will also not affect sorting for the algorithms that depend on token sort order, so in some cases would still not result in perfect match. 
 
 ### Pre-Processing
 
@@ -120,25 +131,14 @@ fuzz.ratio("this is a test", "this is a test!", {full_process: false});
         97
 ```
 
-Or run separately.. (say if searching a long list repeatedly, can avoid some performance overhead)
+Or run separately.. (run beforehand to avoid a bit of performance overhead)
 ```js
-// options.force_ascii will be passed in as 2nd param, default: false
+// force_ascii will strip out non-ascii characters except designated wildcards
 fuzz.full_process("myt^eäXt!");
         myt eäxt
-fuzz.full_process("myt^eäXt!", true);
+fuzz.full_process("myt^eäXt!", {force_ascii: true});
         myt ext
 ```
-
-### Wildcards
-
-Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating distance.
-
-```js
-var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
-fuzz.ratio('fuzzba*l', 'fuXxball', options);
-        100
-```
-Every character in the string will be treated as a wildcard. Wildcards are **case insensitive** unless options.full_process is set to false, and are **not currently supported** when astral is set to true. (see below) They will also not affect sorting for the algorithms that depend on token sort order, so in some cases would still not result in perfect match. 
 
 ### International/Unicode Stuff
 
