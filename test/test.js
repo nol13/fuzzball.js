@@ -393,10 +393,10 @@ describe('errors', function () {
 
 describe('full_process with unicode alphanumeric regex', function () {
     it('should have a with dots in output', function () {
-        assert.equal(fuzz.full_process("myt^eäXt!"), "myt eäxt");
+        assert.equal(fuzz.full_process("_myt^eäXt!"), "myt eäxt");
     });
     it('should not have a with dots in output', function () {
-        assert.equal(fuzz.full_process("myt^eäXt!", true), "myt ext");
+        assert.equal(fuzz.full_process("_myt^eäXt!", true), "myt ext");
     });
 });
 
