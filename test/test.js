@@ -473,12 +473,20 @@ describe('wildcards', function () {
         var options = { wildcards: '^*#x' };
         assert.equal(fuzzlite.ratio('mr. h*rry hood', 'M^.xarry wox#', options), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', options));
     });
-    it('wildcards should be case insensitive when no full process', function () {
+    it('wildcards should be case sensitive when no full process', function () {
         var options = { wildcards: '^*#x', full_process: false };
-        assert.notEqual(fuzz.ratio('mr. h*rry hood', 'M^.Xarry wox#', options), fuzz.ratio('mr. harry hood', 'Mr.xarry wood', options));
+        assert.notEqual(fuzz.ratio('mr. h*rry hood', 'mr. h*rry Xood', options), 100);
     });
-    it('wildcards should be case insensitive when no full process lite', function () {
+    it('wildcards should be case sensitive when no full process lite', function () {
         var options = { wildcards: '^*#x', full_process: false };
-        assert.notEqual(fuzzlite.ratio('mr. h*rry hood', 'M^.Xarry wox#', options), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', options));
+        assert.notEqual(fuzzlite.ratio('mr. h*rry hood', 'mr. h*rry Xood', options), 100);
+    });
+    it('wildcards should be case insensitive when full process', function () {
+        var options = { wildcards: '^*#x', full_process: true };
+        assert.equal(fuzz.ratio('mr. h*rry hood', 'mr. h*rry Xood', options), 100);
+    });
+    it('wildcards should be case insensitive when full process lite', function () {
+        var options = { wildcards: '^*#x', full_process: true };
+        assert.equal(fuzzlite.ratio('mr. h*rry hood', 'mr. h*rry Xood', options), 100);
     });
 });
