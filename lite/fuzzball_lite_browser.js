@@ -171,8 +171,10 @@ module.exports = function (_uniq) {
         return _uniq(str.match(/\S+/g));
     }
 
-    var alphaNumUnicode = xre('[^\\pN|\\pL|_]', 'g');
+    var alphaNumUnicode = xre('[^\\pN|\\pL]', 'g');
     module.full_process = function(str, options) {
+        if (!(str instanceof String) && typeof str !== "string") return "";
+
         if (options && typeof options === "object" && options.wildcards && typeof options.wildcards === "string" && options.wildcards.length > 0) {
             var wildcards = options.wildcards.toLowerCase();
             str = str.toLowerCase();
@@ -189,7 +191,7 @@ module.exports = function (_uniq) {
                 // replace non alpha-num non-wildcards with space
                 var alphanumPat = '[^A-Za-z0-9' + escapeRegExp(wildcards) + ']';
                 str = str.replace(new RegExp(alphanumPat, "g"), " ");
-                str = str.replace(/_/g, ' ')
+                str = str.replace(/_/g, ' ');
 
                 // wildcards are case insensitive as of now
                 // would need to make sure lower version of wildcards didnt get turned into wildcards
@@ -197,7 +199,7 @@ module.exports = function (_uniq) {
             }
             else {
                 // replace non-alphanum non-wildcards
-                var upattern = '[^\\pN|\\pL|_|' + escapeRegExp(wildcards) + ']';
+                var upattern = '[^\\pN|\\pL|' + escapeRegExp(wildcards) + ']';
                 var alphaNumUnicodeWild = xre(upattern, 'g');
                 str = xre.replace(str, alphaNumUnicodeWild, ' ', 'all');
 
@@ -212,7 +214,6 @@ module.exports = function (_uniq) {
             }
         }
         else {
-            if (!(str instanceof String) && typeof str !== "string") return "";
             // Non-ascii won't turn into whitespace if not force_ascii
             if (options && (options.force_ascii || options === true)) { //support old behavior just passing true
                 str = str.replace(/[^\x00-\x7F]/g, "");
