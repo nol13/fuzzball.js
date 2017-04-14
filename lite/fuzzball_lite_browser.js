@@ -1,4 +1,6 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// levenshtein distance with astral support
+
 module.exports = function leven(a, b, options, _toArray) {
     require('string.prototype.codepointat');
     require('string.fromcodepoint');
@@ -15,7 +17,7 @@ module.exports = function leven(a, b, options, _toArray) {
     var charCodeCache = [];
     var useCollator = (options && collator && options.useCollator);
     var subcost = 1;
-    //to match behavior of python-Levenshtein and fuzzywuzzy
+    //to match behavior of python-Levenshtein and fuzzywuzzy, set to 2 in _ratio
     if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
 
     if (a === b) {
@@ -72,7 +74,9 @@ module.exports = function leven(a, b, options, _toArray) {
     }
     return ret;
 }
-},{"string.fromcodepoint":13,"string.prototype.codepointat":14}],2:[function(require,module,exports){
+},{"string.fromcodepoint":14,"string.prototype.codepointat":15}],2:[function(require,module,exports){
+// levenshtein distance without astral support
+
 module.exports = function leven(a, b, options) {
     /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
     var collator;
@@ -87,7 +91,7 @@ module.exports = function leven(a, b, options) {
     var charCodeCache = [];
     var useCollator = (options && collator && options.useCollator);
     var subcost = 1;
-    //to match behavior of python-Levenshtein and fuzzywuzzy
+    //to match behavior of python-Levenshtein and fuzzywuzzy, set to 2 in _ratio
     if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
 
     if (a === b) {
@@ -150,6 +154,10 @@ module.exports = function (_uniq) {
 
     var xre = require('./xregexp/index.js');
 
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // from MDN
+    }
+
     module.validate = function(str) {
         if ((typeof str === "string" || str instanceof String) && str.length > 0) return true;
         else return false;
@@ -164,14 +172,54 @@ module.exports = function (_uniq) {
     }
 
     var alphaNumUnicode = xre('[^\\pN|\\pL|_]', 'g');
-    module.full_process = function(str, force_ascii) {
-        if (!(str instanceof String) && typeof str !== "string") return "";
-        // Non-ascii won't turn into whitespace if not force_ascii
-        if (force_ascii === true) {
-            str = str.replace(/[^\x00-\x7F]/g, "");
-            return str.replace(/\W|_/g, ' ').toLowerCase().trim();
+    module.full_process = function(str, options) {
+        if (options && typeof options === "object" && options.wildcards && typeof options.wildcards === "string" && options.wildcards.length > 0) {
+            var wildcards = options.wildcards.toLowerCase();
+            str = str.toLowerCase();
+            if (options.force_ascii) {
+                // replace non-ascii non-wildcards
+                var pattern = '[^\x00 -\x7F|' + escapeRegExp(wildcards) + ']';
+                str = str.replace(new RegExp(pattern, "g"), "");
+                
+                // replace wildcards with wildchar
+                var wildpattern = '[' + escapeRegExp(wildcards) + ']';
+                var wildchar = wildcards[0];
+                str = str.replace(new RegExp(wildpattern, "g"), wildchar);
+
+                // replace non alpha-num non-wildcards with space
+                var alphanumPat = '[^A-Za-z0-9' + escapeRegExp(wildcards) + ']';
+                str = str.replace(new RegExp(alphanumPat, "g"), " ");
+                str = str.replace(/_/g, ' ')
+
+                // wildcards are case insensitive as of now
+                // would need to make sure lower version of wildcards didnt get turned into wildcards
+                return str.trim();
+            }
+            else {
+                // replace non-alphanum non-wildcards
+                var upattern = '[^\\pN|\\pL|_|' + escapeRegExp(wildcards) + ']';
+                var alphaNumUnicodeWild = xre(upattern, 'g');
+                str = xre.replace(str, alphaNumUnicodeWild, ' ', 'all');
+
+                // replace wildcards with wildchar
+                var wildpattern = '[' + escapeRegExp(wildcards) + ']';
+                var wildchar = wildcards[0];
+                str = str.replace(new RegExp(wildpattern, "g"), wildchar);
+
+                // wildcards are case insensitive as of now
+                // would need to make sure lower version of wildcards didnt get turned into wildcards
+                return str.trim();
+            }
         }
-        return xre.replace(str, alphaNumUnicode, ' ', 'all').toLowerCase().trim();
+        else {
+            if (!(str instanceof String) && typeof str !== "string") return "";
+            // Non-ascii won't turn into whitespace if not force_ascii
+            if (options && (options.force_ascii || options === true)) { //support old behavior just passing true
+                str = str.replace(/[^\x00-\x7F]/g, "");
+                return str.replace(/\W|_/g, ' ').toLowerCase().trim();
+            }
+            return xre.replace(str, alphaNumUnicode, ' ', 'all').toLowerCase().trim();
+        }
     }
 
     // clone/shallow copy whatev
@@ -214,7 +262,105 @@ module.exports = function (_uniq) {
 
     return module;
 }
-},{"./xregexp/index.js":4}],4:[function(require,module,exports){
+},{"./xregexp/index.js":5}],4:[function(require,module,exports){
+// levenshtein distance with wildcard support
+
+module.exports = function leven(a, b, options, regLeven) {
+    /** from https://github.com/hiddentao/fast-levenshtein slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
+    var collator;
+    try {
+        collator = (typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined") ? Intl.Collator("generic", { sensitivity: "base" }) : null;
+    } catch (err) {
+        if (typeof console !== undefined) console.warn("Collator could not be initialized and wouldn't be used");
+    }
+
+    /** from https://github.com/sindresorhus/leven slightly modified to double weight replacements as done by python-Levenshtein/fuzzywuzzy */
+    var arr = [];
+    var charCodeCache = [];
+    var useCollator = (options && collator && options.useCollator);
+    var subcost = 1;
+    //to match behavior of python-Levenshtein and fuzzywuzzy, set to 2 in _ratio
+    if (options && options.subcost && typeof options.subcost === "number") subcost = options.subcost;
+
+    if (a === b) {
+        return 0;
+    }
+
+    var aLen = a.length;
+    var bLen = b.length;
+
+    if (aLen === 0) {
+        return bLen;
+    }
+
+    if (bLen === 0) {
+        return aLen;
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
+    // not doing full check in _ratio as of now
+    if (options && options.wildcards && typeof options.wildcards === "string" && options.wildcards.length > 0) {
+
+        var wildchar;
+        var wildcode;
+        if (options.full_process === false && options.processed !== true) {
+            wildchar = options.wildcards[0];
+            wildcode = wildchar.charCodeAt(0);
+            var pattern = '[' + escapeRegExp(options.wildcards) + ']';
+            a = a.replace(new RegExp(pattern, "g"), wildchar);
+            b = b.replace(new RegExp(pattern, "g"), wildchar);
+        }
+        else {
+            wildchar = options.wildcards[0].toLowerCase();
+            wildcode = wildchar.charCodeAt(0);
+        }
+        var bCharCode;
+        var ret;
+        var tmp;
+        var tmp2;
+        var i = 0;
+        var j = 0;
+
+        while (i < aLen) {
+            charCodeCache[i] = a.charCodeAt(i);
+            arr[i] = ++i;
+        }
+        if (!useCollator) {  //checking for collator inside while 2x slower
+            while (j < bLen) {
+                bCharCode = b.charCodeAt(j);
+                tmp = j++;
+                ret = j;
+                for (i = 0; i < aLen; i++) {
+                    tmp2 = bCharCode === charCodeCache[i] || bCharCode === wildcode || charCodeCache[i] === wildcode ? tmp : tmp + subcost;
+                    tmp = arr[i];
+                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+                }
+            }
+        }
+        else {
+            while (j < bLen) {
+                bCharCode = b.charCodeAt(j);
+                tmp = j++;
+                ret = j;
+
+                for (i = 0; i < aLen; i++) {
+                    tmp2 = 0 === collator.compare(String.fromCharCode(bCharCode), String.fromCharCode(charCodeCache[i]))
+                        || bCharCode === wildcode || charCodeCache[i] === wildcode ? tmp : tmp + subcost;
+                    tmp = arr[i];
+                    ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+                }
+            }
+        }
+        return ret;
+    }
+    else {
+        return regLeven(a, b, options)
+    }
+}
+},{}],5:[function(require,module,exports){
 var XRegExp = require('./xregexp');
 
 require('./unicode-base')(XRegExp);
@@ -222,7 +368,7 @@ require('./unicode-categories')(XRegExp);
 
 module.exports = XRegExp;
 
-},{"./unicode-base":5,"./unicode-categories":6,"./xregexp":7}],5:[function(require,module,exports){
+},{"./unicode-base":6,"./unicode-categories":7,"./xregexp":8}],6:[function(require,module,exports){
 /*!
  * XRegExp Unicode Base 3.1.1-next
  * <xregexp.com>
@@ -484,7 +630,7 @@ module.exports = function(XRegExp) {
 
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*!
  * XRegExp Unicode Categories 3.1.1-next
  * <xregexp.com>
@@ -526,7 +672,7 @@ module.exports = function(XRegExp) {
 
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*!
  * XRegExp 3.1.1-next
  * <xregexp.com>
@@ -2418,7 +2564,7 @@ XRegExp.addToken(
 
 module.exports = XRegExp;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -2446,10 +2592,10 @@ i=false,n=new p(n));++u<a;){var l=t[u],h=l,l=0!==l?l:0;if(i&&h===h){for(var d=s;
 return e=Tt(t),("[object Map]"==e?i:"[object Set]"==e?a:D)(t)},c.uniq=function(t){if(t&&t.length)t:{var r=-1,n=e,u=t.length,o=true,i=[],c=i;if(200<=u){if(n=Rt(t)){t=a(n);break t}o=false,n=f,c=new p}else c=i;e:for(;++r<u;){var s=t[r],l=s,s=0!==s?s:0;if(o&&l===l){for(var h=c.length;h--;)if(c[h]===l)continue e;i.push(s)}else n(c,l,void 0)||(c!==i&&c.push(l),i.push(s))}t=i}else t=[];return t},c.values=D,c.eq=k,c.identity=R,c.isArguments=Wt,c.isArray=Ct,c.isArrayLike=x,c.isArrayLikeObject=z,c.isBuffer=Nt,c.isFunction=M,
 c.isLength=E,c.isObject=F,c.isObjectLike=P,c.isString=$,c.isTypedArray=qt,c.stubFalse=L,c.noop=T,c.VERSION="4.17.3",typeof define=="function"&&typeof define.amd=="object"&&define.amd?(Y._=c, define(function(){return c})):tt?((tt.exports=c)._=c,Z._=c):Y._=c}).call(this);
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = require('./lib/heap');
 
-},{"./lib/heap":10}],10:[function(require,module,exports){
+},{"./lib/heap":11}],11:[function(require,module,exports){
 // Generated by CoffeeScript 1.8.0
 (function() {
   var Heap, defaultCmp, floor, heapify, heappop, heappush, heappushpop, heapreplace, insort, min, nlargest, nsmallest, updateItem, _siftdown, _siftup;
@@ -2826,7 +2972,7 @@ module.exports = require('./lib/heap');
 
 }).call(this);
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -3008,7 +3154,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (process,global){
 (function (global, undefined) {
     "use strict";
@@ -3198,7 +3344,7 @@ process.umask = function() { return 0; };
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":11}],13:[function(require,module,exports){
+},{"_process":12}],14:[function(require,module,exports){
 /*! http://mths.be/fromcodepoint v0.2.1 by @mathias */
 if (!String.fromCodePoint) {
 	(function() {
@@ -3262,7 +3408,7 @@ if (!String.fromCodePoint) {
 	}());
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*! http://mths.be/codepointat v0.2.0 by @mathias */
 if (!String.prototype.codePointAt) {
 	(function() {
@@ -3327,6 +3473,7 @@ if (!String.prototype.codePointAt) {
     var _uniq = require('./lodash.custom.min.js').uniq;
     var _toArray = require('./lodash.custom.min.js').toArray;
     var _iLeven = require('../lib/iLeven.js');
+    var _wildLeven = require('../lib/wildcardLeven.js');
     var _leven = require('../lib/leven.js');
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
@@ -3357,11 +3504,11 @@ if (!String.prototype.codePointAt) {
          * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
         if (options.astral) return _iLeven(str1, str2, options, _toArray);
-        else return _leven(str1, str2, options);
+        else return _wildLeven(str1, str2, options, _leven); // falls back to _leven if no wildcards
     }
 
     function QRatio(str1, str2, options_p) {
@@ -3378,8 +3525,8 @@ if (!String.prototype.codePointAt) {
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         return _ratio(str1, str2, options);
@@ -3399,8 +3546,8 @@ if (!String.prototype.codePointAt) {
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         return _token_set(str1, str2, options);
@@ -3420,8 +3567,8 @@ if (!String.prototype.codePointAt) {
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (!options.proc_sorted) {
@@ -3482,10 +3629,13 @@ if (!String.prototype.codePointAt) {
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
-        if (options.full_process) pre_processor = full_process;
+        if (options.full_process) {
+            pre_processor = full_process;
+            if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
+        }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options.force_ascii);
+            query = pre_processor(query, options);
             options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
@@ -3520,7 +3670,7 @@ if (!String.prototype.codePointAt) {
                     options.proc_sorted = true;
                     if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
@@ -3529,10 +3679,10 @@ if (!String.prototype.codePointAt) {
                     mychoice = "x"; //dummy string so it validates
                     if (choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
-                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
@@ -3544,7 +3694,7 @@ if (!String.prototype.codePointAt) {
                     result = options.scorer(query, mychoice, options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    mychoice = pre_processor(options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
                     if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
@@ -3617,10 +3767,13 @@ if (!String.prototype.codePointAt) {
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
         var pre_processor = function (choice, force_ascii) { return choice; }
-        if (options.full_process) pre_processor = full_process;
+        if (options.full_process) {
+            pre_processor = full_process;
+            if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
+        }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options.force_ascii);
+            query = pre_processor(query, options);
             options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
@@ -3657,7 +3810,7 @@ if (!String.prototype.codePointAt) {
                     options.proc_sorted = true;
                     if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
@@ -3666,10 +3819,10 @@ if (!String.prototype.codePointAt) {
                     mychoice = "x"; //dummy string so it validates
                     if (choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
-                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
@@ -3681,7 +3834,7 @@ if (!String.prototype.codePointAt) {
                     result = options.scorer(query, mychoice, options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    mychoice = pre_processor(options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
                     if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
@@ -3774,8 +3927,14 @@ if (!String.prototype.codePointAt) {
             lensum = _toArray(str1).length + _toArray(str2).length
         }
         else {
-            levdistance = _leven(str1, str2, options);
-            lensum = str1.length + str2.length;
+            if (!options.wildcards) {
+                levdistance = _leven(str1, str2, options);
+                lensum = str1.length + str2.length;
+            }
+            else {
+                levdistance = _wildLeven(str1, str2, options, _leven); // falls back to _leven if invalid
+                lensum = str1.length + str2.length;
+            }
         }
         return Math.round(100 * ((lensum - levdistance) / lensum));
     }
@@ -3844,4 +4003,4 @@ if (!String.prototype.codePointAt) {
      module.exports = fuzzball;
 } ());
 
-},{"../lib/iLeven.js":1,"../lib/leven.js":2,"../lib/utils.js":3,"./lodash.custom.min.js":8,"heap":9,"setimmediate":12}]},{},[]);
+},{"../lib/iLeven.js":1,"../lib/leven.js":2,"../lib/utils.js":3,"../lib/wildcardLeven.js":4,"./lodash.custom.min.js":9,"heap":10,"setimmediate":13}]},{},[]);

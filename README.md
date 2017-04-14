@@ -4,14 +4,16 @@
 ==========
 Easy to use and powerful fuzzy string matching.
 
-This is a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (with a bit of code from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) patched on)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (with a bit of code from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) patched on)
 
 # Contents
  * [Installation](#installation)
  * [Usage and Scoring Overview](#usage)
  * [Pre-Processing](#pre-processing)
+ * [Wildcards](#wildcards)
  * [International/Unicode Stuff](#internationalunicode-stuff)
  * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
+ * [Multiple Fields](#multiple-fields)
  * [Performance Optimization](#performance-optimization)
  * [Alternate Ratio Calculations](#alternate-ratio-calculations)
 
@@ -31,7 +33,7 @@ npm install fuzzball
 var fuzz = require('fuzzball');
 </script>
 ```
-You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (60kB vs. 125kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future)
+You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (64kB vs. 125kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future)
 
 # Usage
 
@@ -127,6 +129,17 @@ fuzz.full_process("myt^eäXt!", true);
         myt ext
 ```
 
+### Wildcards
+
+Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating distance.
+
+```js
+var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
+fuzz.ratio('fuzzba*l', 'fuXxball', options);
+        100
+```
+Every character in the string will be treated as a wildcard. Wildcards are **case insensitive** unless options.full_process is set to false, and are **not currently supported** when astral is set to true. (see below) They will also not affect sorting for the algorithms that depend on token sort order, so in some cases would still not result in perfect match. 
+
 ### International/Unicode Stuff
 
 To use collation when calculating edit distance, set **useCollator** to true. Will be ignored if Intl.Collator does not exist in your enviroment. (node 0.10 and under, IE10 and under)
@@ -149,7 +162,6 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 **If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
-
 
 ### Batch Extract (search list of choices for top results)
 
@@ -210,7 +222,7 @@ var results = fuzz.extract(query, choices, options);
 
 The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior.
 
-**Multiple Fields** 
+### Multiple Fields
 
 If you want to use more than one field for scoring, can do stuff like combine two fields in a processor function before scoring.
 

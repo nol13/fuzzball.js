@@ -10,6 +10,7 @@
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
     var _iLeven = require('./lib/iLeven.js');
+    var _wildLeven = require('./lib/wildcardLeven.js');
     var _leven = require('./lib/leven.js');
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
@@ -40,11 +41,11 @@
          * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
         if (options.astral) return _iLeven(str1, str2, options, _toArray);
-        else return _leven(str1, str2, options);
+        else return _wildLeven(str1, str2, options, _leven); // falls back to _leven if no wildcards
     }
 
     function QRatio(str1, str2, options_p) {
@@ -61,8 +62,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         return _ratio(str1, str2, options);
@@ -82,8 +83,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         return _partial_ratio(str1, str2, options);
@@ -103,8 +104,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         return _token_set(str1, str2, options);
@@ -124,8 +125,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         options.partial = true;
@@ -146,8 +147,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (!options.proc_sorted) {
@@ -171,8 +172,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         options.partial = true;
@@ -197,10 +198,10 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
-        //str1 = full_process(str1, options.force_ascii);  //fuzzywuzzy runs no matter what, reason? going by options.full_process
-        //str2 = full_process(str2, options.force_ascii);
-        str1 = options.full_process ? full_process(str1, options.force_ascii) : str1;
-        str2 = options.full_process ? full_process(str2, options.force_ascii) : str2;
+        //str1 = full_process(str1, options);  //fuzzywuzzy runs no matter what, reason? going by options.full_process
+        //str2 = full_process(str2, options);
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
         options.full_process = false;
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
@@ -277,10 +278,13 @@
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
-        if (options.full_process) pre_processor = full_process;
+        if (options.full_process) {
+            pre_processor = full_process;
+            if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
+        }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options.force_ascii);
+            query = pre_processor(query, options);
             options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
@@ -315,7 +319,7 @@
                 options.proc_sorted = true;
                 if (value.proc_sorted) mychoice = value.proc_sorted;
                 else {
-                    mychoice = pre_processor(options.processor(value), options.force_ascii);
+                    mychoice = pre_processor(options.processor(value), options);
                     mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                 }
                 result = options.scorer(proc_sorted_query, mychoice, options);
@@ -324,10 +328,10 @@
                 mychoice = "x"; //dummy string so it validates, if either tokens is [] all 3 tests will still be 0
                 if (value.tokens) {
                     options.tokens = [query_tokens, value.tokens];
-                    if (options.trySimple) mychoice = pre_processor(options.processor(value), options.force_ascii);
+                    if (options.trySimple) mychoice = pre_processor(options.processor(value), options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(value), options.force_ascii);
+                    mychoice = pre_processor(options.processor(value), options);
                     options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                 }
                 //query and mychoice only used for validation here unless trySimple = true
@@ -339,7 +343,7 @@
                 result = options.scorer(query, mychoice, options);
             }
             else {
-                mychoice = pre_processor(options.processor(value), options.force_ascii);
+                mychoice = pre_processor(options.processor(value), options);
                 if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
                 if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                 result = options.scorer(query, mychoice, options);
@@ -411,10 +415,13 @@
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
         var pre_processor = function (choice, force_ascii) { return choice; }
-        if (options.full_process) pre_processor = full_process;
+        if (options.full_process) {
+            pre_processor = full_process;
+            if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
+        }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options.force_ascii);
+            query = pre_processor(query, options);
             options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
@@ -451,7 +458,7 @@
                     options.proc_sorted = true;
                     if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
@@ -460,10 +467,10 @@
                     mychoice = "x"; //dummy string so it validates
                     if (choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
-                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                        mychoice = pre_processor(options.processor(choices[c]), options);
                         options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
@@ -475,7 +482,7 @@
                     result = options.scorer(query, mychoice, options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(choices[c]), options.force_ascii);
+                    mychoice = pre_processor(options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
                     if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
@@ -573,8 +580,14 @@
             lensum = _toArray(str1).length + _toArray(str2).length
         }
         else {
-            levdistance = _leven(str1, str2, options);
-            lensum = str1.length + str2.length;
+            if (!options.wildcards) {
+                levdistance = _leven(str1, str2, options);
+                lensum = str1.length + str2.length;
+            }
+            else {
+                levdistance = _wildLeven(str1, str2, options, _leven); // falls back to _leven if invalid
+                lensum = str1.length + str2.length;
+            }
         }
         return Math.round(100 * ((lensum - levdistance)/lensum));
     }
