@@ -457,21 +457,28 @@ describe('wildcards', function () {
     it('should match ratio with trySimple on and wildcard lite', function () {
         assert.equal(fuzzlite.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true, wildcards: 'x' }), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', { wildcards: 'x' }));
     });
-    it('token_set_ratio should equal with wildcards (when doesnt affect sort order)', function () {
+    it('token_set_ratio should be equal with wildcards (when doesnt affect sort order)', function () {
         var options = { wildcards: '^*#x' };
         assert.equal(fuzz.token_set_ratio('mr. h*rry hood', 'Mr.xarry wox#', options), fuzz.token_set_ratio('mr. harry hood', 'Mr.xarry wood', options));
     });
-    it('token_set_ratio should equal with wildcards (when doesnt affect sort order) lite', function () {
+    it('token_set_ratio should be equal with wildcards (when doesnt affect sort order) lite', function () {
         var options = { wildcards: '^*#x' };
         assert.equal(fuzzlite.token_set_ratio('mr. h*rry hood', 'Mr.xarry wox#', options), fuzzlite.token_set_ratio('mr. harry hood', 'Mr.xarry wood', options));
     });
-    it('ratio should equal with wildcards', function () {
+    it('ratio should be equal with wildcards', function () {
         var options = { wildcards: '^*#x' };
         assert.equal(fuzz.ratio('mr. h*rry hood', 'Mr.xarry wox#', options), fuzz.ratio('mr. harry hood', 'Mr.xarry wood', options));
     });
-    it('ratio should equal with wildcards lite', function () {
+    it('ratio should be equal with wildcards lite', function () {
         var options = { wildcards: '^*#x' };
         assert.equal(fuzzlite.ratio('mr. h*rry hood', 'M^.xarry wox#', options), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', options));
     });
-
+    it('wildcards should be case insensitive when no full process', function () {
+        var options = { wildcards: '^*#x', full_process: false };
+        assert.notEqual(fuzz.ratio('mr. h*rry hood', 'M^.Xarry wox#', options), fuzz.ratio('mr. harry hood', 'Mr.xarry wood', options));
+    });
+    it('wildcards should be case insensitive when no full process lite', function () {
+        var options = { wildcards: '^*#x', full_process: false };
+        assert.notEqual(fuzzlite.ratio('mr. h*rry hood', 'M^.Xarry wox#', options), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', options));
+    });
 });
