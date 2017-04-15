@@ -9,11 +9,11 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 # Contents
  * [Installation](#installation)
  * [Usage and Scoring Overview](#usage)
- * [Wildcards](#wildcards)
  * [Pre-Processing](#pre-processing)
  * [International/Unicode Stuff](#internationalunicode-stuff)
  * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
  * [Multiple Fields](#multiple-fields)
+ * [Wildcards](#wildcards)
  * [Performance Optimization](#performance-optimization)
  * [Alternate Ratio Calculations](#alternate-ratio-calculations)
 
@@ -110,17 +110,6 @@ Not tests I personally use, but ymmv..
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
 
-### Wildcards
-
-Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating distance.
-
-```js
-var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
-fuzz.ratio('fuzzba*l', 'fuXxball', options);
-        100
-```
-Every character in the string will be treated as a wildcard. Wildcards are **case insensitive** unless options.full_process is set to false, and are **not currently supported** when astral is set to true. (see unicode section below) They will also not affect sorting for the algorithms that depend on token sort order, so in some cases would still not result in perfect match. 
-
 ### Pre-Processing
 
 Pre-processing to remove non-alphanumeric characters run by default unless options.full_process is set to false.
@@ -162,7 +151,6 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 **If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
-
 ### Batch Extract (search list of choices for top results)
 
 ###### fuzz.extract(query, choices, options);
@@ -244,6 +232,18 @@ var results = fuzz.extract(query, choices, options);
 ```
 
 (if you still wanted to use a separate processor function for whatever reason, the processor function would need to return something your scorer accepts)
+
+### Wildcards
+
+Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating edit distance. Each character in the string will be treated as a wildcard, and wildcards are **case insensitive** unless options.full_process is set to false.
+
+```js
+var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
+fuzz.ratio('fuzzba*l', 'fuXxball', options);
+        100
+```
+Note: Wildcards are currently **not supported** when astral is set to true. Also the sorting for the algorithms that depend on token sort order will not take them into account, and when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. They would still score higher than they would without using wildcards in almost all cases though.
+
 
 
 ### Performance Optimization
