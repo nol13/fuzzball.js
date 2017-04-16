@@ -5,12 +5,10 @@
   "main": "fuzzball.js",
   "files": [
     "fuzzball.js",
-    "dist/fuzzball_browser.js",
-    "dist/fuzzball_browser.min.js",
-    "test/test.js",
-    "test/testdata.js",
-    "lite/fuzzball_lite.js",
-    "lite/fuzzball_lite_browser.min.js"
+    "dist",
+    "lite",
+    "lib",
+    "test"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
