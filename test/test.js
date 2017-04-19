@@ -1,6 +1,6 @@
 var assert = require('assert');
-var fuzz = require('../fuzzball');
-var fuzzlite = require('../lite/fuzzball_lite');
+var fuzz = require('../src/fuzzball');
+var fuzzlite = require('../lite/fuzzball_lite.js');
 var data = require('./testdata');
 var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio]
 

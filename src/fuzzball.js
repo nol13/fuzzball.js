@@ -9,12 +9,12 @@
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
     var _toArray = require('lodash.toarray');
-    var _iLeven = require('./lib/iLeven.js');
-    var _wildLeven = require('./lib/wildcardLeven.js');
-    var _leven = require('./lib/leven.js');
+    var _iLeven = require('../lib/iLeven.js');
+    var _wildLeven = require('../lib/wildcardLeven.js');
+    var _leven = require('../lib/leven.js');
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
-    var utils = require('./lib/utils.js')(_uniq);
+    var utils = require('../lib/utils.js')(_uniq);
     var _validate = utils.validate;
     var process_and_sort = utils.process_and_sort;
     var tokenize = utils.tokenize;
