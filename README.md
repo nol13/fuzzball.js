@@ -28,12 +28,12 @@ npm install fuzzball
 **Browser** (using pre-built standalone version, charset must be utf-8)
 
 ```html
-<script charset="UTF-8" src="fuzzball_browser.min.js"></script>
+<script charset="UTF-8" src="fuzzball.umd.min.js"></script>
 <script>
-var fuzz = require('fuzzball');
+fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
-You can use the file __lite/fuzzball_lite_browser.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (64kB vs. 125kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future)
+You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (65kB vs. 129kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future) Now using UMD format but depricated browserified require format files still included.
 
 # Usage
 
