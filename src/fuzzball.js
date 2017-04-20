@@ -1,4 +1,5 @@
 (function () {
+    /** @module fuzzball */
     'use strict';
     var difflib = require('difflib');
     var Heap = require('heap');
@@ -31,6 +32,7 @@
         /**
          * Calculate levenshtein distance of the two strings.
          *
+         * @function distance
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -38,6 +40,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -52,6 +55,7 @@
         /**
          * Calculate levenshtein ratio of the two strings.
          *
+         * @function ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -59,6 +63,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -73,6 +78,7 @@
         /**
          * Calculate partial levenshtein ratio of the two strings.
          *
+         * @function partial_ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -80,6 +86,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -94,6 +101,7 @@
         /**
          * Calculate token set ratio of the two strings.
          *
+         * @function token_set_ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -101,6 +109,8 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -115,6 +125,7 @@
         /**
          * Calculate partial token ratio of the two strings.
          *
+         * @function partial_token_set_ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -122,6 +133,8 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -137,6 +150,7 @@
         /**
          * Calculate token sort ratio of the two strings.
          *
+         * @function token_sort_ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -144,6 +158,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -162,6 +177,7 @@
         /**
          * Calculate partial token sort ratio of the two strings.
          *
+         * @function partial_token_sort_ratio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -169,6 +185,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -188,6 +205,7 @@
         /**
          * Calculate weighted ratio of the two strings, taking best score of various methods.
          *
+         * @function WRatio
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
@@ -195,6 +213,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -233,6 +252,7 @@
         /**
          * Return the top scoring items from an array (or assoc array) of choices
          *
+         * @function extract
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
@@ -246,6 +266,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -366,6 +387,7 @@
         /**
          * Return the top scoring items from an array (or assoc array) of choices
          *
+         * @function extractAsync
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
@@ -379,6 +401,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);

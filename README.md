@@ -33,7 +33,7 @@ npm install fuzzball
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
-You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need the partial ratios. This version has a smaller file size but doesn't include the partial ratios which require difflib. (65kB vs. 129kB uncompressed, file size has been creeping up a bit due to adding better unicode handling and browser compatibility, may try to slim it down again in the future) Now using UMD format but depricated browserified require format files still included.
+You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need the partial ratios. This version has a somewhat smaller file size but doesn't include the partial ratios which require difflib. Now using UMD format but the old browser bundles still provided for backwards compatability.
 
 # Usage
 

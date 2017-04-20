@@ -4,12 +4,13 @@
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.umd.min.js",
   "files": [
-    "fuzzball.js",
+    "fuzzball.umd.min.js",
     "dist",
     "lite",
     "lib",
     "test",
-    "src"
+    "src",
+    "docs"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
@@ -49,12 +50,13 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
+    "jsdoc": "jsdoc src/fuzzball.js -d docs",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "build:reg:old": "browserify -r ./src/fuzzball.js:fuzzball | uglifyjs > dist/fuzzball_browser.min.js",
     "build:lite:old": "browserify -r ./lite/fuzzball_lite.js:fuzzball | uglifyjs > lite/fuzzball_lite_browser.min.js",
     "build:reg": "browserify src/fuzzball.js --standalone fuzzball | uglifyjs > fuzzball.umd.min.js",
     "build:lite": "browserify lite/fuzzball_lite.js --standalone fuzzball | uglifyjs > lite/fuzzball_lite.umd.min.js",
-    "build": "npm test && npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old",
+    "build": "npm test && npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc",
     "test": "mocha && npm run nsp",
     "nsp": "node_modules/nsp/bin/nsp check"
   },
