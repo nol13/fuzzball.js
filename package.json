@@ -27,7 +27,7 @@
     "string.prototype.codepointat": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^1.0.0",
+    "browserify": "~1.18.0",
     "mocha": "^3.2.0",
     "uglify-js": "^1.0.0",
     "lodash-cli": "^4.17.4",
@@ -56,8 +56,9 @@
     "build:lite:old": "browserify -r ./lite/fuzzball_lite.js:fuzzball | uglifyjs > lite/fuzzball_lite_browser.min.js",
     "build:reg": "browserify src/fuzzball.js --standalone fuzzball | uglifyjs > fuzzball.umd.min.js",
     "build:lite": "browserify lite/fuzzball_lite.js --standalone fuzzball | uglifyjs > lite/fuzzball_lite.umd.min.js",
-    "build": "npm test && npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc",
+    "build": "npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc && npm run test:build",
     "test": "mocha && npm run nsp",
+    "test:build": "testenv=build npm run test",
     "nsp": "node_modules/nsp/bin/nsp check"
   },
   "runkitExample": "var fuzz = require('fuzzball');"
