@@ -25,7 +25,7 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 npm install fuzzball
 ```
 
-**Browser** (using pre-built standalone version, charset must be utf-8)
+**Browser** (charset must be utf-8)
 
 ```html
 <script charset="UTF-8" src="fuzzball.umd.min.js"></script>
@@ -45,12 +45,12 @@ fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
 var options = {scorer: fuzz.token_set_ratio};
-var choices = ["Hood, Harry", "Mr. Minor", "Mr. Larry Hood"];
+var choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
 fuzz.extract("mr. harry hood", choices, options);
 
 // [choice, score, index/key]
 [ [ 'Hood, Harry', 100, 0 ],
-  [ 'Mr. Larry Hood', 92, 2 ],
+  [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
