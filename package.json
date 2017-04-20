@@ -32,7 +32,7 @@
     "lodash-cli": "^4.17.4",
     "mocha": "^3.2.0",
     "nsp": "^2.6.2",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "~2.4.10"
   },
   "repository": {
     "type": "git",
