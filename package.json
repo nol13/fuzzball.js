@@ -28,10 +28,11 @@
   },
   "devDependencies": {
     "browserify": "^14.0.0",
-    "mocha": "^3.2.0",
-    "uglify-js": "^1.0.0",
+    "jsdoc": "^3.4.3",
     "lodash-cli": "^4.17.4",
-    "nsp": "^2.6.2"
+    "mocha": "^3.2.0",
+    "nsp": "^2.6.2",
+    "uglify-js": "^1.0.0"
   },
   "repository": {
     "type": "git",
