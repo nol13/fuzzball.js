@@ -1,6 +1,11 @@
 var assert = require('assert');
-var fuzz = require('../src/fuzzball');
+var fuzz = require('../src/fuzzball.js');
 var fuzzlite = require('../lite/fuzzball_lite.js');
+if (process.env.testenv === "build") {
+    console.log('TESTING BUILD');
+    fuzz = require('../fuzzball.umd.min.js');
+    fuzzlite = require('../lite/fuzzball_lite.umd.min.js');
+}
 var data = require('./testdata');
 var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio]
 
