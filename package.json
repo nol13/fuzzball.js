@@ -4,6 +4,7 @@
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
+    "fuzzball.js",
     "dist",
     "lite",
     "lib",
