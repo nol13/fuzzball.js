@@ -2,14 +2,14 @@
   "name": "fuzzball",
   "version": "0.9.1",
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
-  "main": "fuzzball.umd.min.js",
+  "main": "fuzzball.js",
   "files": [
-    "fuzzball.umd.min.js",
     "dist",
     "lite",
     "lib",
     "test",
-    "src"
+    "src",
+    "docs"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "browserify": "^14.0.0",
     "jsdoc": "^3.4.3",
+    "jsdoc-to-markdown": "^3.0.0",
     "lodash-cli": "^4.17.4",
     "mocha": "^3.2.0",
     "nsp": "^2.6.2",
@@ -50,12 +51,12 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "jsdoc": "jsdoc src/fuzzball.js -d docs",
+    "jsdoc": "./node_modules/.bin/jsdoc2md fuzzball.js > docs/fuzzball.md",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
-    "build:reg:old": "browserify -r ./src/fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
-    "build:lite:old": "browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
-    "build:reg": "browserify src/fuzzball.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > fuzzball.umd.min.js",
-    "build:lite": "browserify lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
+    "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
+    "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
+    "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball.umd.min.js",
+    "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
     "build": "npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run test:build",
     "test": "mocha && npm run nsp",
     "test:build": "testenv=build npm run test",

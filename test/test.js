@@ -1,9 +1,9 @@
 var assert = require('assert');
-var fuzz = require('../src/fuzzball.js');
+var fuzz = require('../fuzzball.js');
 var fuzzlite = require('../lite/fuzzball_lite.js');
 if (process.env.testenv === "build") {
     console.log('TESTING BUILD');
-    fuzz = require('../fuzzball.umd.min.js');
+    fuzz = require('../dist/fuzzball.umd.min.js');
     fuzzlite = require('../lite/fuzzball_lite.umd.min.js');
 }
 var data = require('./testdata');

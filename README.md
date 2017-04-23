@@ -28,7 +28,7 @@ npm install fuzzball
 **Browser** (charset must be utf-8)
 
 ```html
-<script charset="UTF-8" src="fuzzball.umd.min.js"></script>
+<script charset="UTF-8" src="dist/fuzzball.umd.min.js"></script>
 <script>
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
