@@ -534,4 +534,10 @@ describe('dedupe lite', function () {
         options = { scorer: fuzzlite.token_set_ratio }
         assert.equal(4, fuzzlite.dedupe(contains_dupes, options).length);
     });
+    it('should remove the dupes from array of strings and keep the dupe map', function () {
+        var contains_dupes = ['a', 'a', 'loldupe', 'lolduped', 'wat', 'nolan rules', 'nolan rulez'];
+        options = {keepmap: true};
+        assert.equal(4, fuzzlite.dedupe(contains_dupes, options).length);
+        assert.equal(3, fuzzlite.dedupe(contains_dupes, options)[2].length);
+    });
 });

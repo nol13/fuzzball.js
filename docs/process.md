@@ -18,6 +18,7 @@ sensitive.
 | --- | --- | --- |
 | contains_dupes | <code>Array.&lt;String&gt;</code> \| <code>Array.&lt;Object&gt;</code> \| <code>Object</code> | array of strings, or array of choice objects if processor is supplied, or object of form {key: choice} |
 | [options_p] | <code>Object</code> | Additional options. |
+| [options_p.useCollator] | <code>boolean</code> | Whether to include map of matching items in results |
 | [options_p.scorer] | <code>function</code> | takes two strings and returns a score |
 | [options_p.processor] | <code>function</code> | takes each choice and outputs a string to be used for Scoring |
 | [options_p.cutoff] | <code>number</code> | matching threshold 0-100, Default: 70 |

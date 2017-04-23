@@ -248,7 +248,7 @@ Note: Wildcards are currently **not supported** when astral is set to true. Also
 
 Convenience function to take a list of items containing duplicates and uses fuzzy matching to identify and remove duplicates. Uses extract to identify duplicates that score greater than a user defined threshold/cutoff. Then, it looks for the longest item in the duplicate list since we assume this item contains the most entity information and returns that. It breaks string length ties on an alphabetical sort.
 
-Available options are the same as in extract except that the cutoff will default to 70 if not supplied, limit will be ignored if given, and each item must either be a string, or if using a processor function the post-processed item must be a string.
+To keep the map of which items were matched with each unique value set options.keepmap = true. Other than that, available options are the same as in extract except that the cutoff will default to 70 if not supplied, limit will be ignored if given, and each item must either be a string, or if using a processor function the post-processed item must be a string.
 
 Note: as the cutoff DECREASES the number of duplicates that are found INCREASES. This means that the returned deduplicated list will likely be shorter. Raise the threshold for fuzzy_dedupe to be less sensitive.
 
@@ -256,9 +256,17 @@ Note: as the cutoff DECREASES the number of duplicates that are found INCREASES.
 var contains_dupes = ['fuzzy wuzzy', 'fuzzy wuzz', 'not a dupe'];
 options = {cutoff: 85, scorer: fuzz.token_set_ratio}
 fuzz.dedupe(contains_dupes, options)
+
 // [item, index/key of item in original list]
 [ [ 'fuzzy wuzzy', 0 ],
   [ 'not a dupe', 2 ] ]
+
+options.keepmap = true;
+fuzz.dedupe(contains_dupes, options)
+
+// [item, index/key of item in original list, [output of fuzz.extract for item]]
+[ [ 'fuzzy wuzzy', 0, [ [Object], [Object] ] ],
+  [ 'not a dupe', 2, [ [Object] ] ] ]
 ```
 
 ### Performance Optimization
