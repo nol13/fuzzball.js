@@ -18,6 +18,16 @@
     var full_process = utils.full_process;
     var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
     var _isCustomFunc = utils.isCustomFunc;
+
+    // isArray polyfill
+    if (typeof Array.isArray === 'undefined') {
+        Array.isArray = function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Array]';
+        }
+    };
+
+    var process = require('../lib/process.js')(_clone_and_set_option_defaults, Array.isArray, QRatio, extract);
+    var dedupe = process.dedupe;
  
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -525,12 +535,6 @@
             };
         } ());
     }
-    // isArray polyfill
-    if (typeof Array.isArray === 'undefined') {
-        Array.isArray = function (obj) {
-            return Object.prototype.toString.call(obj) === '[object Array]';
-        }
-    };
 
     var fuzzball = {
         distance: distance,
@@ -541,7 +545,8 @@
         extract: extract,
         extractAsync: extractAsync,
         process_and_sort: process_and_sort,
-        unique_tokens: tokenize
+        unique_tokens: tokenize,
+        dedupe: dedupe
     };
 
      module.exports = fuzzball;

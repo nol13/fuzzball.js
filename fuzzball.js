@@ -22,6 +22,9 @@
     var full_process = utils.full_process;
     var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
     var _isCustomFunc = utils.isCustomFunc;
+
+    var process = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
+    var dedupe = process.dedupe;
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -534,6 +537,7 @@
         }
     }
 
+
 /** Main Scoring Code */
 
     function _token_set(str1, str2, options) {
@@ -696,7 +700,8 @@
         extract: extract,
         extractAsync: extractAsync,
         process_and_sort: process_and_sort,
-        unique_tokens: tokenize
+        unique_tokens: tokenize,
+        dedupe: dedupe
     };
 
      module.exports = fuzzball;

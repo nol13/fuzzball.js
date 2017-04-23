@@ -14,6 +14,7 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
  * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
  * [Multiple Fields](#multiple-fields)
  * [Wildcards](#wildcards)
+ * [Fuzzy Dedupe](#fuzzy-dedupe)
  * [Performance Optimization](#performance-optimization)
  * [Alternate Ratio Calculations](#alternate-ratio-calculations)
 
@@ -244,7 +245,22 @@ fuzz.ratio('fuzzba*l', 'fuXxball', options);
 ```
 Note: Wildcards are currently **not supported** when astral is set to true. Also the sorting for the algorithms that depend on token sort order will not take them into account, and when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. They would still score higher than they would without using wildcards in almost all cases though.
 
+### Fuzzy Dedupe
 
+Convenience function to take a list of items containing duplicates and uses fuzzy matching to identify and remove duplicates. Uses extract to identify duplicates that score greater than a user defined threshold/cutoff. Then, it looks for the longest item in the duplicate list since we assume this item contains the most entity information and returns that. It breaks string length ties on an alphabetical sort.
+
+Available options are the same as in extract except that the cutoff will default to 70 if not supplied, limit will be ignored if given, and each item must either be a string, or if using a processor function the post-processed item must be a string.
+
+Note: as the cutoff DECREASES the number of duplicates that are found INCREASES. This means that the returned deduplicated list will likely be shorter. Raise the threshold for fuzzy_dedupe to be less sensitive.
+
+```js
+var contains_dupes = ['fuzzy wuzzy', 'fuzzy wuzz', 'not a dupe'];
+options = {cutoff: 85, scorer: fuzz.token_set_ratio}
+fuzz.dedupe(contains_dupes, options)
+// [item, index/key of item in original list]
+[ [ 'fuzzy wuzzy', 0 ],
+  [ 'not a dupe', 2 ] ]
+```
 
 ### Performance Optimization
 
