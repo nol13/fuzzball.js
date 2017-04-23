@@ -92,7 +92,7 @@ fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
 fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
         100
 ```
-If you set options.trySimple to true it will add the simple ratio to the token_set_ratio test suite as well.
+If you set options.trySimple to true it will add the simple ratio to the token_set_ratio test suite as well. Can help smooth out occational irregularities in how much differences in the first letter of a token will get penalized.
 
 **Distance**
 
@@ -104,10 +104,9 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
 
 **Other Scoring Options**
 
-Not tests I personally use, but ymmv..
-  * partial_token_set_ratio (options.trySimple = true will add the partial_ratio to the test suite)
+  * partial_token_set_ratio (options.trySimple = true will add the partial_ratio to the test suite, also note this will always return 100 if there are any tokens in common)
   * partial_token_sort_ratio
-  * WRatio (runs tests based on relative string length and returns weighted top score)
+  * WRatio (runs tests based on relative string length and returns weighted top score, current default scorer in fuzzywuzzy extract)
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
 
