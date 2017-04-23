@@ -565,7 +565,10 @@
         combined_1to2 = combined_1to2.trim();
         combined_2to1 = combined_2to1.trim();
         var ratio_func = _ratio;
-        if (options.partial) ratio_func = _partial_ratio;
+        if (options.partial) {
+            ratio_func = _partial_ratio;
+            if (sorted_sect.length > 0) return 100; // will always be 100 anyway
+        }
 
         var pairwise = [
             ratio_func(sorted_sect, combined_1to2, options),
