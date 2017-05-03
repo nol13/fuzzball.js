@@ -10,8 +10,8 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
  * [Installation](#installation)
  * [Usage and Scoring Overview](#usage)
  * [Pre-Processing](#pre-processing)
- * [International/Unicode Stuff](#internationalunicode-stuff)
- * [Batch Extract](#batch-extract-search-list-of-choices-for-top-results)
+ * [Collation and Unicode Stuff](#collation-and-unicode-stuff)
+ * [Batch Extract](#batch-extract)
  * [Multiple Fields](#multiple-fields)
  * [Wildcards](#wildcards)
  * [Fuzzy Dedupe](#fuzzy-dedupe)
@@ -129,7 +129,7 @@ fuzz.full_process("myt^eäXt!", {force_ascii: true});
         myt ext
 ```
 
-### International/Unicode Stuff
+### Collation and Unicode Stuff
 
 To use collation when calculating edit distance, set **useCollator** to true. Will be ignored if Intl.Collator does not exist in your enviroment. (node 0.10 and under, IE10 and under)
 
@@ -151,7 +151,9 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 **If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
-### Batch Extract (search list of choices for top results)
+
+### Batch Extract 
+Search list of choices for top results.
 
 ###### fuzz.extract(query, choices, options);
 
