@@ -23,8 +23,8 @@
     var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
     var _isCustomFunc = utils.isCustomFunc;
 
-    var process = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
-    var dedupe = process.dedupe;
+    var processing = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
+    var dedupe = processing.dedupe;
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -279,7 +279,6 @@
         }
         else if (!(choices instanceof Object)) {
             throw new Error("Invalid choices");
-            return;
         }
         else numchoices = _keys(choices).length;
         if (!choices || numchoices === 0) {
@@ -288,12 +287,10 @@
         }
         if (options.processor && typeof options.processor !== "function") {
             throw new Error("Invalid Processor");
-            return;
         }
         if (!options.processor) options.processor = function (x) { return x; }
         if (options.scorer && typeof options.scorer !== "function") {
             throw new Error("Invalid Scorer");
-            return;
         }
         if (!options.scorer) {
             options.scorer = QRatio;
