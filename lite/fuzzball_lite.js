@@ -170,10 +170,6 @@
             throw new Error("Invalid choices");
         }
         else numchoices = Object.keys(choices).length;
-        if (!_validate(query)) {
-            query = "";
-            if (typeof console !== undefined) console.warn("Blank or invalid query");
-        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             return [];
@@ -310,10 +306,6 @@
             return;
         }
         else numchoices = Object.keys(choices).length;
-        if (!_validate(query)) {
-            query = "";
-            if (typeof console !== undefined) console.warn("Blank or invalid query");
-        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             callback(null, []);
