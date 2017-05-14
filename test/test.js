@@ -76,6 +76,15 @@ describe('Extract', function () {
         assert.equal(results[2][1], 60);
         assert.equal(results[1][0], 'koala bear');
     });
+    it('should return true if extract with default options working lite', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzlite.extract(query, choices);
+        assert.equal(results[0][1], 100);
+        assert.equal(results[1][1], 80);
+        assert.equal(results[2][1], 60);
+        assert.equal(results[1][0], 'koala bear');
+    });
     it('should return true if extract with README options working', function () {
         var query = "126abzx";
         var choices = [{ id: 345, modelnumber: "123abc" }, { id: 346, modelnumber: "123efg" }, { id: 347, modelnumber: "456abdzx" }];
@@ -90,6 +99,48 @@ describe('Extract', function () {
         assert.equal(results[1][1], 67);
         assert.equal(results.length, 2);
         assert.equal(results[0][0].modelnumber, '456abdzx');
+    });
+    it('should return true if extract with null query not error', function () {
+        var query = null;
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzz.extract(query, choices, {scorer: fuzz.token_sort_ratio});
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with toekn_sort and null query not error lite', function () {
+        var query = null;
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzlite.extract(query, choices, { scorer: fuzzlite.token_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with token_sort null choices not error', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with token_sort null choices not error lite', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with token_set null choices not error', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_set_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with token_set null choices not error lite', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_set_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with partial null choices not error', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.partial_ratio });
+        assert.equal(results[0][1], 0);
     });
 });
 

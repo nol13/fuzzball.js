@@ -13,6 +13,8 @@
     var _iLeven = require('./lib/iLeven.js');
     var _wildLeven = require('./lib/wildcardLeven.js');
     var _leven = require('./lib/leven.js');
+
+    // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
     var utils = require('./lib/utils.js')(_uniq);
@@ -24,6 +26,8 @@
     var _isCustomFunc = utils.isCustomFunc;
 
     var processing = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
+    
+    // @ts-ignore
     var dedupe = processing.dedupe;
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
@@ -281,6 +285,10 @@
             throw new Error("Invalid choices");
         }
         else numchoices = _keys(choices).length;
+        if (!_validate(query)) {
+            query = "";
+            if (typeof console !== undefined) console.warn("Blank or invalid query");
+        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             return [];
@@ -338,7 +346,7 @@
             options.proc_sorted = false;
             if (tsort) {
                 options.proc_sorted = true;
-                if (value.proc_sorted) mychoice = value.proc_sorted;
+                if (value && value.proc_sorted) mychoice = value.proc_sorted;
                 else {
                     mychoice = pre_processor(options.processor(value), options);
                     mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
@@ -347,7 +355,7 @@
             }
             else if (tset) {
                 mychoice = "x"; //dummy string so it validates, if either tokens is [] all 3 tests will still be 0
-                if (value.tokens) {
+                if (value && value.tokens) {
                     options.tokens = [query_tokens, value.tokens];
                     if (options.trySimple) mychoice = pre_processor(options.processor(value), options);
                 }
@@ -417,6 +425,10 @@
             return;
         }
         else numchoices = Object.keys(choices).length;
+        if (!_validate(query)) {
+            query = "";
+            if (typeof console !== undefined) console.warn("Blank or invalid query");
+        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             callback(null, []);
@@ -479,7 +491,7 @@
                 options.proc_sorted = false;
                 if (tsort) {
                     options.proc_sorted = true;
-                    if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
+                    if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
@@ -488,7 +500,7 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) {
+                    if (choices[c] && choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
                         if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }

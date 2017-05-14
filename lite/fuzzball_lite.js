@@ -2,13 +2,18 @@
     /** @module fuzzball */
     'use strict';
     var Heap = require('heap');
+    // @ts-ignore
     var _intersect = require('./lodash.custom.min.js').intersection;
+    // @ts-ignore
     var _difference = require('./lodash.custom.min.js').difference;
+    // @ts-ignore
     var _uniq = require('./lodash.custom.min.js').uniq;
+    // @ts-ignore
     var _toArray = require('./lodash.custom.min.js').toArray;
     var _iLeven = require('../lib/iLeven.js');
     var _wildLeven = require('../lib/wildcardLeven.js');
     var _leven = require('../lib/leven.js');
+    // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
     var utils = require('../lib/utils.js')(_uniq);
@@ -21,13 +26,17 @@
 
     // isArray polyfill
     if (typeof Array.isArray === 'undefined') {
+        // @ts-ignore
         Array.isArray = function (obj) {
             return Object.prototype.toString.call(obj) === '[object Array]';
         }
     };
 
     var processing = require('../lib/process.js')(_clone_and_set_option_defaults, Array.isArray, QRatio, extract);
+    // @ts-ignore
     var dedupe = processing.dedupe;
+
+    var x = 5;
  
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -161,6 +170,10 @@
             throw new Error("Invalid choices");
         }
         else numchoices = Object.keys(choices).length;
+        if (!_validate(query)) {
+            query = "";
+            if (typeof console !== undefined) console.warn("Blank or invalid query");
+        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             return [];
@@ -218,7 +231,7 @@
                 options.proc_sorted = false;
                 if (tsort) {
                     options.proc_sorted = true;
-                    if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
+                    if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
@@ -227,7 +240,7 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) {
+                    if (choices[c] && choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
                         if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
@@ -297,6 +310,10 @@
             return;
         }
         else numchoices = Object.keys(choices).length;
+        if (!_validate(query)) {
+            query = "";
+            if (typeof console !== undefined) console.warn("Blank or invalid query");
+        }
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             callback(null, []);
