@@ -52,7 +52,7 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > docs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > docs/process.md",
+    "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > docs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
     "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
