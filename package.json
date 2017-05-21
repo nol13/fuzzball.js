@@ -10,7 +10,7 @@
     "lib",
     "test",
     "src",
-    "docs"
+    "jsdocs"
   ],
   "dependencies": {
     "difflib": ">=0.2.4",
@@ -58,7 +58,8 @@
     "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
     "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball.umd.min.js",
     "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
-    "build": "npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build",
+    "build:demo": "cd demo_src && npm run build && cp -a dist/. ../docs/",
+    "build": "npm run lodash:lite && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha && npm run nsp",
     "test:build": "testenv=build npm run test",
     "nsp": "node_modules/nsp/bin/nsp check"
