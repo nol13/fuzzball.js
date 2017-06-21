@@ -248,7 +248,7 @@ var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
 fuzz.ratio('fuzzba*l', 'fuXxball', options);
         100
 ```
-Note: Wildcards are currently **not supported** when astral is set to true. Also the token_sort algorithms that depend on token sort order will not take them into account. In fuzzball_lite, when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. In the full non-lite version the set functions will now take wildcards into account, though there will be a significant performance hit. Set options.tameTokens = true to fall back to the faster non-wildcard-aware set functions.
+Note: Wildcards are currently **not supported** when astral is set to true. Also the token_sort algorithms that depend on token sort order will not take wildcards into account. In fuzzball_lite, when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. In the full non-lite version the set functions will now take wildcards into account, though there will be a performance hit. Set options.tameTokens = true to fall back to the faster non-wildcard-aware set functions even when still using wildcards for the ratio calculations.
 
 ### Fuzzy Dedupe
 
