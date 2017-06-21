@@ -339,6 +339,7 @@ fuzz.token_set_ratio(str1, str2, options);
         85
 ```
 
+Pass options to fuzz.unique_tokens as the second argument if you're using wildcards for it to be wildcard aware.
 
 
 ### Alternate Ratio Calculations
