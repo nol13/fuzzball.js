@@ -4,8 +4,12 @@
     var difflib = require('difflib');
     var Heap = require('heap');
     var _intersect = require('lodash.intersection'); //for whatever reason lodash a bit faster when included as individual packages
+    var _intersectWith = require('lodash.intersectionwith');
     var _difference = require('lodash.difference');
+    var _differenceWith = require('lodash.differencewith');
     var _uniq = require('lodash.uniq');
+    var _uniqWith = require('lodash.uniqwith');
+    var _partialRight = require('lodash.partialright');
     var _forEach = require('lodash.foreach');
     var _keys = require('lodash.keys');
     var _isArray = require('lodash.isarray');
@@ -17,7 +21,7 @@
     // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
-    var utils = require('./lib/utils.js')(_uniq);
+    var utils = require('./lib/utils.js')(_uniq, _uniqWith, _partialRight);
     var _validate = utils.validate;
     var process_and_sort = utils.process_and_sort;
     var tokenize = utils.tokenize;
@@ -332,7 +336,7 @@
             tsort = true;
         }
         else if (options.scorer.name === "token_set_ratio" || options.scorer.name === "partial_token_set_ratio") {
-            var query_tokens = tokenize(query);
+            var query_tokens = tokenize(query, options);
             tset = true;
         }
 
@@ -357,7 +361,7 @@
                 }
                 else {
                     mychoice = pre_processor(options.processor(value), options);
-                    options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
+                    options.tokens = [query_tokens, tokenize((normalize ? mychoice.normalize() : mychoice), options)]
                 }
                 //query and mychoice only used for validation here unless trySimple = true
                 result = options.scorer(query, mychoice, options);
@@ -471,7 +475,7 @@
             tsort = true;
         }
         else if (options.scorer.name === "token_set_ratio" || options.scorer.name === "partial_token_set_ratio") {
-            var query_tokens = tokenize(query);
+            var query_tokens = tokenize(query, options);
             tset = true;
         }
         var idx, mychoice, result;
@@ -498,7 +502,7 @@
                     }
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
-                        options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
+                        options.tokens = [query_tokens, tokenize((normalize ? mychoice.normalize() : mychoice), options)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
@@ -543,18 +547,28 @@
 
     function _token_set(str1, str2, options) {
 
+        var partWild = _partialRight(_wildLeven, options, _leven);
+        var wildCompare = function (a, b) { return partWild(a, b) === 0; }
+
         if (!options.tokens) {
-            var tokens1 = tokenize(str1);
-            var tokens2 = tokenize(str2);
+            var tokens1 = tokenize(str1, options);
+            var tokens2 = tokenize(str2, options);
         }
         else {
             var tokens1 = options.tokens[0];
             var tokens2 = options.tokens[1];
         }
 
-        var intersection = _intersect(tokens1, tokens2);
-        var diff1to2 = _difference(tokens1, tokens2);
-        var diff2to1 = _difference(tokens2, tokens1);
+        if (options.wildcards) {
+            var intersection = _intersectWith(tokens1, tokens2, wildCompare);
+            var diff1to2 = _differenceWith(tokens1, tokens2, wildCompare);
+            var diff2to1 = _differenceWith(tokens2, tokens1, wildCompare);
+        }
+        else {
+            var intersection = _intersect(tokens1, tokens2);
+            var diff1to2 = _difference(tokens1, tokens2);
+            var diff2to1 = _difference(tokens2, tokens1);
+        }
 
         var sorted_sect = intersection.sort().join(" ");
         var sorted_1to2 = diff1to2.sort().join(" ");

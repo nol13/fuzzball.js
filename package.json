@@ -19,6 +19,7 @@
     "lodash.keys": "^4.2.0",
     "lodash.toarray": "^4.4.0",
     "lodash.uniq": "^4.5.0",
+    "lodash.uniqwith": "^4.5.0",
     "setimmediate": "^1.0.5",
     "string.fromcodepoint": "^0.2.1",
     "string.prototype.codepointat": "^0.2.0"
@@ -49,7 +50,7 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > docs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
+    "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
     "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",

@@ -6,7 +6,7 @@ import * as fuzz from 'fuzzball';
 const products = [
     { name: 'DEP-CLW-150WA1 4500K' },
     { name: '542222XX' },
-    { name: '542222XX 4500K 542222XX-BL' },
+    { name: '542222XX 4500K 542222xx-BL' },
     { name: 'DEP-HB02-100WD1 5000K' },
     { name: 'YR-PL345-W150-X-Y6-P(3500K)' },
     { name: 'PL01-36DS286-S403Y-50' },

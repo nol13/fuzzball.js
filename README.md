@@ -8,6 +8,8 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 
 Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options.
 
+API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>.
+
 # Contents
  * [Installation](#installation)
  * [Usage and Scoring Overview](#usage)
@@ -246,7 +248,7 @@ var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
 fuzz.ratio('fuzzba*l', 'fuXxball', options);
         100
 ```
-Note: Wildcards are currently **not supported** when astral is set to true. Also the sorting for the algorithms that depend on token sort order will not take them into account, and when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. They would still score higher than they would without using wildcards in almost all cases though.
+Note: Wildcards are currently **not supported** when astral is set to true. Also the token_sort algorithms that depend on token sort order will not take them into account. In fuzzball_lite, when calculating the unique tokens in a string, say for example 'fuzz' and 'f*zz', would be considered different tokens. In the full non-lite version the set functions will now take wildcards into account, though there will be a significant performance hit. Set options.tameTokens = true to fall back to the faster non-wildcard-aware set functions.
 
 ### Fuzzy Dedupe
 
