@@ -505,9 +505,9 @@ describe('trySimple', function () {
 });
 
 describe('wildcards', function () {
-    it('should match ratio with trySimple on and wildcard', function () {
-        assert.equal(fuzz.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true, wildcards: 'x', tameTokens: true}), fuzz.ratio('mr. harry hood', 'Mr.xarry wood', {wildcards: 'x'}));
-    });
+    /* it('should match ratio with trySimple on and wildcard', function () { //not true anymore with wildcard aware set ops
+        assert.equal(fuzz.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true, wildcards: 'x' }), fuzz.ratio('mr. harry hood', 'Mr.xarry wood', {wildcards: 'x'}));
+    }); */
     it('should match ratio with trySimple on and wildcard lite', function () {
         assert.equal(fuzzlite.token_set_ratio('mr. harry hood', 'Mr.xarry wood', { trySimple: true, wildcards: 'x' }), fuzzlite.ratio('mr. harry hood', 'Mr.xarry wood', { wildcards: 'x' }));
     });

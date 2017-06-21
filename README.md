@@ -248,7 +248,7 @@ var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
 fuzz.ratio('fuzzba*l', 'fuXxball', options);
         100
 ```
-Note: Wildcards are currently **not supported** when astral is set to true. The set operation in token_set_ratio will now take wildcards into account, unless using fuzzball_lite, though there will be a large performance hit. The token_set_ratio function is currently about 10x slower when using wildcards. Simple ratio is only about 50% slower when using them. Set options.tameTokens = true to fall back to the faster non-wildcard-aware set functions even when still using wildcards for the ratio calculations. In fuzzball_lite tameTokens is always true and the set operations will still not be wildcards aware to avoid the extra dependencies.
+Notes: Wildcards are currently **not supported** when astral is set to true. The set operations in the token_set_ratio's will now take wildcards into account, unless using fuzzball_lite. In fuzzball_lite the set operations are currently still not wildcard aware to avoid the extra dependencies, so the token_set scores in lite when using wildcards will differ.
 
 ### Fuzzy Dedupe
 

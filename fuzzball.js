@@ -561,7 +561,7 @@
             var tokens2 = options.tokens[1];
         }
 
-        if (options.wildcards && !options.tameTokens) {
+        if (options.wildcards) {
             var intersection = _intersectWith(tokens1, tokens2, wildCompare);
             var diff1to2 = _differenceWith(tokens1, tokens2, wildCompare);
             var diff2to1 = _differenceWith(tokens2, tokens1, wildCompare);
