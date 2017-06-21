@@ -3,17 +3,19 @@
     'use strict';
     var difflib = require('difflib');
     var Heap = require('heap');
-    var _intersect = require('lodash.intersection'); //for whatever reason lodash a bit faster when included as individual packages
-    var _intersectWith = require('lodash.intersectionwith');
-    var _difference = require('lodash.difference');
-    var _differenceWith = require('lodash.differencewith');
-    var _uniq = require('lodash.uniq');
-    var _uniqWith = require('lodash.uniqwith');
-    var _partialRight = require('lodash.partialright');
-    var _forEach = require('lodash.foreach');
-    var _keys = require('lodash.keys');
-    var _isArray = require('lodash.isarray');
-    var _toArray = require('lodash.toarray');
+
+    var _intersect = require('./lib/lodash.custom.min.js').intersection;
+    var _intersectWith = require('./lib/lodash.custom.min.js').intersectionWith;
+    var _difference = require('./lib/lodash.custom.min.js').difference;
+    var _differenceWith = require('./lib/lodash.custom.min.js').differenceWith;
+    var _uniq = require('./lib/lodash.custom.min.js').uniq;
+    var _uniqWith = require('./lib/lodash.custom.min.js').uniqWith;
+    var _partialRight = require('./lib/lodash.custom.min.js').partialRight;
+    var _forEach = require('./lib/lodash.custom.min.js').forEach;
+    var _keys = require('./lib/lodash.custom.min.js').keys;
+    var _isArray = require('./lib/lodash.custom.min.js').isArray;
+    var _toArray = require('./lib/lodash.custom.min.js').toArray;
+
     var _iLeven = require('./lib/iLeven.js');
     var _wildLeven = require('./lib/wildcardLeven.js');
     var _leven = require('./lib/leven.js');
@@ -559,7 +561,7 @@
             var tokens2 = options.tokens[1];
         }
 
-        if (options.wildcards) {
+        if (options.wildcards && !options.tameTokens) {
             var intersection = _intersectWith(tokens1, tokens2, wildCompare);
             var diff1to2 = _differenceWith(tokens1, tokens2, wildCompare);
             var diff2to1 = _differenceWith(tokens2, tokens1, wildCompare);
