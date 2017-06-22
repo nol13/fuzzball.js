@@ -37,7 +37,9 @@
     "search",
     "ratio",
     "distance",
-    "compare"
+    "compare",
+    "wildcard",
+    "dedupe"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
