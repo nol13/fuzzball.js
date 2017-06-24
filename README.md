@@ -4,7 +4,7 @@
 ==========
 Easy to use and powerful fuzzy string matching.
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Uses [leven](https://github.com/sindresorhus/leven) for distance calculations. (with a few modifications for wildcards, unicode, and a bit of code from [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) patched on)
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Distance calculations based on [leven](https://github.com/sindresorhus/leven) and [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>.
 
