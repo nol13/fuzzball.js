@@ -1,7 +1,7 @@
 {
-  "name": "webpack-react-redux",
+  "name": "fuzzball_demo",
   "version": "1.0.0",
-  "description": "A boilerplate for playing around with react, redux and react-router with the help of webpack.",
+  "description": "fuzzball demo page",
   "main": "index.js",
   "scripts": {
     "test": "",
@@ -14,7 +14,7 @@
     "react",
     "redux"
   ],
-  "author": "Jean-Pierre Sierens",
+  "author": "Nolan Kaplan",
   "license": "MIT",
   "dependencies": {
     "file-loader": "^0.9.0",

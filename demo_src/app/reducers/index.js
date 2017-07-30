@@ -2,7 +2,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import * as types from '../actions/types';
 
-const filter = (state = '542222CC', action) => {
+const filter = (state = 'g*no atkins', action) => {
     switch (action.type) {
         case types.FILTER:
             return action.filter;
@@ -20,7 +20,7 @@ const fullProcess = (state = true, action) => {
     }
 };
 
-const wildcards = (state = 'x', action) => {
+const wildcards = (state = '*', action) => {
     switch (action.type) {
         case types.WILDCARDS:
             return action.wildcards;
@@ -29,10 +29,19 @@ const wildcards = (state = 'x', action) => {
     }
 };
 
-const dataset = (state = 'dlc', action) => {
+const dataset = (state = 'bengals', action) => {
     switch (action.type) {
         case types.DATASET:
             return action.dataset;
+        default:
+            return state;
+    }
+};
+
+const enteredData = (state = [], action) => {
+    switch (action.type) {
+        case types.ENTERED_DATASET:
+            return action.data;
         default:
             return state;
     }
@@ -44,7 +53,8 @@ const rootReducer = combineReducers({
     fullProcess,
     wildcards,
     dataset,
-    routing
+    routing,
+    enteredData
 });
 
 export default rootReducer;

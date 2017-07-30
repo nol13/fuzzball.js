@@ -592,3 +592,15 @@ describe('dedupe lite', function () {
         assert.equal(3, fuzzlite.dedupe(contains_dupes, options)[2].length);
     });
 });
+
+describe('collapse whitespace', function () {
+    it('should be 100 when whitespace collapsed', function () {
+        assert.equal(100, fuzz.ratio('x y', 'x     y', {collapseWhitespace: true}));
+    });
+    it('should collapse by default', function () {
+        assert.equal(100, fuzz.ratio('x y', 'x     y'));
+    });
+    it('should not be 100 when whitespace collapsed', function () {
+        assert.notEqual(100, fuzz.ratio('x y', 'x     y', { collapseWhitespace: false }));
+    });
+});

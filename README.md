@@ -28,7 +28,7 @@ Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</
 npm install fuzzball
 ```
 
-**Browser** (charset must be utf-8)
+**Browser** (make sure charset is utf-8)
 
 ```html
 <script charset="UTF-8" src="dist/fuzzball.umd.min.js"></script>
@@ -44,11 +44,13 @@ You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need
 
 ```js
 var fuzz = require('fuzzball');
+
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
 var options = {scorer: fuzz.token_set_ratio};
 var choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
+
 fuzz.extract("mr. harry hood", choices, options);
 
 // [choice, score, index/key]
@@ -130,6 +132,8 @@ fuzz.full_process("myt^eäXt!");
 fuzz.full_process("myt^eäXt!", {force_ascii: true});
         myt ext
 ```
+
+Consecutive white space will be collapsed unless options.collapseWhitespace = false, default true. Setting to false will match the behavior in fuzzywuzzy.
 
 ### Collation and Unicode Stuff
 

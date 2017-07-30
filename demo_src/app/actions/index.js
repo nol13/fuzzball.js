@@ -27,3 +27,10 @@ export function selectDataset(dataset) {
         dataset
     };
 }
+
+export function enterData(data) {
+    return {
+        type: types.ENTERED_DATASET,
+        data
+    };
+}

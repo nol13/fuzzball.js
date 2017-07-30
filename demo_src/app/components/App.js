@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+//import { Link } from 'react-router';
 import { footer } from '../styles/footer.scss';
 
 const App = ({ children }) =>
-    <div>
+    <div style={{fontFamily: 'arial', fontSize: '13px'}}>
         <h1>Fuzzball Scorer Demo</h1>
         { children }
         <footer className={footer}>
-            <Link to="/">Fuzzball Demo</Link>
-            <Link to="/about">About</Link>
+            <div style={{fontSize: 'smaller'}}>
+                Demo based on boilerplate from <a href="https://github.com/jpsierens/webpack-react-redux">https://github.com/jpsierens/webpack-react-redux</a>
+            </div>
         </footer>
     </div>;
 
