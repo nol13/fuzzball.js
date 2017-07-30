@@ -47,7 +47,7 @@ const FilterableTable = ({ filter, onFilter, fullProcVal, onFullProcCheck, wildc
 
     return (
         <div className={filterableTable}>
-            <Link to="/enter-data"><b>Enter custom dataset</b></Link><br /><br />
+            <Link to="/enter-data"><b>Enter Custom Dataset</b></Link><br /><br />
             <label>
                Select dataset:&nbsp;
                 <select ref={node => { input4 = node; }} value={dataset}

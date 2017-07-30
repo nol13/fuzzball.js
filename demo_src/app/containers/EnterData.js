@@ -30,7 +30,7 @@ class EnterData extends Component {
 
     render() {
         return (<div style={{backgroundColor: '#ffc571', width: '400px', border: '1px solid black', padding: '10px 20px 10px 20px'}}>
-            <p></p>Enter custom search choices below, one line per choice.
+            <p></p>Enter custom search choices below, one choice per line.
             <br /><br />
             <textarea style={{width: '350px', height: '169px'}} value={this.state.text} onChange={this.handleChange} />
             <p></p>
