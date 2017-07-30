@@ -133,7 +133,7 @@ fuzz.full_process("myt^eäXt!", {force_ascii: true});
         myt ext
 ```
 
-Consecutive white space will be collapsed unless options.collapseWhitespace = false, default true. Setting to false will match the behavior in fuzzywuzzy.
+Consecutive white space will be collapsed unless options.collapseWhitespace = false, default true. Setting to false will match the behavior in fuzzywuzzy. Only affects the non-token scorers.
 
 ### Collation and Unicode Stuff
 

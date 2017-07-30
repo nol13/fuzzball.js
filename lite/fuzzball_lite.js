@@ -54,6 +54,7 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein distance (0 and above).
@@ -77,6 +78,7 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
@@ -154,6 +156,7 @@
          * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
+         * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
@@ -289,6 +292,7 @@
          * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
+         * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided

@@ -30,6 +30,7 @@ Calculate levenshtein distance of the two strings.
 | [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 
@@ -49,6 +50,7 @@ Calculate levenshtein ratio of the two strings.
 | [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 
@@ -68,6 +70,7 @@ Calculate partial levenshtein ratio of the two strings.
 | [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 
@@ -165,6 +168,7 @@ Calculate weighted ratio of the two strings, taking best score of various method
 | [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 
@@ -189,6 +193,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.astral] | <code>boolean</code> | use iLeven for scoring to properly handle astral symbols |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
@@ -213,6 +218,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.astral] | <code>boolean</code> | use iLeven for scoring to properly handle astral symbols |
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
