@@ -144,7 +144,7 @@ To use collation when calculating edit distance, set **useCollator** to true. Wi
 Setting useCollator to true will have an impact on performance, so if you have really large number of choices may be best to pre-process (i.e. lodash _.deburr) instead if possible.
 
 ```js
-var options = {useCollator: true};
+options = {useCollator: true};
 fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
@@ -152,7 +152,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
 If your strings contain code points beyond the basic multilingual plane (BMP), set **astral** to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters and the ratio will be off a bit. (This will have some impact on performance, which is why it is turned off by default.) 
 
 ```js
-var options = {astral: true};
+options = {astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
@@ -173,10 +173,10 @@ The scorer defaults to fuzz.ratio if not specified.
 
 With array of strings
 ```js
-var query = "polar bear";
-var choices = ["brown bear", "polar bear", "koala bear"];
+query = "polar bear";
+choices = ["brown bear", "polar bear", "koala bear"];
 
-var results = fuzz.extract(query, choices);
+results = fuzz.extract(query, choices);
 
 // [choice, score, index]
 [ [ 'polar bear', 100, 1 ],
@@ -186,10 +186,10 @@ var results = fuzz.extract(query, choices);
 
 With object
 ```js
-var query = "polar bear";
-var choicesObj = {id1: "brown bear", id2: "polar bear", id3: "koala bear"};
+query = "polar bear";
+choicesObj = {id1: "brown bear", id2: "polar bear", id3: "koala bear"};
 
-var results = fuzz.extract(query, choicesObj);
+results = fuzz.extract(query, choicesObj);
 
 // [choice, score, key]
 [ [ 'polar bear', 100, 'id2' ],
@@ -201,9 +201,9 @@ var results = fuzz.extract(query, choicesObj);
 
 Optional processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string.
 ```js
-var query = "126abzx";
-var choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
-var options = {
+query = "126abzx";
+choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
+options = {
         scorer: fuzz.partial_ratio, // any function that takes two values and returns a score, default: ratio
         processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
         limit: 2, // max number of top results to return, default: no limit / 0.
@@ -211,7 +211,7 @@ var options = {
         unsorted: false // results won't be sorted if true, default: false. If true limit will be ignored.
 };
 
-var results = fuzz.extract(query, choices, options);
+results = fuzz.extract(query, choices, options);
 
 // [choice, score, index/key]
 [ [ { id: 347, modelnumber: '456abdzx' }, 71, 2 ],
@@ -225,20 +225,20 @@ The processor function will only run on choices, so if your processor function m
 If you want to use more than one field for scoring, can do stuff like combine two fields in a processor function before scoring.
 
 ```js
-var processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
+processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
 ```
 
 For more complex behavior you can provide a custom scorer, say for a weighted score of two fields, or to include additional types of data. When using a custom scorer both the query and each choice can be any type of value, as long as your scorer can handle the respective parameters correctly.
 
 ```js
-var query = {name: "tiger", gender: "female"}
-var choices = [{name: "tiger", gender: "female"},{name: "tigger", gender: "male"},{name: "lulav", gender: "female"}, {name: "chad ochocinco", gender: "male"}]
+query = {name: "tiger", gender: "female"}
+choices = [{name: "tiger", gender: "female"},{name: "tigger", gender: "male"},{name: "lulav", gender: "female"}, {name: "chad ochocinco", gender: "male"}]
 function myCustomScorer(query, choice, options) {
         if (query.gender !== choice.gender) return 0;
         else return fuzz.ratio(query.name, choice.name, options);
 }
-var options = {scorer: myCustomScorer}
-var results = fuzz.extract(query, choices, options);
+options = {scorer: myCustomScorer}
+results = fuzz.extract(query, choices, options);
 ```
 
 (if you still wanted to use a separate processor function for whatever reason, the processor function would need to return something your scorer accepts)
@@ -248,7 +248,7 @@ var results = fuzz.extract(query, choices, options);
 Set options.wildcards to a string containing wildcard characters to be used as wildcards when calculating edit distance. Each character in the string will be treated as a wildcard, and wildcards are **case insensitive** unless options.full_process is set to false.
 
 ```js
-var options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
+options = {wildcards: "*x"}; // '*' and 'x' are both wildcards
 fuzz.ratio('fuzzba*l', 'fuXxball', options);
         100
 ```
@@ -263,7 +263,7 @@ To keep the map of which items were matched with each unique value set options.k
 Note: as the cutoff DECREASES the number of duplicates that are found INCREASES. This means that the returned deduplicated list will likely be shorter. Raise the threshold for fuzzy_dedupe to be less sensitive.
 
 ```js
-var contains_dupes = ['fuzzy wuzzy', 'fuzzy wuzz', 'not a dupe'];
+contains_dupes = ['fuzzy wuzzy', 'fuzzy wuzz', 'not a dupe'];
 options = {cutoff: 85, scorer: fuzz.token_set_ratio}
 fuzz.dedupe(contains_dupes, options)
 
@@ -286,24 +286,24 @@ If you have a large list of terms that you're searching repeatedly, and you need
 If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
-var query = fuzz.full_process("126-Abzx");
-var choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
-for (var c in choices) {
-        choices[c].proc_sorted = fuzz.process_and_sort(fuzz.full_process(choices[c].modelnumber));
+query = fuzz.full_process("126-Abzx");
+choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+for (choice of choices) {
+        choice.proc_sorted = fuzz.process_and_sort(fuzz.full_process(choice.modelnumber));
 }
-var options = {
+options = {
         scorer: fuzz.token_sort_ratio,
         processor: function(choice) {return choice['modelnumber']}, //choice.proc_sorted will override this
         full_process: false
 };
-var results = fuzz.extract(query, choices, options);
+results = fuzz.extract(query, choices, options);
 ```
 
 If using either "token_sort" scorer as standalone functions: Set options.proc_sorted = true and process both strings beforehand.
 
 ```js
-var str1 = "Abe Lincoln";
-var str2 = "Lincoln, Abe";
+str1 = "Abe Lincoln";
+str2 = "Lincoln, Abe";
 
 str1 = fuzz.process_and_sort(fuzz.full_process(str1));
 str2 = fuzz.process_and_sort(fuzz.full_process(str2));
@@ -314,29 +314,29 @@ fuzz.token_sort_ratio(str1, str2, {proc_sorted: true});
 If using either "token_set" scorer with extract: You can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
-var query = fuzz.full_process("126-Abzx");
-var choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
-for (var c in choices) {
-        choices[c].tokens = fuzz.unique_tokens(fuzz.full_process(choices[c].modelnumber));
+query = fuzz.full_process("126-Abzx");
+choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+for (choice of choices) {
+        choice.tokens = fuzz.unique_tokens(fuzz.full_process(choice.modelnumber));
 }
-var options = {
+options = {
         scorer: fuzz.token_set_ratio,
         processor: function(choice) {return choice['modelnumber']}, //choice.tokens will override this
         full_process: false
 };
-var results = fuzz.extract(query, choices, options);
+results = fuzz.extract(query, choices, options);
 ```
 
 If using either "token_set" scorer as standalone functions: Tokenize both strings beforehand and attach them to options.tokens as a two element array.
 
 ```js
-var str1 = "fluffy head man";
-var str2 = "heady fluffy head";
+str1 = "fluffy head man";
+str2 = "heady fluffy head";
 
 str1_tokens = fuzz.unique_tokens(fuzz.full_process(str1));
 str2_tokens = fuzz.unique_tokens(fuzz.full_process(str2));
 
-var options = {tokens: [str1_tokens, str2_tokens]};
+options = {tokens: [str1_tokens, str2_tokens]};
 
 // still have to include first two args for validation but they won't be used for scoring
 fuzz.token_set_ratio(str1, str2, options);
