@@ -2,11 +2,13 @@
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
-Easy to use and powerful fuzzy string matching.
+Easy to use and powerful fuzzy string matching. 
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library. Distance calculations based on [leven](https://github.com/sindresorhus/leven) and [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
+This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library.
 
-Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>.
+Demo page <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
+
+Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). (using js-levenshtein now unless you set the wildcard, collation, or astral symbol support options, which still use a modified version of leven)
 
 # Contents
  * [Installation](#installation)
@@ -36,20 +38,20 @@ npm install fuzzball
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
-You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need the partial ratios. This version has smaller file size but doesn't include the partial ratios which require difflib, and only has limited wildcard support. Now using UMD format but the old browser bundles still provided for backwards compatability.
+You can use the file __lite/fuzzball_lite.umd.min.js__ instead if you don't need the partial ratios. Has a smaller file size (69kB vs. 125kB) but doesn't include the partial ratios which require difflib, and only has limited wildcard support. Now using UMD format but the old browser bundles still provided.
 
 # Usage
 
 **Basic Overview**
 
 ```js
-var fuzz = require('fuzzball');
+fuzz = require('fuzzball');
 
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
-var options = {scorer: fuzz.token_set_ratio};
-var choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
+options = {scorer: fuzz.token_set_ratio};
+choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
 
 fuzz.extract("mr. harry hood", choices, options);
 

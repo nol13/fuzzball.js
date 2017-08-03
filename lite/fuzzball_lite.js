@@ -13,6 +13,7 @@
     var _iLeven = require('../lib/iLeven.js');
     var _wildLeven = require('../lib/wildcardLeven.js');
     var _leven = require('../lib/leven.js');
+    var _jsleven = require('../lib/jsleven');
     // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
@@ -491,7 +492,11 @@
             lensum = _toArray(str1).length + _toArray(str2).length
         }
         else {
-            if (!options.wildcards) {
+            if (!options.wildcards && !options.useCollator && options.subcost === 2) {
+                levdistance = _jsleven(str1, str2);
+                lensum = str1.length + str2.length;
+            }
+            else if (!options.wildcards) {
                 levdistance = _leven(str1, str2, options);
                 lensum = str1.length + str2.length;
             }
