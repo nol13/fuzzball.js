@@ -30,7 +30,7 @@ Distance calculations based on [leven](https://github.com/sindresorhus/leven), [
 npm install fuzzball
 ```
 
-**Browser** (make sure charset is utf-8)
+**Browser** (make sure script is utf-8 if your page isn't already)
 
 ```html
 <script charset="UTF-8" src="dist/fuzzball.umd.min.js"></script>
@@ -202,10 +202,13 @@ results = fuzz.extract(query, choicesObj);
 Optional processor function takes a choice and returns the string which will be used for scoring. Each choice can be a string or an object, as long as the processor function can accept it and return a string.
 ```js
 query = "126abzx";
-choices = [{id: 345, modelnumber: "123abc"},{id: 346, modelnumber: "123efg"},{id: 347, modelnumber: "456abdzx"}];
+choices = [{id: 345, model: "123abc"},
+           {id: 346, model: "123efg"},
+           {id: 347, model: "456abdzx"}];
+
 options = {
         scorer: fuzz.partial_ratio, // any function that takes two values and returns a score, default: ratio
-        processor: function(choice) {return choice['modelnumber']},  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
+        processor: choice => choice.model,  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
         limit: 2, // max number of top results to return, default: no limit / 0.
         cutoff: 50, // lowest score to return, default: 0
         unsorted: false // results won't be sorted if true, default: false. If true limit will be ignored.
@@ -214,8 +217,8 @@ options = {
 results = fuzz.extract(query, choices, options);
 
 // [choice, score, index/key]
-[ [ { id: 347, modelnumber: '456abdzx' }, 71, 2 ],
-  [ { id: 345, modelnumber: '123abc' }, 67, 0 ] ]
+[ [ { id: 347, model: '456abdzx' }, 71, 2 ],
+  [ { id: 345, model: '123abc' }, 67, 0 ] ]
 ```
 
 The processor function will only run on choices, so if your processor function modifies text in any way be sure to do the same to your query for unbiased results. This and default scorer are a slight departure from current fuzzywuzzy behavior.
@@ -225,18 +228,24 @@ The processor function will only run on choices, so if your processor function m
 If you want to use more than one field for scoring, can do stuff like combine two fields in a processor function before scoring.
 
 ```js
-processor = function(choice) { return choice['field1'] + " " + choice['field2']; }
+processor = choice => choice.field1 + " " + choice.field2;
 ```
 
 For more complex behavior you can provide a custom scorer, say for a weighted score of two fields, or to include additional types of data. When using a custom scorer both the query and each choice can be any type of value, as long as your scorer can handle the respective parameters correctly.
 
 ```js
 query = {name: "tiger", gender: "female"}
-choices = [{name: "tiger", gender: "female"},{name: "tigger", gender: "male"},{name: "lulav", gender: "female"}, {name: "chad ochocinco", gender: "male"}]
+
+choices = [{name: "tiger", gender: "female"},
+           {name: "tigger", gender: "male"},
+           {name: "lulav", gender: "female"},
+           {name: "chad ochocinco", gender: "male"}]
+
 function myCustomScorer(query, choice, options) {
         if (query.gender !== choice.gender) return 0;
         else return fuzz.ratio(query.name, choice.name, options);
 }
+
 options = {scorer: myCustomScorer}
 results = fuzz.extract(query, choices, options);
 ```
@@ -283,17 +292,18 @@ fuzz.dedupe(contains_dupes, options)
 
 If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (Also, f you wanted to use an alternate tokenizer could sub them for the functions used below)
 
-If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
+If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. If you supply a processor function when proc_sorted is set the processor will not get used. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 query = fuzz.full_process("126-Abzx");
-choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+choices = [{id: 345, model: "123-abc"},
+           {id: 346, model: "efg-123"},
+           {id: 347, model: "456 abdzx"}];
 for (choice of choices) {
-        choice.proc_sorted = fuzz.process_and_sort(fuzz.full_process(choice.modelnumber));
+        choice.proc_sorted = fuzz.process_and_sort(fuzz.full_process(choice.model));
 }
 options = {
         scorer: fuzz.token_sort_ratio,
-        processor: function(choice) {return choice['modelnumber']}, //choice.proc_sorted will override this
         full_process: false
 };
 results = fuzz.extract(query, choices, options);
@@ -311,17 +321,19 @@ fuzz.token_sort_ratio(str1, str2, {proc_sorted: true});
         100
 ```
 
-If using either "token_set" scorer with extract: You can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
+If using either "token_set" scorer with extract: You can set the property "tokens" of each choice object and it will use that instead of running unique_tokens() again. Processor functions will be ignored if "tokens" is set. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 
 ```js
 query = fuzz.full_process("126-Abzx");
-choices = [{id: 345, modelnumber: "123-abc"},{id: 346, modelnumber: "efg-123"},{id: 347, modelnumber: "456 abdzx"}];
+choices = [{id: 345, model: "123-abc"},
+           {id: 346, model: "efg-123"},
+           {id: 347, model: "456 abdzx"}];
+
 for (choice of choices) {
-        choice.tokens = fuzz.unique_tokens(fuzz.full_process(choice.modelnumber));
+        choice.tokens = fuzz.unique_tokens(fuzz.full_process(choice.model));
 }
 options = {
         scorer: fuzz.token_set_ratio,
-        processor: function(choice) {return choice['modelnumber']}, //choice.tokens will override this
         full_process: false
 };
 results = fuzz.extract(query, choices, options);
@@ -353,4 +365,4 @@ If you want to use difflib's ratio function for all ratio calculations, which di
 
 Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio.
 
-Setting options.useCollator only works at this time if using the default algorithm.
+Not all scoring options are available if using the difflib calculation. (useCollator, wildcards, )
