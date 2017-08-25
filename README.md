@@ -187,7 +187,9 @@ results = fuzz.extract(query, choices);
 With object
 ```js
 query = "polar bear";
-choicesObj = {id1: "brown bear", id2: "polar bear", id3: "koala bear"};
+choicesObj = {id1: "brown bear",
+              id2: "polar bear",
+              id3: "koala bear"};
 
 results = fuzz.extract(query, choicesObj);
 
