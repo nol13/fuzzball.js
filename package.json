@@ -7,7 +7,7 @@
     "fuzzball.js",
     "dist",
     "lite",
-    "ultralite",
+    "ultra_lite",
     "lib"
   ],
   "dependencies": {
