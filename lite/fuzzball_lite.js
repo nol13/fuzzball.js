@@ -2,19 +2,14 @@
     /** @module fuzzball */
     'use strict';
     var Heap = require('heap');
-    // @ts-ignore
     var _intersect = require('./lodash.custom.min.js').intersection;
-    // @ts-ignore
     var _difference = require('./lodash.custom.min.js').difference;
-    // @ts-ignore
     var _uniq = require('./lodash.custom.min.js').uniq;
-    // @ts-ignore
     var _toArray = require('./lodash.custom.min.js').toArray;
     var _iLeven = require('../lib/iLeven.js');
     var _wildLeven = require('../lib/wildcardLeven.js');
     var _leven = require('../lib/leven.js');
     var _jsleven = require('../lib/jsleven');
-    // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
     var utils = require('../lib/utils.js')(_uniq);
@@ -27,14 +22,12 @@
 
     // isArray polyfill
     if (typeof Array.isArray === 'undefined') {
-        // @ts-ignore
         Array.isArray = function (obj) {
             return Object.prototype.toString.call(obj) === '[object Array]';
         }
     };
 
     var processing = require('../lib/process.js')(_clone_and_set_option_defaults, Array.isArray, QRatio, extract);
-    // @ts-ignore
     var dedupe = processing.dedupe;
  
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */

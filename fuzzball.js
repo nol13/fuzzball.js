@@ -21,7 +21,6 @@
     var _leven = require('./lib/leven.js');
     var _jsleven = require('./lib/jsleven');
 
-    // @ts-ignore
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
     var utils = require('./lib/utils.js')(_uniq, _uniqWith, _partialRight);
@@ -34,7 +33,6 @@
 
     var processing = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
     
-    // @ts-ignore
     var dedupe = processing.dedupe;
     
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */

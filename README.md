@@ -38,9 +38,9 @@ npm install fuzzball
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
-Can also use the files __lite/fuzzball_lite.umd.min.js__ or __ultra_lite/fuzzball_ultra_lite.umd.min.js__ bundles if you need a smaller file size. The lite version doesn't include the partial ratios, and only has limited wildcard support, and the ultra_lite version also doesnt include support for collation or astral symbols, it's extract functions are not as optimized for large datasets, and it's full_process function's alphanumeric check doesn't support non-roman alphabets. 
+Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you want a smaller file size. (located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js) The lite version doesn't include the partial ratios, and only has limited wildcard support, and the ultra_lite version also doesnt include support for collation or astral symbols, it's extract functions are not as optimized for large datasets, and it's full_process function's alphanumeric check doesn't support non-roman alphabets. 
 
-The full, lite and ultra_lite flavors currently weight in at 125kB, 69kB, and 28kB respectively, uncompressed. May try to take out additional dependencies from ultra_light in the future but the feature set should remain intact. Now using UMD format but the old browser bundles still provided.
+The full, lite and ultra_lite flavors currently weight in at a compressed 37kB, 21kB, and 8kB, respectively. Now using UMD format but the old browser bundles still provided.
 
 # Usage
 
