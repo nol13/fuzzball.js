@@ -1,10 +1,12 @@
 var assert = require('assert');
 var fuzz = require('../fuzzball.js');
 var fuzzlite = require('../lite/fuzzball_lite.js');
+var fuzzultra = require('../ultra_lite/fuzzball_ultra_lite.js');
 if (process.env.testenv === "build") {
     console.log('TESTING BUILD');
     fuzz = require('../dist/fuzzball.umd.min.js');
     fuzzlite = require('../lite/fuzzball_lite.umd.min.js');
+    fuzzultra = require('../ultra_lite/fuzzball_ultra_lite.umd.min.js');
 }
 var data = require('./testdata');
 var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio]
@@ -85,6 +87,16 @@ describe('Extract', function () {
         assert.equal(results[2][1], 60);
         assert.equal(results[1][0], 'koala bear');
     });
+    it('should return true if extract with default options working ultra_lite', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzultra.extract(query, choices);
+        console.log(results);
+        assert.equal(results[0][1], 100);
+        assert.equal(results[1][1], 80);
+        assert.equal(results[2][1], 60);
+        assert.equal(results[1][0], 'koala bear');
+    });
     it('should return true if extract with README options working', function () {
         var query = "126abzx";
         var choices = [{ id: 345, modelnumber: "123abc" }, { id: 346, modelnumber: "123efg" }, { id: 347, modelnumber: "456abdzx" }];
@@ -106,10 +118,16 @@ describe('Extract', function () {
         var results = fuzz.extract(query, choices, {scorer: fuzz.token_sort_ratio});
         assert.equal(results[0][1], 0);
     });
-    it('should return true if extract with toekn_sort and null query not error lite', function () {
+    it('should return true if extract with token_sort and null query not error lite', function () {
         var query = null;
         var choices = ["brown bear", "polar bear", "koala bear"];
         var results = fuzzlite.extract(query, choices, { scorer: fuzzlite.token_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with token_sort and null query not error ultra_lite', function () {
+        var query = null;
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzultra.extract(query, choices, { scorer: fuzzlite.token_sort_ratio });
         assert.equal(results[0][1], 0);
     });
     it('should return true if extract with token_sort null choices not error', function () {
@@ -173,6 +191,13 @@ describe('Extract with pre-calculated tokens', function () {
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
         assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzultra.extract(query, choices, options);
+        results2 = fuzzultra.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
     it('should return true if pre-calculating tokens and not using processor function doesnt affect token_set_ratio results', function () {
         var query = "126 abz x";
@@ -207,6 +232,13 @@ describe('Extract with pre-calculated tokens', function () {
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
         assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzultra.extract(query, choices, options);
+        results2 = fuzzultra.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
     it('should return true if pre-calculating tokens and using dummy string doesnt effect token_sort_ratio', function () {
         var query = "126 abz x";
@@ -232,6 +264,13 @@ describe('Extract with pre-calculated tokens', function () {
 
         results = fuzzlite.extract(query, choices, options);
         results2 = fuzzlite.extract(query, choices2, options);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzultra.extract(query, choices, options);
+        results2 = fuzzultra.extract(query, choices2, options);
         assert.equal(results[0][1], results2[0][1]);
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
@@ -270,6 +309,13 @@ describe('Extract with pre-calculated tokens', function () {
         assert.equal(results[1][1], results2[1][1]);
         assert.equal(results[0][2], results2[0][2]);
         assert.equal(results[1][2], results2[1][2]);
+
+        results = fuzzultra.extract(query, choices, options);
+        results2 = fuzzultra.extract(query, choices2, options2);
+        assert.equal(results[0][1], results2[0][1]);
+        assert.equal(results[1][1], results2[1][1]);
+        assert.equal(results[0][2], results2[0][2]);
+        assert.equal(results[1][2], results2[1][2]);
     });
 });
 
@@ -279,6 +325,12 @@ describe('fullball_lite', function () {
         assert.equal(fuzz.ratio("this isnt a test", "this is a test!"), fuzzlite.ratio("this isnt a test", "this is a test!"));
         assert.equal(fuzz.token_set_ratio("this isnt a test", "this is a test!"), fuzzlite.token_set_ratio("this isnt a test", "this is a test!"));
         assert.equal(fuzz.token_sort_ratio("this isnt a test", "this is a test!"), fuzzlite.token_sort_ratio("this isnt a test", "this is a test!"));
+    });
+    it('should return true if fullball_ultra_lite scorers give same results', function () {
+        assert.equal(fuzz.ratio("this is a test", "this is a test!"), fuzzultra.ratio("this is a test", "this is a test!"));
+        assert.equal(fuzz.ratio("this isnt a test", "this is a test!"), fuzzultra.ratio("this isnt a test", "this is a test!"));
+        assert.equal(fuzz.token_set_ratio("this isnt a test", "this is a test!"), fuzzultra.token_set_ratio("this isnt a test", "this is a test!"));
+        assert.equal(fuzz.token_sort_ratio("this isnt a test", "this is a test!"), fuzzultra.token_sort_ratio("this isnt a test", "this is a test!"));
     });
     it('should return true if in lite extract pre-calculating tokens and using dummy string gives same results', function () {
         var query = "126 abz x";
@@ -406,6 +458,17 @@ describe('async', function () {
             done();
         });
     });
+    it('should return true if extractAsync ultra_lite with default options working', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzultra.extractAsync(query, choices, {}, function (err, results) {
+            assert.equal(results[0][1], 100);
+            assert.equal(results[1][1], 80);
+            assert.equal(results[2][1], 60);
+            assert.equal(results[1][0], 'koala bear');
+            done();
+        });
+    });
 });
 
 describe('errors', function () {
@@ -421,6 +484,14 @@ describe('errors', function () {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         fuzzlite.extractAsync(query, 'not a valid choices obj', {}, function (err, results) {
+            assert.equal(err.message, "Invalid choices");
+            done();
+        });
+    });
+    it('should return error from extractAsync with invalid choices ultra_lite', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzultra.extractAsync(query, 'not a valid choices obj', {}, function (err, results) {
             assert.equal(err.message, "Invalid choices");
             done();
         });

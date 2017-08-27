@@ -40,7 +40,7 @@ fuzzball.ratio("fuzz", "fuzzy")
 ```
 Also available are the __lite/fuzzball_lite.umd.min.js__ or __ultra_lite/fuzzball_ultra_lite.umd.min.js__ bundles if you need a smaller file size. The lite version doesn't include the partial ratios, and only has limited wildcard support, and ultra_lite version also doesnt include support for collation or astral symbols, it's extract functions are as not optimized for large datasets, and it's full_process function's alphanumeric check doesn't support non-roman alphabets. 
 
-The full, lite and ultra_lite flavors weight in at 125kB, 69kB, and 28kB respectively uncompressed. Now using UMD format but the old browser bundles still provided. Has a smaller file size (69kB vs. 125kB) but
+The full, lite and ultra_lite flavors currently weight in at 125kB, 69kB, and 28kB respectively, uncompressed. May try to take out additional dependencies from ultra_light in the future but the feature set should remain intact. Now using UMD format but the old browser bundles still provided. Has a smaller file size (69kB vs. 125kB) but
 
 # Usage
 
