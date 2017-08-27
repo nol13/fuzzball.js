@@ -1,41 +1,25 @@
 (function () {
     /** @module fuzzball */
     'use strict';
-    var Heap = require('heap');
-    // @ts-ignore
     var _intersect = require('./lodash.custom.min.js').intersection;
-    // @ts-ignore
     var _difference = require('./lodash.custom.min.js').difference;
-    // @ts-ignore
     var _uniq = require('./lodash.custom.min.js').uniq;
-    // @ts-ignore
-    var _toArray = require('./lodash.custom.min.js').toArray;
-    var _iLeven = require('../lib/iLeven.js');
-    var _wildLeven = require('../lib/wildcardLeven.js');
-    var _leven = require('../lib/leven.js');
     var _jsleven = require('../lib/jsleven');
-    // @ts-ignore
-    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
-    var utils = require('../lib/utils.js')(_uniq);
+    var utils = require('../lib/utils_ultra_lite.js')(_uniq);
     var _validate = utils.validate;
     var process_and_sort = utils.process_and_sort;
     var tokenize = utils.tokenize;
     var full_process = utils.full_process;
     var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
     var _isCustomFunc = utils.isCustomFunc;
-
+    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
     // isArray polyfill
     if (typeof Array.isArray === 'undefined') {
-        // @ts-ignore
         Array.isArray = function (obj) {
             return Object.prototype.toString.call(obj) === '[object Array]';
         }
     };
-
-    var processing = require('../lib/process.js')(_clone_and_set_option_defaults, Array.isArray, QRatio, extract);
-    // @ts-ignore
-    var dedupe = processing.dedupe;
  
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
@@ -50,20 +34,15 @@
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        if (typeof options.subcost === "undefined") options.subcost = 1;
-        if (options.astral) return _iLeven(str1, str2, options, _toArray);
-        else return _wildLeven(str1, str2, options, _leven); // falls back to _leven if no wildcards
+        return _jsleven(str1, str2, options, _leven); // falls back to _leven if no wildcards
     }
 
     function QRatio(str1, str2, options_p) {
@@ -74,12 +53,9 @@
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -98,11 +74,8 @@
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -121,11 +94,8 @@
          * @param {string} str1 - the first string.
          * @param {string} str2 - the second string.
          * @param {Object} [options_p] - Additional options.
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -151,14 +121,10 @@
          * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
+         * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suited
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -194,20 +160,9 @@
             pre_processor = full_process;
             if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
         }
-        var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
             query = pre_processor(query, options);
             options.full_process = false;
-            if (options.astral && options.normalize) {
-                options.normalize = false;  // don't normalize again in ratio if doing here
-                if (String.prototype.normalize) {
-                    normalize = true
-                    query = query.normalize();
-                }
-                else {
-                    if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                }
-            }
             if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
@@ -232,7 +187,7 @@
                     if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
-                        mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
+                        mychoice = process_and_sort(mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
                 }
@@ -244,7 +199,7 @@
                     }
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
-                        options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
+                        options.tokens = [query_tokens, tokenize(mychoice)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
@@ -257,7 +212,6 @@
                 else {
                     mychoice = pre_processor(options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
-                    if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
                 }
                 if (isArray) idx = parseInt(c);
@@ -267,8 +221,7 @@
         }
         if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-            var cmp = function(a, b) { return a[1] - b[1]; }
-            results = Heap.nlargest(results, options.limit, cmp);
+            results = results.sort(function (a, b) { return b[1] - a[1]; }).slice(0, options.limit);
         }
         else if (!options.unsorted) {
             results = results.sort(function(a,b){return b[1]-a[1];});
@@ -287,14 +240,10 @@
          * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
-         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
-         * @param {boolean} [options_p.astral] - use iLeven for scoring to properly handle astral symbols
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
-         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -334,20 +283,9 @@
             pre_processor = full_process;
             if (!isCustom) options.processed = true; // to let wildcardLeven know and not run again after we set fp to false below
         }
-        var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
             query = pre_processor(query, options);
             options.full_process = false;
-            if (options.astral && options.normalize) {
-                options.normalize = false;  // don't normalize again in ratio if doing here
-                if (String.prototype.normalize) {
-                    normalize = true
-                    query = query.normalize();
-                }
-                else {
-                    if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                }
-            }
             if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
@@ -374,7 +312,7 @@
                     if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
-                        mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
+                        mychoice = process_and_sort(mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
                 }
@@ -386,7 +324,7 @@
                     }
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
-                        options.tokens = [query_tokens, tokenize(normalize ? mychoice.normalize() : mychoice)]
+                        options.tokens = [query_tokens, tokenize(mychoice)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
@@ -399,7 +337,6 @@
                 else {
                     mychoice = pre_processor(options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
-                    if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
                 }
                 if (isArray) idx = parseInt(c);
@@ -415,8 +352,7 @@
             else {
                 if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
                 if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-                    var cmp = function (a, b) { return a[1] - b[1]; }
-                    results = Heap.nlargest(results, options.limit, cmp);
+                    results = results.sort(function (a, b) { return b[1] - a[1]; }).slice(0, options.limit);
                 }
                 else if (!options.unsorted) {
                     results = results.sort(function (a, b) { return b[1] - a[1]; });
@@ -453,7 +389,6 @@
         combined_1to2 = combined_1to2.trim();
         combined_2to1 = combined_2to1.trim();
         var ratio_func = _ratio;
-        //if (options.partial) ratio_func = _partial_ratio;
 
         var pairwise = [
             ratio_func(sorted_sect, combined_1to2, options),
@@ -466,43 +401,13 @@
         return Math.max.apply(null, pairwise);
     }
 
-    var normalWarn = false;
     function _ratio(str1, str2, options) {
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
-        //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2 if not specified, or would default to 1
-        if (typeof options.subcost === "undefined") options.subcost = 2;
+        //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2
         var levdistance, lensum;
-        if (options.astral) {
-            if (options.normalize) {
-                if (String.prototype.normalize) {
-                    str1 = str1.normalize();
-                    str2 = str2.normalize();
-                }
-                else {
-                    if (!normalWarn) {
-                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                        normalWarn = true;
-                    }
-                }
-            }
-            levdistance = _iLeven(str1, str2, options, _toArray);
-            lensum = _toArray(str1).length + _toArray(str2).length
-        }
-        else {
-            if (!options.wildcards && !options.useCollator && options.subcost === 2) {
-                levdistance = _jsleven(str1, str2);
-                lensum = str1.length + str2.length;
-            }
-            else if (!options.wildcards) {
-                levdistance = _leven(str1, str2, options);
-                lensum = str1.length + str2.length;
-            }
-            else {
-                levdistance = _wildLeven(str1, str2, options, _leven); // falls back to _leven if invalid
-                lensum = str1.length + str2.length;
-            }
-        }
+        levdistance = _jsleven(str1, str2);
+        lensum = str1.length + str2.length;
         return Math.round(100 * ((lensum - levdistance) / lensum));
     }
 
@@ -558,8 +463,7 @@
         extract: extract,
         extractAsync: extractAsync,
         process_and_sort: process_and_sort,
-        unique_tokens: tokenize,
-        dedupe: dedupe
+        unique_tokens: tokenize
     };
 
      module.exports = fuzzball;

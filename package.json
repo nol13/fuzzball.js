@@ -7,6 +7,7 @@
     "fuzzball.js",
     "dist",
     "lite",
+    "ultralite",
     "lib"
   ],
   "dependencies": {
@@ -47,12 +48,14 @@
     "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
     "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach -p -o ./lib/lodash.custom.min.js",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
+    "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",
     "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
     "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
     "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball.umd.min.js",
     "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
+    "build:ultralite": "./node_modules/.bin/browserify ./ultra_lite/fuzzball_ultra_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > ultra_lite/fuzzball_ultra_lite.umd.min.js",
     "build:demo": "cd demo_src && npm run build && cp -a dist/. ../docs/",
-    "build": "npm run lodash:lite && npm run lodash:reg && npm run build:reg && npm run build:lite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
+    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:reg && npm run build:lite && npm run build:ultralite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha && npm run nsp",
     "test:build": "testenv=build npm run test",
     "nsp": "node_modules/nsp/bin/nsp check"
