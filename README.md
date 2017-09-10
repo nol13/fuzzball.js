@@ -8,7 +8,7 @@ This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatge
 
 Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
 
-Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). (now using js-levenshtein unless you set the wildcard, collation, or astral symbol support options, which will use a modified version of leven instead)
+Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). (now using js-levenshtein unless you use certain features, which will still use a modified version of leven instead)
 
 # Contents
  * [Installation](#installation)
@@ -21,6 +21,7 @@ Distance calculations based on [leven](https://github.com/sindresorhus/leven), [
  * [Fuzzy Dedupe](#fuzzy-dedupe)
  * [Performance Optimization](#performance-optimization)
  * [Alternate Ratio Calculations](#alternate-ratio-calculations)
+ * [Lite Bundles](#lite-bundles)
 
 # Installation
 
@@ -30,7 +31,7 @@ Distance calculations based on [leven](https://github.com/sindresorhus/leven), [
 npm install fuzzball
 ```
 
-**Browser** (make sure script is utf-8 if your page isn't already)
+**Browser** (make sure script is utf-8 if page isn't already)
 
 ```html
 <script charset="UTF-8" src="dist/fuzzball.umd.min.js"></script>
@@ -38,9 +39,7 @@ npm install fuzzball
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
-Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you want a smaller file size. (located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js) The lite version doesn't include the partial ratios, and only has limited wildcard support, and the ultra_lite version also doesnt include support for collation or astral symbols, it's extract functions are not as optimized for large datasets, and it's full_process function's alphanumeric check doesn't support non-roman alphabets. 
-
-The full, lite and ultra_lite flavors currently weight in at a compressed 37kB, 21kB, and 8kB, respectively. Now using UMD format but the old browser bundles still provided.
+Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
 
 # Usage
 
@@ -370,3 +369,11 @@ If you want to use difflib's ratio function for all ratio calculations, which di
 Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio.
 
 Not all scoring options are available if using the difflib calculation. (useCollator, wildcards, )
+
+### Lite Bundles
+
+Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js. 
+
+The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
+
+The full, lite and ultra_lite flavors currently weight in at a compressed 37kB, 21kB, and 8kB, respectively. Now using UMD format but the old browser bundles still provided.
