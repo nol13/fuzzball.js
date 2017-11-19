@@ -1,6 +1,6 @@
 {
   "name": "fuzzball",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
   "files": [
