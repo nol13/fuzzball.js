@@ -6,9 +6,7 @@ Easy to use and powerful fuzzy string matching.
 
 This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library.
 
-Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
-
-Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). (now using js-levenshtein unless you use certain features, which will still use a modified version of leven instead)
+Simple demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. JSDoc generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
 
 # Contents
  * [Installation](#installation)
@@ -22,6 +20,8 @@ Distance calculations based on [leven](https://github.com/sindresorhus/leven), [
  * [Performance Optimization](#performance-optimization)
  * [Alternate Ratio Calculations](#alternate-ratio-calculations)
  * [Lite Bundles](#lite-bundles)
+ * [Credits](#credits) (aka, projects I stole code from)
+ * [Contributions](#contributions)
 
 # Installation
 
@@ -368,7 +368,7 @@ If you want to use difflib's ratio function for all ratio calculations, which di
 
 Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio.
 
-Not all scoring options are available if using the difflib calculation. (useCollator, wildcards, )
+Not all scoring options are available if using the difflib calculation. (useCollator, wildcards, subcost)
 
 ### Lite Bundles
 
@@ -377,3 +377,19 @@ Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
 The full, lite and ultra_lite flavors currently weight in at a compressed 37kB, 21kB, and 8kB, respectively. Now using UMD format but the old browser bundles still provided.
+
+### Credits
+
+In addition to all dependencies..
+
+Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). Now using js-levenshtein unless you use certain features, which will still use a modified version of leven instead. Collation code based on fast-levenshtein. 
+
+Default ratio formula is based on [python-Levenshtein](https://github.com/miohtama/python-Levenshtein).
+
+Unicode alphanumerica check from [XRegExp](http://xregexp.com).
+
+### Contributions
+
+Pull requests welcome, no breaking stuff. :)
+
+Currently on the agenda is adding Flow/TypeScript typings.
