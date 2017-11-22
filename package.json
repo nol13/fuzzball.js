@@ -45,7 +45,7 @@
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "jsdoc2md": "./node_modules/.bin/jsdoc2md fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
+    "jsdoc2md": "./node_modules/.bin/jsdoc2md --template ./jsdocs/README.hbs fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
     "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach -p -o ./lib/lodash.custom.min.js",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",

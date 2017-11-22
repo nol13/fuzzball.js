@@ -4,7 +4,8 @@ import { footer } from '../styles/footer.scss';
 
 const App = ({ children }) =>
     <div style={{fontFamily: 'arial', fontSize: '13px'}}>
-        <h1>Fuzzball Scorer Demo</h1>
+        <h2>Fuzzball.js Scorer Demo</h2>
+        <a href="https://github.com/nol13/fuzzball.js">&lt; back to README </a><br /><br />
         { children }
         <footer className={footer}>
             <div style={{fontSize: 'smaller'}}>

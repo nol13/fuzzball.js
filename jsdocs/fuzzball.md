@@ -1,3 +1,5 @@
+[< back to README](https://github.com/nol13/fuzzball.js)
+
 <a name="module_fuzzball"></a>
 
 ## fuzzball
