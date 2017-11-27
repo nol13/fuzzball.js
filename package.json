@@ -3,6 +3,7 @@
   "version": "0.13.6",
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
+  "types": "fuzzball.d.ts",
   "files": [
     "fuzzball.js",
     "dist",

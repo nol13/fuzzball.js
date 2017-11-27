@@ -152,7 +152,7 @@
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
-         * @returns {Object[]} - array of choice results with their computed ratios (0-100).
+         * @returns {Array[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         var isArray = false;
