@@ -6,6 +6,7 @@
   "types": "fuzzball.d.ts",
   "files": [
     "fuzzball.js",
+    "fuzzball.d.ts",
     "dist",
     "lite",
     "ultra_lite",
