@@ -21,6 +21,10 @@ export interface FuzzballExtractOptions extends FuzzballBaseOptions {
     cutoff?: number;
 }
 
+export interface FuzzballDedupeOptions extends FuzzballExtractOptions {
+    keepmap?: boolean
+}
+
 export interface ExtractResults {
     [index: number]: [any, number, string | number];
 }
@@ -42,6 +46,6 @@ export function extractAsync(query: any, choices: any, opts?: FuzzballExtractOpt
 export function full_Process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;
 export function unique_tokens(str: string, opts?: FuzzballExtractOptions): string[];
-export function dedupe(contains_dupes: any, opts?: FuzzballExtractOptions): DedupeResults;
+export function dedupe(contains_dupes: any, opts?: FuzzballDedupeOptions): DedupeResults;
 
 export as namespace fuzzball;
