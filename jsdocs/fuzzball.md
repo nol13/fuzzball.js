@@ -200,7 +200,7 @@ Return the top scoring items from an array (or assoc array) of choices
 
 | Param | Type | Description |
 | --- | --- | --- |
-| query | <code>string</code> | the search term. |
+| query |  | the search term. |
 | choices | <code>Array.&lt;String&gt;</code> \| <code>Array.&lt;Object&gt;</code> \| <code>Object</code> | array of strings, or array of choice objects if processor is supplied, or object of form {key: choice} |
 | [options_p] | <code>Object</code> | Additional options. |
 | [options_p.scorer] | <code>function</code> | takes two values and returns a score |
@@ -226,7 +226,7 @@ Return the top scoring items from an array (or assoc array) of choices
 
 | Param | Type | Description |
 | --- | --- | --- |
-| query | <code>string</code> | the search term. |
+| query |  | the search term. |
 | choices | <code>Array.&lt;String&gt;</code> \| <code>Array.&lt;Object&gt;</code> \| <code>Object</code> | array of strings, or array of choice objects if processor is supplied, or object of form {key: choice} |
 | [options_p] | <code>Object</code> | Additional options. |
 | [options_p.scorer] | <code>function</code> | takes two values and returns a score |

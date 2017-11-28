@@ -285,7 +285,7 @@
          * Return the top scoring items from an array (or assoc array) of choices
          *
          * @function extract
-         * @param {string} query - the search term.
+         * @param query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
          * @param {function} [options_p.scorer] - takes two values and returns a score
@@ -419,7 +419,7 @@
          * Return the top scoring items from an array (or assoc array) of choices
          *
          * @function extractAsync
-         * @param {string} query - the search term.
+         * @param query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
          * @param {function} [options_p.scorer] - takes two values and returns a score
