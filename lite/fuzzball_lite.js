@@ -140,7 +140,7 @@
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
-         * @param {function} [options_p.scorer] - takes two values and returns a score
+         * @param {function} [options_p.scorer] - takes two values and returns a score, will be passed options as 3rd argument
          * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
@@ -276,7 +276,7 @@
          * @param {string} query - the search term.
          * @param {String[]|Object[]|Object} choices - array of strings, or array of choice objects if processor is supplied, or object of form {key: choice}
          * @param {Object} [options_p] - Additional options.
-         * @param {function} [options_p.scorer] - takes two values and returns a score
+         * @param {function} [options_p.scorer] - takes two values and returns a score, will be passed options as 3rd argument
          * @param {function} [options_p.processor] - takes each choice and outputs a value to be used for Scoring
          * @param {number} [options_p.limit] - optional max number of results to return, returns all if not supplied
          * @param {number} [options_p.cutoff] - minimum score that will get returned 0-100
