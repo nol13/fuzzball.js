@@ -46,7 +46,7 @@ export interface FuzzballExtractOptions extends FuzzballBaseOptions {
      */
     trySimple?: boolean;
     /**
-     * Custom scoring function
+     * Scoring function, default: ratio
      */
     scorer?: (str1: any, str2: any, opts?: FuzzballExtractOptions) => number;
     /**
