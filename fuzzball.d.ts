@@ -81,28 +81,44 @@ export interface FuzzballDedupeOptions extends FuzzballExtractOptions {
     /**
      * Keep the items and scores mapped to this value, default false
      */
-    keepmap?: false
+    keepmap?: false;
+    /**
+     * Function that will be run on each item before scoring
+     */
+    processor?: (str: any) => string;
 }
 
 export interface FuzzballDedupeOptionsWithMap extends FuzzballExtractOptions {
     /**
      * Keep the items and scores mapped to this value, default false
      */
-    keepmap: true
+    keepmap: true;
+    /**
+     * Function that will be run on each item before scoring
+     */
+    processor?: (str: any) => string;
 }
 
 export interface FuzzballDedupeObjOptions extends FuzzballExtractObjectOptions {
     /**
      * Keep the items and scores mapped to this value, default false
      */
-    keepmap?: false
+    keepmap?: false;
+    /**
+     * Function that will be run on each item before scoring
+     */
+    processor?: (str: any) => string;
 }
 
 export interface FuzzballDedupeObjOptionsWithMap extends FuzzballExtractObjectOptions {
     /**
      * Keep the items and scores mapped to this value, default false
      */
-    keepmap: true
+    keepmap: true;
+    /**
+     * Function that will be run on each item before scoring
+     */
+    processor?: (str: any) => string;
 }
 
 export function distance(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
