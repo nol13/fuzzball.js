@@ -125,6 +125,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suited
+         * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -177,7 +178,13 @@
             var query_tokens = tokenize(query);
             tset = true;
         }
-        var idx, mychoice, result;
+        var idx, mychoice, result, cmpSort;
+        if (options.returnObjects) {
+            cmpSort = function (a, b) { return b.score - a.score; };
+        }
+        else {
+            cmpSort = function (a, b) { return b[1] - a[1]; };
+        }
         for (var c in choices) {
             if (isArray || choices.hasOwnProperty(c)) {
                 options.tokens = undefined;
@@ -216,15 +223,18 @@
                 }
                 if (isArray) idx = parseInt(c);
                 else idx = c;
-                if (result > options.cutoff) results.push([choices[c], result, idx]);
+                if (result > options.cutoff) {
+                    if (options.returnObjects) results.push({ choice: choices[c], score: result, key: idx });
+                    else results.push([choices[c], result, idx]);;
+                }
             }
         }
         if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-            results = results.sort(function (a, b) { return b[1] - a[1]; }).slice(0, options.limit);
+            results = results.sort(cmpSort).slice(0, options.limit);
         }
         else if (!options.unsorted) {
-            results = results.sort(function(a,b){return b[1]-a[1];});
+            results = results.sort(cmpSort);
         }
         return results;
     }
@@ -244,6 +254,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -300,7 +311,13 @@
             var query_tokens = tokenize(query);
             tset = true;
         }
-        var idx, mychoice, result;
+        var idx, mychoice, result, cmpSort;
+        if (options.returnObjects) {
+            cmpSort = function (a, b) { return b.score - a.score; };
+        }
+        else {
+            cmpSort = function (a, b) { return b[1] - a[1]; };
+        }
         var keys = Object.keys(choices);
         isArray ? searchLoop(0) : searchLoop(keys[0], 0);
         function searchLoop (c, i) {
@@ -341,7 +358,10 @@
                 }
                 if (isArray) idx = parseInt(c);
                 else idx = c;
-                if (result > options.cutoff) results.push([choices[c], result, idx]);
+                if (result > options.cutoff) {
+                    if (options.returnObjects) results.push({ choice: choices[c], score: result, key: idx });
+                    else results.push([choices[c], result, idx]);;
+                }
             }
             if (isArray && c < choices.length - 1) {
                 setImmediate(function () { searchLoop(c + 1) })
@@ -352,10 +372,10 @@
             else {
                 if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
                 if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-                    results = results.sort(function (a, b) { return b[1] - a[1]; }).slice(0, options.limit);
+                    results = results.sort(cmpSort).slice(0, options.limit);
                 }
                 else if (!options.unsorted) {
-                    results = results.sort(function (a, b) { return b[1] - a[1]; });
+                    results = results.sort(cmpSort);
                 }
                 callback(null, results);
             }

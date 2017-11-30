@@ -97,6 +97,37 @@ describe('Extract', function () {
         assert.equal(results[2][1], 60);
         assert.equal(results[1][0], 'koala bear');
     });
+
+    it('should return true if extract with with options.returnObjects = true is working', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzz.extract(query, choices, { returnObjects: true });
+        console.log(results);
+        assert.equal(results[0].score, 100);
+        assert.equal(results[1].score, 80);
+        assert.equal(results[2].score, 60);
+        assert.equal(results[1].choice, 'koala bear');
+    });
+    it('should return true if extract with with options.returnObjects = true is working lite', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzlite.extract(query, choices, { returnObjects: true });
+        assert.equal(results[0].score, 100);
+        assert.equal(results[1].score, 80);
+        assert.equal(results[2].score, 60);
+        assert.equal(results[1].choice, 'koala bear');
+    });
+    it('should return true if extract with with options.returnObjects = true is working ultra_lite', function () {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        var results = fuzzultra.extract(query, choices, { returnObjects: true });
+        console.log(results);
+        assert.equal(results[0].score, 100);
+        assert.equal(results[1].score, 80);
+        assert.equal(results[2].score, 60);
+        assert.equal(results[1].choice, 'koala bear');
+    });
+
     it('should return true if extract with README options working', function () {
         var query = "126abzx";
         var choices = [{ id: 345, modelnumber: "123abc" }, { id: 346, modelnumber: "123efg" }, { id: 347, modelnumber: "456abdzx" }];
@@ -447,7 +478,7 @@ describe('async', function () {
             done();
         });
     });
-    it('should return true if extractAsync lite with default options working', function (done) {
+    it('should return true if extractAsync lite with default options working lite', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         fuzzlite.extractAsync(query, choices, {}, function (err, results) {
@@ -458,7 +489,7 @@ describe('async', function () {
             done();
         });
     });
-    it('should return true if extractAsync ultra_lite with default options working', function (done) {
+    it('should return true if extractAsync ultra_lite with default options working ultra lite', function (done) {
         var query = "polar bear";
         var choices = ["brown bear", "polar bear", "koala bear"];
         fuzzultra.extractAsync(query, choices, {}, function (err, results) {
@@ -466,6 +497,40 @@ describe('async', function () {
             assert.equal(results[1][1], 80);
             assert.equal(results[2][1], 60);
             assert.equal(results[1][0], 'koala bear');
+            done();
+        });
+    });
+
+    it('should return true if extractAsync with options.returnObjects = true is working', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzz.extractAsync(query, choices, {returnObjects: true}, function (err, results) {
+            assert.equal(results[0].score, 100);
+            assert.equal(results[1].score, 80);
+            assert.equal(results[2].score, 60);
+            assert.equal(results[1].choice, 'koala bear');
+            done();
+        });
+    });
+    it('should return true if extractAsync lite with options.returnObjects = true is working lite', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzlite.extractAsync(query, choices, { returnObjects: true}, function (err, results) {
+            assert.equal(results[0].score, 100);
+            assert.equal(results[1].score, 80);
+            assert.equal(results[2].score, 60);
+            assert.equal(results[1].choice, 'koala bear');
+            done();
+        });
+    });
+    it('should return true if extractAsync ultra_lite with options.returnObjects = true is working ultra lite', function (done) {
+        var query = "polar bear";
+        var choices = ["brown bear", "polar bear", "koala bear"];
+        fuzzultra.extractAsync(query, choices, { returnObjects: true}, function (err, results) {
+            assert.equal(results[0].score, 100);
+            assert.equal(results[1].score, 80);
+            assert.equal(results[2].score, 60);
+            assert.equal(results[1].choice, 'koala bear');
             done();
         });
     });

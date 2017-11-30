@@ -61,7 +61,7 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
-// set options.returnObjects to get back {choice, score, key} instead of tuples
+// can set options.returnObjects = true to get back array of {choice, score, key} objects instead of tuples
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 ```
