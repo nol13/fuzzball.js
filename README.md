@@ -61,6 +61,8 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
+// set options.returnObjects to get back {choice, score, key} instead of tuples
+
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 ```
 
@@ -198,6 +200,16 @@ results = fuzz.extract(query, choicesObj);
 [ [ 'polar bear', 100, 'id2' ],
   [ 'koala bear', 80, 'id3' ],
   [ 'brown bear', 60, 'id1' ] ]
+```
+
+Return objects
+```
+options = {returnObjects: true}
+results = fuzz.extract(query, choicesObj, options);
+
+[ { choice: 'polar bear', score: 100, key: 'id2' },
+  { choice: 'koala bear', score: 80, key: 'id3' },
+  { choice: 'brown bear', score: 60, key: 'id1' } ]
 ```
 
 **Less simple:** array of objects, or object in form of {key: choice}, with processor function + options

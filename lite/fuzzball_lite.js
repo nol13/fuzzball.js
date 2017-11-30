@@ -152,7 +152,8 @@
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
-         * @returns {Array[]} - array of choice results with their computed ratios (0-100).
+         * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
+         * @returns {Array[] | Object} - array of choice results with their computed ratios (0-100).
          */
         var options = _clone_and_set_option_defaults(options_p);
         var isArray = false;
@@ -215,7 +216,15 @@
             var query_tokens = tokenize(query);
             tset = true;
         }
-        var idx, mychoice, result;
+        var idx, mychoice, result, cmpHeap, cmpSort;
+        if (options.returnObjects) {
+            cmpHeap = function (a, b) { return a.score - b.score; };
+            cmpSort = function (a, b) { return b.score - a.score; };
+        }
+        else {
+            cmpHeap = function (a, b) { return a[1] - b[1]; };
+            cmpSort = function (a, b) { return b[1] - a[1]; };
+        }
         for (var c in choices) {
             if (isArray || choices.hasOwnProperty(c)) {
                 options.tokens = undefined;
@@ -255,16 +264,18 @@
                 }
                 if (isArray) idx = parseInt(c);
                 else idx = c;
-                if (result > options.cutoff) results.push([choices[c], result, idx]);
+                if (result > options.cutoff) {
+                    if (options.returnObjects) results.push({ choice: choices[c], score: result, key: idx });
+                    else results.push([choices[c], result, idx]);;
+                }
             }
         }
         if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
         if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-            var cmp = function(a, b) { return a[1] - b[1]; }
-            results = Heap.nlargest(results, options.limit, cmp);
+            results = Heap.nlargest(results, options.limit, cmpHeap);
         }
         else if (!options.unsorted) {
-            results = results.sort(function(a,b){return b[1]-a[1];});
+            results = results.sort(cmpSort);
         }
         return results;
     }
@@ -288,6 +299,7 @@
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
+         * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
@@ -355,7 +367,15 @@
             var query_tokens = tokenize(query);
             tset = true;
         }
-        var idx, mychoice, result;
+        var idx, mychoice, result, cmpHeap, cmpSort;
+        if (options.returnObjects) {
+            cmpHeap = function (a, b) { return a.score - b.score; };
+            cmpSort = function (a, b) { return b.score - a.score; };
+        }
+        else {
+            cmpHeap = function (a, b) { return a[1] - b[1]; };
+            cmpSort = function (a, b) { return b[1] - a[1]; };
+        }
         var keys = Object.keys(choices);
         isArray ? searchLoop(0) : searchLoop(keys[0], 0);
         function searchLoop (c, i) {
@@ -397,7 +417,10 @@
                 }
                 if (isArray) idx = parseInt(c);
                 else idx = c;
-                if (result > options.cutoff) results.push([choices[c], result, idx]);
+                if (result > options.cutoff) {
+                    if (options.returnObjects) results.push({ choice: choices[c], score: result, key: idx });
+                    else results.push([choices[c], result, idx]);;
+                }
             }
             if (isArray && c < choices.length - 1) {
                 setImmediate(function () { searchLoop(c + 1) })
@@ -408,11 +431,10 @@
             else {
                 if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")
                 if (options.limit && typeof options.limit === "number" && options.limit > 0 && options.limit < numchoices && !options.unsorted) {
-                    var cmp = function (a, b) { return a[1] - b[1]; }
-                    results = Heap.nlargest(results, options.limit, cmp);
+                    results = Heap.nlargest(results, options.limit, cmpHeap);
                 }
                 else if (!options.unsorted) {
-                    results = results.sort(function (a, b) { return b[1] - a[1]; });
+                    results = results.sort(cmpSort);
                 }
                 callback(null, results);
             }

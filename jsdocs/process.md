@@ -1,6 +1,6 @@
 <a name="dedupe"></a>
 
-## dedupe(contains_dupes, [options_p]) ⇒ <code>Array.&lt;Object&gt;</code>
+## dedupe(contains_dupes, [options_p]) ⇒ <code>Array.&lt;Object&gt;</code> \| <code>Array.&lt;Array&gt;</code>
 This convenience function takes a list of strings containing duplicates and uses fuzzy matching to identify
 and remove duplicates. Specifically, it uses extract to identify duplicates that
 score greater than a user defined threshold/cutoff. Then, it looks for the longest item in the duplicate list
@@ -12,7 +12,7 @@ returned deduplicated list will likely be shorter. Raise the threshold for fuzzy
 sensitive.
 
 **Kind**: global function  
-**Returns**: <code>Array.&lt;Object&gt;</code> - - array of unique items and the index/key of the used match in contains_dupes.  
+**Returns**: <code>Array.&lt;Object&gt;</code> \| <code>Array.&lt;Array&gt;</code> - - array of unique items and the index/key of the used match in contains_dupes.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -29,4 +29,8 @@ sensitive.
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
+| [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
+| [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.keepmap] | <code>boolean</code> | keep the items mapped to this value, default false |
+| [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples |
 

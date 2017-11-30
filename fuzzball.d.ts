@@ -40,7 +40,7 @@ export interface FuzzballTokenSetOptions extends FuzzballBaseOptions {
     trySimple?: boolean;
 }
 
-export interface FuzzballExtractOptions extends FuzzballBaseOptions {
+interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
     /**
      * Include ratio as part of token set test suite
      */
@@ -63,6 +63,20 @@ export interface FuzzballExtractOptions extends FuzzballBaseOptions {
     cutoff?: number;
 }
 
+export interface FuzzballExtractOptions extends FuzzballExtractBaseOptions {
+    /**
+  * Return array of objects instead of tuples
+  */
+    returnObjects?: false;
+}
+
+export interface FuzzballExtractObjectOptions extends FuzzballExtractBaseOptions {
+    /**
+  * Return array of objects instead of tuples
+  */
+    returnObjects: true;
+}
+
 export interface FuzzballDedupeOptions extends FuzzballExtractOptions {
     /**
      * Keep the items and scores mapped to this value, default false
@@ -71,6 +85,20 @@ export interface FuzzballDedupeOptions extends FuzzballExtractOptions {
 }
 
 export interface FuzzballDedupeOptionsWithMap extends FuzzballExtractOptions {
+    /**
+     * Keep the items and scores mapped to this value, default false
+     */
+    keepmap: true
+}
+
+export interface FuzzballDedupeObjOptions extends FuzzballExtractObjectOptions {
+    /**
+     * Keep the items and scores mapped to this value, default false
+     */
+    keepmap?: false
+}
+
+export interface FuzzballDedupeObjOptionsWithMap extends FuzzballExtractObjectOptions {
     /**
      * Keep the items and scores mapped to this value, default false
      */
@@ -91,12 +119,22 @@ export function unique_tokens(str: string, opts?: FuzzballExtractOptions): strin
 
 export function extract(query: any, choices: any[], opts?: FuzzballExtractOptions): Array<[any, number, number]>;
 export function extract(query: any, choices: Object, opts?: FuzzballExtractOptions): Array<[any, number, string]>;
+export function extract(query: any, choices: any[], opts?: FuzzballExtractObjectOptions): Array<{choice: any, score: number, key: number}>;
+export function extract(query: any, choices: Object, opts?: FuzzballExtractObjectOptions): Array<{ choice: any, score: number, key: string}>;
+
 export function extractAsync(query: any, choices: any[], opts: FuzzballExtractOptions, callback: (err: any, results?: Array<[any, number, number]>) => void): void;
 export function extractAsync(query: any, choices: Object, opts: FuzzballExtractOptions, callback: (err: any, results?: Array<[any, number, string]>) => void): void;
+export function extractAsync(query: any, choices: any[], opts: FuzzballExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: number }>) => void): void;
+export function extractAsync(query: any, choices: Object, opts: FuzzballExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: string }>) => void): void;
 
 export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeOptions): Array<[any, number]>;
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeOptions): Array<[any, string]>;
 export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeOptionsWithMap): Array<[any, number, Array<[any, number, number]>]>;
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeOptionsWithMap): Array<[any, string, Array<[any, number, string]>]>;
+
+export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptions): Array<{item: any, key: number}>;
+export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptions): Array<{ item: any, key: string }>;
+export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: number, matches: Array<{ choice: any, score: number, key: number }>}>;
+export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: string, matches: Array<{ choice: any, score: number, key: string }>}>;
 
 export as namespace fuzzball;

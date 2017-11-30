@@ -13,7 +13,7 @@
     * [~token_sort_ratio(str1, str2, [options_p])](#module_fuzzball..token_sort_ratio) ⇒ <code>number</code>
     * [~partial_token_sort_ratio(str1, str2, [options_p])](#module_fuzzball..partial_token_sort_ratio) ⇒ <code>number</code>
     * [~WRatio(str1, str2, [options_p])](#module_fuzzball..WRatio) ⇒ <code>number</code>
-    * [~extract(query, choices, [options_p])](#module_fuzzball..extract) ⇒ <code>Array.&lt;Array&gt;</code>
+    * [~extract(query, choices, [options_p])](#module_fuzzball..extract) ⇒ <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code>
     * [~extractAsync(query, choices, [options_p], callback)](#module_fuzzball..extractAsync)
 
 <a name="module_fuzzball..distance"></a>
@@ -192,18 +192,18 @@ Calculate weighted ratio of the two strings, taking best score of various method
 
 <a name="module_fuzzball..extract"></a>
 
-### fuzzball~extract(query, choices, [options_p]) ⇒ <code>Array.&lt;Array&gt;</code>
+### fuzzball~extract(query, choices, [options_p]) ⇒ <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code>
 Return the top scoring items from an array (or assoc array) of choices
 
 **Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
-**Returns**: <code>Array.&lt;Array&gt;</code> - - array of choice results with their computed ratios (0-100).  
+**Returns**: <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code> - - array of choice results with their computed ratios (0-100).  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | query |  | the search term. |
 | choices | <code>Array.&lt;String&gt;</code> \| <code>Array.&lt;Object&gt;</code> \| <code>Object</code> | array of strings, or array of choice objects if processor is supplied, or object of form {key: choice} |
 | [options_p] | <code>Object</code> | Additional options. |
-| [options_p.scorer] | <code>function</code> | takes two values and returns a score |
+| [options_p.scorer] | <code>function</code> | takes two values and returns a score, will be passed options as 3rd argument |
 | [options_p.processor] | <code>function</code> | takes each choice and outputs a value to be used for Scoring |
 | [options_p.limit] | <code>number</code> | optional max number of results to return, returns all if not supplied |
 | [options_p.cutoff] | <code>number</code> | minimum score that will get returned 0-100 |
@@ -216,6 +216,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
+| [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
 
 <a name="module_fuzzball..extractAsync"></a>
 
@@ -229,7 +230,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | query |  | the search term. |
 | choices | <code>Array.&lt;String&gt;</code> \| <code>Array.&lt;Object&gt;</code> \| <code>Object</code> | array of strings, or array of choice objects if processor is supplied, or object of form {key: choice} |
 | [options_p] | <code>Object</code> | Additional options. |
-| [options_p.scorer] | <code>function</code> | takes two values and returns a score |
+| [options_p.scorer] | <code>function</code> | takes two values and returns a score, will be passed options as 3rd argument |
 | [options_p.processor] | <code>function</code> | takes each choice and outputs a value to be used for Scoring |
 | [options_p.limit] | <code>number</code> | optional max number of results to return, returns all if not supplied |
 | [options_p.cutoff] | <code>number</code> | minimum score that will get returned 0-100 |
@@ -242,5 +243,6 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.subcost] | <code>number</code> | Substitution cost, default 1 for distance, 2 for all ratios |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
+| [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
 | callback | <code>function</code> | node style callback (err, arrayOfResults) |
 
