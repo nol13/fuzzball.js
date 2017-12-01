@@ -403,5 +403,3 @@ Unicode alphanumerica check from [XRegExp](http://xregexp.com).
 ### Contributions
 
 Pull requests welcome, no breaking stuff. :)
-
-Currently on the agenda is adding Flow/TypeScript typings.
