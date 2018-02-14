@@ -50,7 +50,24 @@ class FilterableTable extends React.Component {
             { name: 'Geno Atkins' }
         ];
 
-        const datasets = { dlc, bengals, custom: enteredData };
+        const trees = [
+            { name: 'American Elm' },
+            { name: 'Slippery Elm' },
+            { name: 'Balsam Fir' },
+            { name: 'Northern Red Oak' },
+            { name: 'American Chestnut' },
+            { name: 'Scarlet Oak' },
+            { name: 'Red Spruce' },
+            { name: 'Black Walnut' },
+            { name: 'Black Willow' },
+            { name: 'Red Pine' },
+            { name: 'Pine, Red' },
+            { name: 'Spruce - Red Spruce' },
+            { name: 'Sycamore' },
+            { name: 'Oak - Black Oak' },
+        ];
+
+        const datasets = { trees, dlc, bengals, custom: enteredData };
 
         return (
             <div className={filterableTable}>
@@ -59,6 +76,7 @@ class FilterableTable extends React.Component {
                     Select dataset:&nbsp;
                 <select ref={node => { input4 = node; }} value={dataset}
                         onChange={() => this.handleDataSetChange(input4.value)}>
+                        <option value="trees">Trees</option>
                         <option value="bengals">Bengals Players</option>
                         <option value="dlc">DLC Model Numbers</option>
                         {enteredData.length ? <option value="custom">Custom Dataset</option> :
