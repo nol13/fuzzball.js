@@ -404,4 +404,4 @@ Thanks to dvisg and voidevector on reddit for .d.ts feedback.
 
 ### Contributions
 
-Pull requests welcome, no breaking stuff. :)
+Pull requests welcome. No breaking stuff, fixing stuff encouraged. :)
