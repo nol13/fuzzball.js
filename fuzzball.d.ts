@@ -1,6 +1,6 @@
 export interface FuzzballBaseOptions {
     /**
-     * Use Intl.Collator for locale-sensitive string comparison.
+     * Use Intl.Collator for locale-sensitive string comparison
      */
     useCollator?: boolean;
     /**
@@ -16,7 +16,7 @@ export interface FuzzballBaseOptions {
      */
     collapseWhitespace?: boolean;
     /**
-     * Substitution cost, default 1 for distance, 2 for all ratios
+     * Substitution cost, default 1 for distance, 2 for all ratios, prob don't want to change it
      */
     subcost?: number;
     /**
