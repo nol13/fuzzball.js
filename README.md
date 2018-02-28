@@ -400,6 +400,8 @@ Default ratio formula is based on [python-Levenshtein](https://github.com/miohta
 
 Unicode alphanumerica check from [XRegExp](http://xregexp.com).
 
+Substring matching from [difflib.js](https://github.com/qiao/difflib.js).
+
 Thanks to dvisg and voidevector on reddit for .d.ts feedback.
 
 ### Contributions

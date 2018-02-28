@@ -1,7 +1,7 @@
 (function () {
     /** @module fuzzball */
     'use strict';
-    var difflib = require('difflib');
+    var difflib = require('./lib/difflib.js');
     var Heap = require('heap');
 
     var _intersect = require('./lib/lodash.custom.min.js').intersection;

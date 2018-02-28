@@ -13,7 +13,6 @@
     "lib"
   ],
   "dependencies": {
-    "difflib": ">=0.2.4",
     "heap": ">=0.2.0",
     "setimmediate": "^1.0.5",
     "string.fromcodepoint": "^0.2.1",
