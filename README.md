@@ -203,7 +203,7 @@ results = fuzz.extract(query, choicesObj);
 ```
 
 Return objects
-```
+```js
 options = {returnObjects: true}
 results = fuzz.extract(query, choicesObj, options);
 
