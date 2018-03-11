@@ -129,7 +129,7 @@ export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballBase
 export function partial_token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function partial_token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function WRatio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function full_Process(str: string, options?: FuzzballExtractOptions | boolean): string;
+export function full_process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;
 export function unique_tokens(str: string, opts?: FuzzballExtractOptions): string[];
 
