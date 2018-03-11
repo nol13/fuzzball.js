@@ -61,7 +61,8 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
-// can set options.returnObjects = true to get back array of {choice, score, key} objects instead of tuples
+// set options.returnObjects = true to get back
+// array of {choice, score, key} objects instead of tuples
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 ```
@@ -69,7 +70,8 @@ fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/*
 **Simple Ratio**
 
 ```js
-fuzz.ratio("this is a test", "this is a test!"); // "!" stripped in pre-processing by default
+// "!" stripped and lowercased in pre-processing by default
+fuzz.ratio("this is a test", "This is a test!");
         100
 ```
 
@@ -78,7 +80,8 @@ fuzz.ratio("this is a test", "this is a test!"); // "!" stripped in pre-processi
 Highest scoring substring of the longer string vs. the shorter string.
 
 ```js
-fuzz.partial_ratio("test", "testing"); //still 100, substring of 2nd is a perfect match of the first
+//still 100, substring of 2nd is a perfect match of the first
+fuzz.partial_ratio("test", "testing");
         100
 ```
 
