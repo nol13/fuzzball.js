@@ -1,7 +1,7 @@
 (function () {
     /** @module fuzzball */
     'use strict';
-    var difflib = require('./lib/difflib.js');
+    var difflib = require('difflib');
     var Heap = require('heap');
 
     var _intersect = require('./lib/lodash.custom.min.js').intersection;
@@ -32,9 +32,9 @@
     var _isCustomFunc = utils.isCustomFunc;
 
     var processing = require('./lib/process.js')(_clone_and_set_option_defaults, _isArray, QRatio, extract);
-    
+
     var dedupe = processing.dedupe;
-    
+
     /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -450,7 +450,7 @@
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
-        
+
         var isArray = false;
         var numchoices;
         if (choices && choices.length && _isArray(choices)) {
@@ -493,8 +493,8 @@
             options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
-                if (String.prototype.normalize) { 
-                    normalize = true 
+                if (String.prototype.normalize) {
+                    normalize = true
                     query = query.normalize();
                 }
                 else {
@@ -622,7 +622,7 @@
         var sorted_2to1 = diff2to1.sort().join(" ");
         var combined_1to2 = sorted_sect + " " + sorted_1to2;
         var combined_2to1 = sorted_sect + " " + sorted_2to1;
-        
+
         sorted_sect = sorted_sect.trim();
         combined_1to2 = combined_1to2.trim();
         combined_2to1 = combined_2to1.trim();
@@ -662,7 +662,7 @@
                     str2 = str2.normalize();
                 }
                 else {
-                    if (!normalWarn) { 
+                    if (!normalWarn) {
                         if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                         normalWarn = true;
                     }
