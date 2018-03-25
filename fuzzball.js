@@ -1,7 +1,7 @@
 (function () {
     /** @module fuzzball */
     'use strict';
-    var difflib = require('./lib/difflib.js');
+    var SequenceMatcher = require('./lib/fbdifflib.js');
     var Heap = require('heap');
 
     var _intersect = require('./lib/lodash.custom.min.js').intersection;
@@ -648,7 +648,7 @@
         if (!_validate(str1)) return 0;
         if (!_validate(str2)) return 0;
         if (options.ratio_alg && options.ratio_alg === "difflib") {
-            var m = new difflib.SequenceMatcher(null, str1, str2);
+            var m = new SequenceMatcher(null, str1, str2);
             var r = m.ratio();
             return Math.round(100 * r);
         }
@@ -699,7 +699,7 @@
             var shorter = str2
             var longer = str1
         }
-        var m = new difflib.SequenceMatcher(null, shorter, longer);
+        var m = new SequenceMatcher(null, shorter, longer);
         var blocks = m.getMatchingBlocks();
         var scores = [];
         for (var b = 0; b < blocks.length; b++) {
