@@ -754,5 +754,19 @@ describe('subcost is 2', function () {
         assert.equal(fuzzultra.ratio("qwe", "qwx"), 67);
         assert.equal(fuzzultra.ratio("qwe", "qwx", { wildcards: 'z' }), 67);
     });
+});
 
+describe('subcost is 1 for distance', function () {
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzz.distance("qwe", "qwx"), 1);
+        assert.equal(fuzz.distance("qwe", "qwx", { wildcards: 'z' }), 1);
+    });
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzzlite.distance("qwe", "qwx"), 1);
+        assert.equal(fuzzlite.distance("qwe", "qwx", { wildcards: 'z' }), 1);
+    });
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzzultra.distance("qwe", "qwx"), 1);
+        assert.equal(fuzzultra.distance("qwe", "qwx", { wildcards: 'z' }), 1);
+    });
 });
