@@ -387,7 +387,7 @@ Not all scoring options are available if using the difflib calculation. (useColl
 
 ### Lite Bundles
 
-Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js. 
+Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js. The full version has been reworked to only pull in the needed parts from difflib, so the difference between it and lite isn't quite as much as before.
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
