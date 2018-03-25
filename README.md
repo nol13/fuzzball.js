@@ -383,7 +383,7 @@ If you want to use difflib's ratio function for all ratio calculations, which di
 
 Except when using difflib, the ratios are calculated as ((str1.length + str2.length) - distance) / (str1.length + str2.length), where distance is calculated with a substitution cost of 2. This follows the behavior of python-Levenshtein, however the fuzz.distance function still uses a cost of 1 by default for all operations if just calculating distance and not a ratio.
 
-Not all scoring options are available if using the difflib calculation. (useCollator, wildcards, subcost)
+Not all scoring options are available if using the difflib calculation. (i.e. useCollator, wildcards)
 
 ### Lite Bundles
 
@@ -397,7 +397,7 @@ The full, lite and ultra_lite flavors currently weight in at a compressed 28kB, 
 
 In addition to all dependencies..
 
-Distance calculations based on [leven](https://github.com/sindresorhus/leven), [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) and [js-levenshtein](https://github.com/gustf/js-levenshtein). Now using js-levenshtein unless you use certain features, which will still use a modified version of leven instead. Collation code based on fast-levenshtein. 
+Distance calculations based on [leven](https://github.com/sindresorhus/leven) and [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 Default ratio formula is based on [python-Levenshtein](https://github.com/miohtama/python-Levenshtein).
 

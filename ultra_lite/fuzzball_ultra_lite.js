@@ -4,7 +4,7 @@
     var _intersect = require('./lodash.custom.min.js').intersection;
     var _difference = require('./lodash.custom.min.js').difference;
     var _uniq = require('./lodash.custom.min.js').uniq;
-    var _jsleven = require('../lib/jsleven');
+    var _leven = require('../lib/leven');
 
     var utils = require('../lib/utils_ultra_lite.js')(_uniq);
     var _validate = utils.validate;
@@ -42,7 +42,7 @@
         var options = _clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        return _jsleven(str1, str2, options, _leven); // falls back to _leven if no wildcards
+        return _leven(str1, str2, options); // falls back to _leven if no wildcards
     }
 
     function QRatio(str1, str2, options_p) {
@@ -426,7 +426,8 @@
         if (!_validate(str2)) return 0;
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2
         var levdistance, lensum;
-        levdistance = _jsleven(str1, str2);
+        if (typeof options.subcost === "undefined") options.subcost = 2;
+        levdistance = _leven(str1, str2, options);
         lensum = str1.length + str2.length;
         return Math.round(100 * ((lensum - levdistance) / lensum));
     }

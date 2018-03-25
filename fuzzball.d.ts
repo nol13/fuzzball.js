@@ -18,10 +18,6 @@ export interface FuzzballBaseOptions {
     /**
      * Substitution cost, default 1 for distance, 2 for all ratios, prob don't want to change it
      */
-    subcost?: number;
-    /**
-     * String where each character it contains will be treated as a wildcard in distance calculations
-     */
     wildcards?: string;
     /**
      * Use astral symbol and post-BMP codepoint aware distance calculation, default false

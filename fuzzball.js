@@ -19,7 +19,6 @@
     var _iLeven = require('./lib/iLeven.js');
     var _wildLeven = require('./lib/wildcardLeven.js');
     var _leven = require('./lib/leven.js');
-    var _jsleven = require('./lib/jsleven');
 
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
 
@@ -52,7 +51,6 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -62,6 +60,7 @@
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
+        return _iLeven(str1, str2, options, _toArray)
         if (options.astral) return _iLeven(str1, str2, options, _toArray);
         else return _wildLeven(str1, str2, options, _leven); // falls back to _leven if no wildcards
     }
@@ -78,7 +77,6 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -104,7 +102,6 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -129,7 +126,6 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
@@ -155,7 +151,6 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
@@ -182,7 +177,6 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -211,7 +205,6 @@
          * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -242,7 +235,6 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -299,7 +291,6 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @returns {Array[] | Object[]} - array of choice results with their computed ratios (0-100).
@@ -444,7 +435,6 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
-         * @param {number} [options_p.subcost] - Substitution cost, default 1 for distance, 2 for all ratios
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @param {function} callback - node style callback (err, arrayOfResults)
@@ -672,11 +662,7 @@
             lensum = _toArray(str1).length + _toArray(str2).length
         }
         else {
-            if (!options.wildcards && !options.useCollator && options.subcost === 2) {
-                levdistance = _jsleven(str1, str2);
-                lensum = str1.length + str2.length;
-            }
-            else if (!options.wildcards) {
+            if (!options.wildcards) {
                 levdistance = _leven(str1, str2, options);
                 lensum = str1.length + str2.length;
             }
@@ -707,6 +693,7 @@
             var long_end = long_start + shorter.length;
             var long_substr = longer.substring(long_start,long_end);
             var r = _ratio(shorter,long_substr,options);
+            console.log('short: ' + shorter + ', long: ' + long_substr + ', r: ' + r);
             if (r > 99.5) return 100;
             else scores.push(r);
         }
