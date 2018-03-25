@@ -743,6 +743,18 @@
         } ());
     }
 
+    var extractAsPromised = undefined;
+    if (typeof Promise !== 'undefined') {
+        extractAsPromised = function(query, choices, options) {
+            return new Promise(function(resolve, reject){
+                extractAsync(query, choices, options, function(err, response){
+                    if (err) reject(err);
+                    else resolve(response);
+                });
+            });
+        };
+    }
+
     var fuzzball = {
         distance: distance,
         ratio: QRatio,
@@ -755,6 +767,7 @@
         full_process: full_process,
         extract: extract,
         extractAsync: extractAsync,
+        extractAsPromised: extractAsPromised,
         process_and_sort: process_and_sort,
         unique_tokens: tokenize,
         dedupe: dedupe

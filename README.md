@@ -51,6 +51,9 @@ fuzz = require('fuzzball');
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
+fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
+        100
+
 options = {scorer: fuzz.token_set_ratio};
 choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
 
@@ -62,9 +65,12 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Minor', 40, 1 ] ]
 
 // set options.returnObjects = true to get back
-// array of {choice, score, key} objects instead of tuples
+// an array of {choice, score, key} objects instead of tuples
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
+
+// in supported environments, Promise will not be polyfilled
+fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
 ```
 
 **Simple Ratio**
@@ -172,6 +178,8 @@ Search list of choices for top results.
 ###### fuzz.extract(query, choices, options);
 
 ###### fuzz.extractAsync(query, choices, options, function(err, results) { /* do stuff */ }); (internal loop will be non-blocking)
+
+###### fuzz.extractAsPromised(query, choices, options).then(results => { /* do stuff */ }); (Promise will not be polyfilled)
 
 **Simple:** array of strings, or object in form of {key: "string"}
 
