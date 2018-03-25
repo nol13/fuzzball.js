@@ -740,3 +740,19 @@ describe('collapse whitespace', function () {
         assert.notEqual(100, fuzz.ratio('x y', 'x     y', { collapseWhitespace: false }));
     });
 });
+
+describe('subcost is 2', function () {
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzz.ratio("qwe", "qwx"), 67);
+        assert.equal(fuzz.ratio("qwe", "qwx", {wildcards: 'z'}), 67);
+    });
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzzlite.ratio("qwe", "qwx"), 67);
+        assert.equal(fuzzlite.ratio("qwe", "qwx", { wildcards: 'z' }), 67);
+    });
+    it('should return true if subcost 2', function () {
+        assert.equal(fuzzultra.ratio("qwe", "qwx"), 67);
+        assert.equal(fuzzultra.ratio("qwe", "qwx", { wildcards: 'z' }), 67);
+    });
+
+});
