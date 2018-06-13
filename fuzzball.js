@@ -584,9 +584,6 @@
 
     function _token_set(str1, str2, options) {
 
-        var partWild = _partialRight(_wildLeven, options, _leven);
-        var wildCompare = function (a, b) { return partWild(a, b) === 0; }
-
         if (!options.tokens) {
             var tokens1 = tokenize(str1, options);
             var tokens2 = tokenize(str2, options);
@@ -597,6 +594,8 @@
         }
 
         if (options.wildcards) {
+            var partWild = _partialRight(_wildLeven, options, _leven);
+            var wildCompare = function (a, b) { return partWild(a, b) === 0; }
             var intersection = _intersectWith(tokens1, tokens2, wildCompare);
             var diff1to2 = _differenceWith(tokens1, tokens2, wildCompare);
             var diff2to1 = _differenceWith(tokens2, tokens1, wildCompare);
