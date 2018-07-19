@@ -57,7 +57,7 @@
     "build:ultralite": "./node_modules/.bin/browserify ./ultra_lite/fuzzball_ultra_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > ultra_lite/fuzzball_ultra_lite.umd.min.js",
     "build:demo": "cd demo_src && npm run build && cp -a dist/. ../docs/",
     "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:reg && npm run build:lite && npm run build:ultralite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
-    "test": "mocha && npm run nsp",
+    "test": "mocha --use_strict && npm run nsp",
     "test:build": "testenv=build npm run test",
     "nsp": "node_modules/nsp/bin/nsp check"
   },
