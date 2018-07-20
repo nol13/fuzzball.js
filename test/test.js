@@ -58,7 +58,7 @@ describe('Python Test Scores Comparison', function () {
                 var tc = 0
                 for (var i = 0; i < data.strings.length; i++) {
                     for (var j = 0; j < data.strings.length; j++) {
-                        result = scorers[tmp](data.strings[i], data.strings[j])
+                        var result = scorers[tmp](data.strings[i], data.strings[j])
                         assert.equal(result, data.string_scores[((tmp * (data.strings.length * data.strings.length)) + tc)]);
                         tc++;
                     }
@@ -692,12 +692,12 @@ describe('dedupe', function () {
     });
     it('should remove the dupes from object of arrays with processor', function () {
         var contains_dupes = { a: ['a'], b: ['a'], c: ['loldupe'], d: ['lolduped'], e: ['wat'], f: ['nolan rules'], g: ['nolan rulez'] };
-        options = { processor: function(x) { return x[0] } }
+        var options = { processor: function(x) { return x[0] } }
         assert.equal(4, fuzz.dedupe(contains_dupes, options).length);
     });
     it('should remove the dupes from array of strings with non-default scorer', function () {
         var contains_dupes = ['a', 'a', 'loldupe', 'lolduped', 'wat', 'nolan rules', 'nolan rulez'];
-        options = {scorer: fuzz.token_set_ratio}
+        var options = {scorer: fuzz.token_set_ratio}
         assert.equal(4, fuzz.dedupe(contains_dupes, options).length);
     });
 });
@@ -713,17 +713,17 @@ describe('dedupe lite', function () {
     });
     it('should remove the dupes from object of arrays with processor', function () {
         var contains_dupes = { a: ['a'], b: ['a'], c: ['loldupe'], d: ['lolduped'], e: ['wat'], f: ['nolan rules'], g: ['nolan rulez'] };
-        options = { processor: function (x) { return x[0] } }
+        var options = { processor: function (x) { return x[0] } }
         assert.equal(4, fuzzlite.dedupe(contains_dupes, options).length);
     });
     it('should remove the dupes from array of strings with non-default scorer', function () {
         var contains_dupes = ['a', 'a', 'loldupe', 'lolduped', 'wat', 'nolan rules', 'nolan rulez'];
-        options = { scorer: fuzzlite.token_set_ratio }
+        var options = { scorer: fuzzlite.token_set_ratio }
         assert.equal(4, fuzzlite.dedupe(contains_dupes, options).length);
     });
     it('should remove the dupes from array of strings and keep the dupe map', function () {
         var contains_dupes = ['a', 'a', 'loldupe', 'lolduped', 'wat', 'nolan rules', 'nolan rulez'];
-        options = {keepmap: true};
+        var options = {keepmap: true};
         assert.equal(4, fuzzlite.dedupe(contains_dupes, options).length);
         assert.equal(3, fuzzlite.dedupe(contains_dupes, options)[2].length);
     });
