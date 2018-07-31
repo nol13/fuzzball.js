@@ -317,7 +317,6 @@
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            if (typeof console !== undefined) console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
@@ -468,7 +467,6 @@
         }
         if (!options.scorer) {
             options.scorer = QRatio;
-            if (typeof console !== undefined) console.log("Using default scorer 'ratio'");
         }
         var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
