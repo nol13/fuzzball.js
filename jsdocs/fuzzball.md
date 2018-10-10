@@ -21,7 +21,7 @@
 ### fuzzball~distance(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate levenshtein distance of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein distance (0 and above).  
 
 | Param | Type | Description |
@@ -42,7 +42,7 @@ Calculate levenshtein distance of the two strings.
 ### fuzzball~ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate levenshtein ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -63,7 +63,7 @@ Calculate levenshtein ratio of the two strings.
 ### fuzzball~partial_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial levenshtein ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -84,7 +84,7 @@ Calculate partial levenshtein ratio of the two strings.
 ### fuzzball~token_set_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate token set ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -105,7 +105,7 @@ Calculate token set ratio of the two strings.
 ### fuzzball~partial_token_set_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial token ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -126,7 +126,7 @@ Calculate partial token ratio of the two strings.
 ### fuzzball~token_sort_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate token sort ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -146,7 +146,7 @@ Calculate token sort ratio of the two strings.
 ### fuzzball~partial_token_sort_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial token sort ratio of the two strings.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -166,7 +166,7 @@ Calculate partial token sort ratio of the two strings.
 ### fuzzball~WRatio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate weighted ratio of the two strings, taking best score of various methods.
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
 
 | Param | Type | Description |
@@ -187,7 +187,7 @@ Calculate weighted ratio of the two strings, taking best score of various method
 ### fuzzball~extract(query, choices, [options_p]) ⇒ <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code>
 Return the top scoring items from an array (or assoc array) of choices
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code> - - array of choice results with their computed ratios (0-100).  
 
 | Param | Type | Description |
@@ -214,7 +214,7 @@ Return the top scoring items from an array (or assoc array) of choices
 ### fuzzball~extractAsync(query, choices, [options_p], callback)
 Return the top scoring items from an array (or assoc array) of choices
 
-**Kind**: inner method of <code>[fuzzball](#module_fuzzball)</code>  
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 
 | Param | Type | Description |
 | --- | --- | --- |
