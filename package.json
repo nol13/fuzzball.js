@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "browserify": "^14.0.0",
+    "cached-path-relative": "^1.0.2",
     "jsdoc": "^3.4.3",
     "jsdoc-to-markdown": "^4.0.0",
     "lodash-cli": "^4.17.5",
