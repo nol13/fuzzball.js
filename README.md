@@ -4,9 +4,9 @@
 ==========
 Easy to use and powerful fuzzy string matching. 
 
-This is (mostly) a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library.
+Mostly a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library.
 
-Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. JSDoc generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
+Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. Auto-generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
 
 # Contents
  * [Installation](#installation)
