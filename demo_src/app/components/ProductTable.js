@@ -3,8 +3,6 @@ import ProductRow from './ProductRow';
 import { productTable, scorer as scorerStyle } from '../styles/productTable.scss';
 import * as fuzz from 'fuzzball';
 
-let cancelToken;
-
 class ProductTable extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -20,15 +18,15 @@ class ProductTable extends React.PureComponent {
     }
 
     extract = (props) => {
-        if (cancelToken) cancelToken.canceled = true;
-        cancelToken = {canceled: false};
+        if (this.cancelToken) this.cancelToken.canceled = true;
+        this.cancelToken = {canceled: false};
         const { filter, scorer, fullProcess, wildcards, dataset } = props;
         const options = {
             scorer: fuzz[scorer],
             processor: (choice) => { return choice.name; },
             full_process: fullProcess,
             wildcards,
-            cancelToken
+            cancelToken: this.cancelToken
         };
         const choices = dataset;
         fuzz.extractAsPromised(filter, choices, options).then(scoredProds => {
