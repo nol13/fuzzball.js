@@ -254,9 +254,16 @@
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
+         * @param {Object} [options_p.cancelToken] - track cancellation
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = _clone_and_set_option_defaults(options_p);
+
+        var cancelToken;
+        if (typeof options_p.cancelToken === "object") {
+            cancelToken = options_p.cancelToken;
+        }
+
         var isArray = false;
         var numchoices;
         if (choices && choices.length && Array.isArray(choices)) {
@@ -361,11 +368,19 @@
                     else results.push([choices[c], result, idx]);;
                 }
             }
+
+            if (cancelToken && cancelToken.canceled === true) {
+                callback(new Error("canceled"));
+                return;
+            }
+
             if (isArray && c < choices.length - 1) {
-                setImmediate(function () { searchLoop(c + 1) })
+                if (c % 256 === 0) { setImmediate(function () { searchLoop(c + 1); }); }
+                else searchLoop(c + 1);
             }
             else if (i < keys.length - 1) {
-                setImmediate(function () { searchLoop(keys[i + 1], i + 1) });
+                if (i % 256 === 0) { setImmediate(function () { searchLoop(keys[i + 1], i + 1); }); }
+                else { searchLoop(keys[i + 1], i + 1); }
             }
             else {
                 if (anyblank) if (typeof console !== undefined) console.log("One or more choices were empty. (post-processing if applied)")

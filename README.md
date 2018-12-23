@@ -71,6 +71,16 @@ fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/*
 
 // in supported environments, Promise will not be polyfilled
 fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
+
+// cancel search
+let cancelToken = {canceled: false};
+options.cancelToken = cancelToken;
+fuzz.extractAsPromised("gonna get canceled", choices, options)
+        .then(res => {/* do stuff */})
+        .catch((e) => {
+                if (e.message === 'canceled') console.log('I got canceled!') 
+        });
+cancelToken.canceled = true;
 ```
 
 **Simple Ratio**
@@ -412,6 +422,8 @@ Default ratio formula is based on [python-Levenshtein](https://github.com/miohta
 Unicode alphanumerica check from [XRegExp](http://xregexp.com).
 
 Substring matching from [difflib.js](https://github.com/qiao/difflib.js).
+
+Inspiration to add cancellation and async optimization from [fuzzysort](https://github.com/farzher/fuzzysort)
 
 Thanks to dvisg and voidevector on reddit for .d.ts feedback.
 

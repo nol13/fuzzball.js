@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import ProductRow from './ProductRow';
 import { productTable, scorer as scorerStyle } from '../styles/productTable.scss';
 import * as fuzz from 'fuzzball';
-import debounce from 'lodash/debounce';
 
+let cancelToken;
 
 class ProductTable extends React.PureComponent {
     constructor(props) {
@@ -12,31 +12,34 @@ class ProductTable extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.extractDebounced(this.props);
+        this.extract(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.extractDebounced(nextProps);
+        this.extract(nextProps);
     }
 
-    extractDebounced = debounce((props) => {
+    extract = (props) => {
+        if (cancelToken) cancelToken.canceled = true;
+        cancelToken = {canceled: false};
         const { filter, scorer, fullProcess, wildcards, dataset } = props;
         const options = {
             scorer: fuzz[scorer],
             processor: (choice) => { return choice.name; },
             full_process: fullProcess,
-            wildcards
+            wildcards,
+            cancelToken
         };
         const choices = dataset;
-        const scoredProds = fuzz.extract(filter, choices, options);
-        this.setState({scoredProds});
-    }, 269, { leading: true });
+        fuzz.extractAsPromised(filter, choices, options).then(scoredProds => {
+            this.setState({scoredProds});
+        });
+    };
 
     render() {
         const { scorer } = this.props;
         const { scoredProds } = this.state;
         let rows = [];
-        //const scoredProds = extractDebounced(filter, choices, options);
         scoredProds.forEach((p) => {
             rows.push(
                 <ProductRow key={p[0].name} data={p} />

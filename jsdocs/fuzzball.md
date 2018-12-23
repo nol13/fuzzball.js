@@ -234,5 +234,6 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
+| [options_p.cancelToken] | <code>Object</code> | track cancellation |
 | callback | <code>function</code> | node style callback (err, arrayOfResults) |
 

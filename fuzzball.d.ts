@@ -59,6 +59,13 @@ interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
     cutoff?: number;
 }
 
+interface CancellationToken {
+    /**
+     * If extract has been canceled;
+     */
+    canceled?: boolean;
+}
+
 export interface FuzzballExtractOptions extends FuzzballExtractBaseOptions {
     /**
   * Return array of objects instead of tuples
@@ -71,6 +78,20 @@ export interface FuzzballExtractObjectOptions extends FuzzballExtractBaseOptions
   * Return array of objects instead of tuples
   */
     returnObjects: true;
+}
+
+export interface FuzzballAsyncExtractOptions extends FuzzballExtractOptions {
+    /**
+     * Track if extract has been canceled
+     */
+    cancelToken?: CancellationToken;
+}
+
+export interface FuzzballAsyncExtractObjectOptions extends FuzzballExtractObjectOptions {
+    /**
+     * Track if extract has been canceled;
+     */
+    cancelToken?: CancellationToken;
 }
 
 export interface FuzzballDedupeOptions extends FuzzballExtractOptions {
@@ -134,15 +155,15 @@ export function extract(query: any, choices: Object, opts?: FuzzballExtractOptio
 export function extract(query: any, choices: any[], opts?: FuzzballExtractObjectOptions): Array<{choice: any, score: number, key: number}>;
 export function extract(query: any, choices: Object, opts?: FuzzballExtractObjectOptions): Array<{ choice: any, score: number, key: string}>;
 
-export function extractAsync(query: any, choices: any[], opts: FuzzballExtractOptions, callback: (err: any, results?: Array<[any, number, number]>) => void): void;
-export function extractAsync(query: any, choices: Object, opts: FuzzballExtractOptions, callback: (err: any, results?: Array<[any, number, string]>) => void): void;
-export function extractAsync(query: any, choices: any[], opts: FuzzballExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: number }>) => void): void;
-export function extractAsync(query: any, choices: Object, opts: FuzzballExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: string }>) => void): void;
+export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractOptions, callback: (err: any, results?: Array<[any, number, number]>) => void): void;
+export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractOptions, callback: (err: any, results?: Array<[any, number, string]>) => void): void;
+export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: number }>) => void): void;
+export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: string }>) => void): void;
 
-export function extractAsPromised(query: any, choices: any[], opts: FuzzballExtractOptions): Promise<Array<[any, number, number]>>;
-export function extractAsPromised(query: any, choices: Object, opts: FuzzballExtractOptions): Promise<Array<[any, number, string]>>;
-export function extractAsPromised(query: any, choices: any[], opts: FuzzballExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: number }>>;
-export function extractAsPromised(query: any, choices: Object, opts: FuzzballExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: string }>>;
+export function extractAsPromised(query: any, choices: any[], opts: FuzzballAsyncExtractOptions): Promise<Array<[any, number, number]>>;
+export function extractAsPromised(query: any, choices: Object, opts: FuzzballAsyncExtractOptions): Promise<Array<[any, number, string]>>;
+export function extractAsPromised(query: any, choices: any[], opts: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: number }>>;
+export function extractAsPromised(query: any, choices: Object, opts: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: string }>>;
 
 export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeOptions): Array<[any, number]>;
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeOptions): Array<[any, string]>;
