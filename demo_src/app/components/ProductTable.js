@@ -31,6 +31,8 @@ class ProductTable extends React.PureComponent {
         const choices = dataset;
         fuzz.extractAsPromised(filter, choices, options).then(scoredProds => {
             this.setState({scoredProds});
+        }).catch(() => {
+            // canceled
         });
     };
 
