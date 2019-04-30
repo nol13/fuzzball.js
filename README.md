@@ -51,7 +51,7 @@ fuzz = require('fuzzball');
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
 
-fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
+fuzz.token_set_ratio("fuzzy was a bear", "a fuzzy bear fuzzy was");
         100
 
 options = {scorer: fuzz.token_set_ratio};
