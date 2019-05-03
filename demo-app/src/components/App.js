@@ -9,7 +9,7 @@ const App = ({ children }) =>
         { children }
         <footer className={footer}>
             <div style={{fontSize: 'smaller'}}>
-                Demo based on boilerplate from <a href="https://github.com/jpsierens/webpack-react-redux">https://github.com/jpsierens/webpack-react-redux</a> and Create React App
+                Demo based on boilerplate from <a href="https://github.com/jpsierens/webpack-react-redux">https://github.com/jpsierens/webpack-react-redux</a>and Create React App
             </div>
         </footer>
     </div>;
