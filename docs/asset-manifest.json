@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.4b4ed36f.chunk.css",
-    "main.js": "/static/js/main.78e8e816.chunk.js",
-    "main.js.map": "/static/js/main.78e8e816.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.dd19df95.chunk.js": "/static/js/2.dd19df95.chunk.js",
-    "static/js/2.dd19df95.chunk.js.map": "/static/js/2.dd19df95.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.d9a018490bb5f3910661d79537d8ad95.js": "/precache-manifest.d9a018490bb5f3910661d79537d8ad95.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.4b4ed36f.chunk.css.map": "/static/css/main.4b4ed36f.chunk.css.map"
+    "main.css": "/fuzzball.js/static/css/main.4b4ed36f.chunk.css",
+    "main.js": "/fuzzball.js/static/js/main.b8f5b1ad.chunk.js",
+    "main.js.map": "/fuzzball.js/static/js/main.b8f5b1ad.chunk.js.map",
+    "runtime~main.js": "/fuzzball.js/static/js/runtime~main.b844411a.js",
+    "runtime~main.js.map": "/fuzzball.js/static/js/runtime~main.b844411a.js.map",
+    "static/js/2.e7284260.chunk.js": "/fuzzball.js/static/js/2.e7284260.chunk.js",
+    "static/js/2.e7284260.chunk.js.map": "/fuzzball.js/static/js/2.e7284260.chunk.js.map",
+    "index.html": "/fuzzball.js/index.html",
+    "precache-manifest.65a2b4bd7e54640ff53808ef2eef2b90.js": "/fuzzball.js/precache-manifest.65a2b4bd7e54640ff53808ef2eef2b90.js",
+    "service-worker.js": "/fuzzball.js/service-worker.js",
+    "static/css/main.4b4ed36f.chunk.css.map": "/fuzzball.js/static/css/main.4b4ed36f.chunk.css.map"
   }
 }
