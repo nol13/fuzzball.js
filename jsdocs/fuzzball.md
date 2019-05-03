@@ -60,7 +60,7 @@ Calculate levenshtein ratio of the two strings.
 
 <a name="module_fuzzball..partial_ratio"></a>
 
-### fuzzball~partial_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+### fuzzball~partial\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial levenshtein ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
@@ -81,7 +81,7 @@ Calculate partial levenshtein ratio of the two strings.
 
 <a name="module_fuzzball..token_set_ratio"></a>
 
-### fuzzball~token_set_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+### fuzzball~token\_set\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate token set ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
@@ -102,7 +102,7 @@ Calculate token set ratio of the two strings.
 
 <a name="module_fuzzball..partial_token_set_ratio"></a>
 
-### fuzzball~partial_token_set_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+### fuzzball~partial\_token\_set\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial token ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
@@ -123,7 +123,7 @@ Calculate partial token ratio of the two strings.
 
 <a name="module_fuzzball..token_sort_ratio"></a>
 
-### fuzzball~token_sort_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+### fuzzball~token\_sort\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate token sort ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
@@ -143,7 +143,7 @@ Calculate token sort ratio of the two strings.
 
 <a name="module_fuzzball..partial_token_sort_ratio"></a>
 
-### fuzzball~partial_token_sort_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+### fuzzball~partial\_token\_sort\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial token sort ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  

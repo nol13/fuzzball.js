@@ -4,7 +4,7 @@
   "description": "fuzzball demo page",
   "main": "index.js",
   "private": true,
-  "homepage": "https://nol13.github.io/fuzzball.js",
+  "homepage": ".",
   "devDependencies": {
     "gh-pages": "^2.0.1",
     "react-scripts": "3.0.0",
