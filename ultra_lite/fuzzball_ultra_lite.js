@@ -4,15 +4,15 @@
     var _intersect = require('./lodash.custom.min.js').intersection;
     var _difference = require('./lodash.custom.min.js').difference;
     var _uniq = require('./lodash.custom.min.js').uniq;
-    var _leven = require('../lib/leven');
+    var leven = require('../lib/leven');
 
     var utils = require('../lib/utils_ultra_lite.js')(_uniq);
-    var _validate = utils.validate;
+    var validate = utils.validate;
     var process_and_sort = utils.process_and_sort;
     var tokenize = utils.tokenize;
     var full_process = utils.full_process;
-    var _clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
-    var _isCustomFunc = utils.isCustomFunc;
+    var clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
+    var isCustomFunc = utils.isCustomFunc;
     if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
     // isArray polyfill
     if (typeof Array.isArray === 'undefined') {
@@ -39,10 +39,10 @@
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @returns {number} - the levenshtein distance (0 and above).
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        return _leven(str1, str2, options); // falls back to _leven if no wildcards
+        return leven(str1, str2, options); // falls back to leven if no wildcards
     }
 
     function QRatio(str1, str2, options_p) {
@@ -58,11 +58,11 @@
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        if (!_validate(str1)) return 0;
-        if (!_validate(str2)) return 0;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
         return _ratio(str1, str2, options);
     }
 
@@ -78,11 +78,11 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        if (!_validate(str1)) return 0;
-        if (!_validate(str2)) return 0;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
         return _token_set(str1, str2, options);
     }
 
@@ -98,11 +98,11 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
-        if (!_validate(str1)) return 0;
-        if (!_validate(str2)) return 0;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
         if (!options.proc_sorted) {
             str1 = process_and_sort(str1);
             str2 = process_and_sort(str2);
@@ -128,7 +128,7 @@
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @returns {Object[]} - array of choice results with their computed ratios (0-100).
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
         var isArray = false;
         var numchoices;
         if (choices && choices.length && Array.isArray(choices)) {
@@ -153,7 +153,7 @@
         if (!options.scorer) {
             options.scorer = QRatio;
         }
-        var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
+        var isCustom = isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1;}
         var pre_processor = function(choice, force_ascii) {return choice;}
         if (options.full_process) {
@@ -257,7 +257,7 @@
          * @param {Object} [options_p.cancelToken] - track cancellation
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
-        var options = _clone_and_set_option_defaults(options_p);
+        var options = clone_and_set_option_defaults(options_p);
 
         var cancelToken;
         if (typeof options_p.cancelToken === "object") {
@@ -292,7 +292,7 @@
         if (!options.scorer) {
             options.scorer = QRatio;
         }
-        var isCustom = _isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
+        var isCustom = isCustomFunc(options.scorer); // check if func name is one of fuzzball's, so don't use same names..
         if (!options.cutoff || typeof options.cutoff !== "number") { options.cutoff = -1; }
         var pre_processor = function (choice, force_ascii) { return choice; }
         if (options.full_process) {
@@ -435,12 +435,12 @@
     }
 
     function _ratio(str1, str2, options) {
-        if (!_validate(str1)) return 0;
-        if (!_validate(str2)) return 0;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
         //to match behavior of python-Levenshtein/fuzzywuzzy, substitution cost is 2
         var levdistance, lensum;
         if (typeof options.subcost === "undefined") options.subcost = 2;
-        levdistance = _leven(str1, str2, options);
+        levdistance = leven(str1, str2, options);
         lensum = str1.length + str2.length;
         return Math.round(100 * ((lensum - levdistance) / lensum));
     }
