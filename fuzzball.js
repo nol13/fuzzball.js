@@ -60,7 +60,6 @@
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        return _iLeven(str1, str2, options, _toArray)
         if (options.astral) return _iLeven(str1, str2, options, _toArray);
         else return _wildLeven(str1, str2, options, _leven); // falls back to _leven if no wildcards
     }
