@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "file-loader": "^0.9.0",
-    "fuzzball": "^1.2.0",
+    "fuzzball": "^1.2.2",
     "lodash": "^4.17.11",
     "node-sass": "^4.12.0",
     "react": "^15.6.2",
