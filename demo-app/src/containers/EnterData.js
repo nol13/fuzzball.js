@@ -29,7 +29,7 @@ class EnterData extends Component {
     }
 
     render() {
-        return (<div style={{/*backgroundColor: '#ffc571',*/ backgroundColor: 'white', display: 'inline-block', border: '1px solid black', padding: '0px 20px 10px 20px', borderRadius: '10px'}}>
+        return (<div style={{/*backgroundColor: '#ffc571',*/ backgroundColor: 'whitesmoke', display: 'inline-block', border: '1px solid black', padding: '0px 20px 10px 20px', borderRadius: '10px'}}>
             <p style={{fontWeight: '600', fontSize: '1.1em'}}>Enter custom search terms below, one term per line.</p>
             <textarea style={{width: '40vw', height: '50vh'}} value={this.state.text} onChange={this.handleChange} />
             <br />
