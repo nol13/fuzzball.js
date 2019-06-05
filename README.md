@@ -326,7 +326,7 @@ fuzz.dedupe(contains_dupes, options)
 
 ### Performance Optimization
 
-If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (Also, f you wanted to use an alternate tokenizer could sub them for the functions used below)
+If you have a large list of terms that you're searching repeatedly, and you need to boost performance, can do some of the processing beforehand. For all scorers you can run full_process() on all of the choices beforehand, and then set options.full_process to false. With the token scorers you can run some of the additional processing beforehand. Exactly how depends on if using with the extract function or as standalone functions. (Also, if you wanted to use an alternate tokenizer could sub them for the functions used below)
 
 If using either "token_sort" scorer with the extract function: You can set the property "proc_sorted" of each choice object and it will use that instead of running process_and_sort() again. If you supply a processor function when proc_sorted is set the processor will not get used. (Will need to make sure each choice is an object, even if just "choice = new String(choice)")
 

@@ -40,9 +40,9 @@ class ProductTable extends React.PureComponent {
         const { scorer } = this.props;
         const { scoredProds } = this.state;
         let rows = [];
-        scoredProds.forEach((p) => {
+        scoredProds.forEach((p, i) => {
             rows.push(
-                <ProductRow key={p[0].name} data={p} />
+                <ProductRow key={p[0].name + '-@-' + i} data={p} />
             );
         });
         return (<div className={productTable}>

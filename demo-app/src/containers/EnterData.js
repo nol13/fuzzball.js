@@ -29,10 +29,9 @@ class EnterData extends Component {
     }
 
     render() {
-        return (<div style={{backgroundColor: '#ffc571', width: '400px', border: '1px solid black', padding: '10px 20px 10px 20px'}}>
-            <p></p>Enter custom search choices below, one choice per line.
-            <br /><br />
-            <textarea style={{width: '350px', height: '169px'}} value={this.state.text} onChange={this.handleChange} />
+        return (<div style={{/*backgroundColor: '#ffc571',*/ backgroundColor: 'white', display: 'inline-block', border: '1px solid black', padding: '0px 20px 10px 20px'}}>
+            <p style={{fontWeight: '600', fontSize: '1.1em'}}>Enter custom search terms below, one term per line.</p>
+            <textarea style={{width: '40vw', height: '50vh'}} value={this.state.text} onChange={this.handleChange} />
             <p></p>
             <input type="button" onClick={this.handleSave} value="Save" disabled={!this.state.text.trim()} />&nbsp;
             <input type="button" onClick={() => this.context.router.push('/')} value="Cancel" />
