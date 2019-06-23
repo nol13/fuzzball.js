@@ -64,15 +64,17 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
-// set options.returnObjects = true to get back
-// an array of {choice, score, key} objects instead of tuples
+/** 
+* Set options.returnObjects = true to get back
+* an array of {choice, score, key} objects instead of tuples
+*/
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 
-// in supported environments, Promise will not be polyfilled
+// In supported environments, Promise will not be polyfilled
 fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
 
-// cancel search
+// Cancel search, by default only every 256th iteration is async
 let cancelToken = {canceled: false};
 options.cancelToken = cancelToken;
 fuzz.extractAsPromised("gonna get canceled", choices, options)
@@ -86,7 +88,7 @@ cancelToken.canceled = true;
 **Simple Ratio**
 
 ```js
-// "!" stripped and lowercased in pre-processing by default
+// "!" Stripped and lowercased in pre-processing by default
 fuzz.ratio("this is a test", "This is a test!");
         100
 ```
@@ -96,7 +98,7 @@ fuzz.ratio("this is a test", "This is a test!");
 Highest scoring substring of the longer string vs. the shorter string.
 
 ```js
-//still 100, substring of 2nd is a perfect match of the first
+// Still 100, substring of 2nd is a perfect match of the first
 fuzz.partial_ratio("test", "testing");
         100
 ```
@@ -142,8 +144,8 @@ Blog post with overview of scoring algorithms can be found [**here**](http://cha
 
 Pre-processing to remove non-alphanumeric characters run by default unless options.full_process is set to false.
 ```js
-// eh, don't need to clean it up..
-// set options.force_ascii to true to remove all non-ascii letters as well, default: false
+// Eh, don't need to clean it up..
+// Set options.force_ascii to true to remove all non-ascii letters as well, default: false
 fuzz.ratio("this is a test", "this is a test!", {full_process: false});
         97
 ```
@@ -243,11 +245,11 @@ choices = [{id: 345, model: "123abc"},
            {id: 347, model: "456abdzx"}];
 
 options = {
-        scorer: fuzz.partial_ratio, // any function that takes two values and returns a score, default: ratio
-        processor: choice => choice.model,  //takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
-        limit: 2, // max number of top results to return, default: no limit / 0.
-        cutoff: 50, // lowest score to return, default: 0
-        unsorted: false // results won't be sorted if true, default: false. If true limit will be ignored.
+        scorer: fuzz.partial_ratio, // Any function that takes two values and returns a score, default: ratio
+        processor: choice => choice.model,  // Takes choice object, returns string, default: no processor. Must supply if choices are not already strings.
+        limit: 2, // Max number of top results to return, default: no limit / 0.
+        cutoff: 50, // Lowest score to return, default: 0
+        unsorted: false // Results won't be sorted if true, default: false. If true limit will be ignored.
 };
 
 results = fuzz.extract(query, choices, options);
@@ -287,6 +289,25 @@ results = fuzz.extract(query, choices, options);
 ```
 
 (if you still wanted to use a separate processor function for whatever reason, the processor function would need to return something your scorer accepts)
+
+### Async and Cancellation
+
+When using extractAsPromised or extractAsync, create a new object with a 'canceled' property to use as a cancel token. For performance, by default only every 256th loop will be async, set asyncLoopOffset to change.
+
+```js
+let cancelToken = {canceled: false};
+options.cancelToken = cancelToken;
+options.asyncLoopOffset = 64;
+fuzz.extractAsPromised("gonna get canceled", choices, options)
+        .then(res => {/* do stuff */})
+        .catch((e) => {
+                if (e.message === 'canceled') console.log('I got canceled!') 
+        });
+
+// ...
+
+cancelToken.canceled = true;
+```
 
 ### Wildcards
 
@@ -386,7 +407,7 @@ str2_tokens = fuzz.unique_tokens(fuzz.full_process(str2));
 
 options = {tokens: [str1_tokens, str2_tokens]};
 
-// still have to include first two args for validation but they won't be used for scoring
+// Still have to include first two args for validation but they won't be used for scoring
 fuzz.token_set_ratio(str1, str2, options);
         85
 ```

@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { filterTable, checkFullProcess, enterWildcards, selectDataset } from '../actions';
 import ProductTable from '../components/ProductTable';
 import { filterableTable, clear } from '../styles/filterableTable.module.scss';
 import { Link } from 'react-router';
 
-class FilterableTable extends React.Component {
+class FilterableTable extends PureComponent {
 
     handleDataSetChange = (value) => {
         const {onFilter, onDataset, onWildcard} = this.props;

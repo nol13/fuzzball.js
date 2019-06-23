@@ -8,15 +8,13 @@ class EnterData extends Component {
         super(props);
         const text = this.props.enteredData.map(item => item.name || '').join('\n');
         this.state = {text: text};
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSave = this.handleSave.bind(this);
     }
 
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({text: e.target.value});
     }
 
-    handleSave() {
+    handleSave = () => {
         const { onData, onDataset, onFilter, onWildcard, dataset } = this.props;
         const newData = this.state.text.split('\n').map(item => ({name: item.trim()})).filter(item => item.name);
         onData(newData);

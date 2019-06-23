@@ -85,6 +85,7 @@ export interface FuzzballAsyncExtractOptions extends FuzzballExtractOptions {
      * Track if extract has been canceled
      */
     cancelToken?: CancellationToken;
+    asyncLoopOffset?: number;
 }
 
 export interface FuzzballAsyncExtractObjectOptions extends FuzzballExtractObjectOptions {
@@ -92,6 +93,7 @@ export interface FuzzballAsyncExtractObjectOptions extends FuzzballExtractObject
      * Track if extract has been canceled;
      */
     cancelToken?: CancellationToken;
+    asyncLoopOffset?: number;
 }
 
 export interface FuzzballDedupeOptions extends FuzzballExtractOptions {

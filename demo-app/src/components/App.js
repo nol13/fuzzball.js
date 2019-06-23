@@ -25,9 +25,9 @@ const App = ({ children }) =>
         </div>
 
         <img src={logo} alt="Fuzzball's Sweet 2nd Logo" style={{
-            height: '80px',
+            height: '50px',
             display: 'inline',
-            marginTop: '3px'
+            marginTop: '10px'
             }} 
         />
        

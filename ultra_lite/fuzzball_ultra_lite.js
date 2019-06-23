@@ -255,6 +255,7 @@
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @param {Object} [options_p.cancelToken] - track cancellation
+         * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -262,6 +263,11 @@
         var cancelToken;
         if (typeof options_p.cancelToken === "object") {
             cancelToken = options_p.cancelToken;
+        }
+
+        var loopOffset = 256;
+        if (typeof options.asyncLoopOffset === 'number') {
+            loopOffset = options.asyncLoopOffset;
         }
 
         var isArray = false;
@@ -375,11 +381,11 @@
             }
 
             if (isArray && c < choices.length - 1) {
-                if (c % 256 === 0) { setImmediate(function () { searchLoop(c + 1); }); }
+                if (c % loopOffset === 0) { setImmediate(function () { searchLoop(c + 1); }); }
                 else searchLoop(c + 1);
             }
             else if (i < keys.length - 1) {
-                if (i % 256 === 0) { setImmediate(function () { searchLoop(keys[i + 1], i + 1); }); }
+                if (i % loopOffset === 0) { setImmediate(function () { searchLoop(keys[i + 1], i + 1); }); }
                 else { searchLoop(keys[i + 1], i + 1); }
             }
             else {
