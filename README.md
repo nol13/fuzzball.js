@@ -293,7 +293,7 @@ results = fuzz.extract(query, choices, options);
 
 ### Async and Cancellation
 
-When using extractAsPromised or extractAsync, create a new object with a 'canceled' property to use as a cancel token. For performance, by default only every 256th loop will be async, set asyncLoopOffset to change.
+When using extractAsPromised or extractAsync, create a new object with a 'canceled' property to use as a cancel token. For performance, by default only every 256th loop will be async, but set asyncLoopOffset to change. It is nost likely not worth changing this.
 
 ```js
 let cancelToken = {canceled: false};
