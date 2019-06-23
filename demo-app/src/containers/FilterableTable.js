@@ -1,4 +1,4 @@
-import { PropTypes, PureComponent } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { filterTable, checkFullProcess, enterWildcards, selectDataset } from '../actions';
 import ProductTable from '../components/ProductTable';

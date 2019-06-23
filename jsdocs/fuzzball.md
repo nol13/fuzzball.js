@@ -235,5 +235,6 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
 | [options_p.cancelToken] | <code>Object</code> | track cancellation |
+| [options_p.asyncLoopOffset] | <code>number</code> | number of rows to run in between every async loop iteration, default 256 |
 | callback | <code>function</code> | node style callback (err, arrayOfResults) |
 
