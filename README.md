@@ -15,6 +15,7 @@ Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comp
  * [Collation and Unicode Stuff](#collation-and-unicode-stuff)
  * [Batch Extract](#batch-extract)
  * [Multiple Fields](#multiple-fields)
+ * [Async and Cancellation](#async-and-cancellation)
  * [Wildcards](#wildcards)
  * [Fuzzy Dedupe](#fuzzy-dedupe)
  * [Performance Optimization](#performance-optimization)
