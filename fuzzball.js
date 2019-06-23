@@ -447,7 +447,8 @@
 
         var loopOffset = 256;
         if (typeof options.asyncLoopOffset === 'number') {
-            loopOffset = options.asyncLoopOffset;
+            if (options.asyncLoopOffset < 1) loopOffset = 1;
+            else loopOffset = options.asyncLoopOffset;
         }
 
         var isArray = false;
