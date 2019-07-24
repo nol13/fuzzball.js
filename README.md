@@ -75,7 +75,7 @@ fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/*
 // In supported environments, Promise will not be polyfilled
 fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
 
-// Cancel search, by default only every 256th iteration is async
+// Cancel search
 let cancelToken = {canceled: false};
 options.cancelToken = cancelToken;
 fuzz.extractAsPromised("gonna get canceled", choices, options)
@@ -293,7 +293,7 @@ results = fuzz.extract(query, choices, options);
 
 ### Async and Cancellation
 
-When using extractAsPromised or extractAsync, create a new object with a 'canceled' property to use as a cancel token. For performance, by default only every 256th loop will be async, but set asyncLoopOffset to change. It is nost likely not worth changing this.
+When using extractAsPromised or extractAsync, create a new object with a 'canceled' property to use as a cancel token. For performance, by default only every 256th loop will be async, but set asyncLoopOffset to change. It is most likely not worth changing this.
 
 ```js
 let cancelToken = {canceled: false};

@@ -86,7 +86,7 @@ export interface FuzzballAsyncExtractOptions extends FuzzballExtractOptions {
      */
     cancelToken?: CancellationToken;
     /**
-     * Number of loop iterations between async iteration
+     * Number of loop iterations between each async iteration
      */
     asyncLoopOffset?: number;
 }
@@ -97,7 +97,7 @@ export interface FuzzballAsyncExtractObjectOptions extends FuzzballExtractObject
      */
     cancelToken?: CancellationToken;
     /**
-     * Number of loop iterations between async iteration
+     * Number of loop iterations between each async iteration
      */
     asyncLoopOffset?: number;
 }
