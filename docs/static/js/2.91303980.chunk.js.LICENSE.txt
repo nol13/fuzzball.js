@@ -1,0 +1,58 @@
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/*!
+ * XRegExp 3.1.1-next
+ * <xregexp.com>
+ * Steven Levithan (c) 2007-2016 MIT License
+ */
+
+/*!
+ * XRegExp Unicode Base 3.1.1-next
+ * <xregexp.com>
+ * Steven Levithan (c) 2008-2016 MIT License
+ */
+
+/*!
+ * XRegExp Unicode Categories 3.1.1-next // regenerated from v4.2.4 with Unicode version changed to 12.1 then copied from output folder
+ * <xregexp.com>
+ * Steven Levithan (c) 2010-2016 MIT License
+ * Unicode data by Mathias Bynens <mathiasbynens.be>
+ */
+
+/*! http://mths.be/fromcodepoint v0.2.1 by @mathias */
+
+/*! https://mths.be/codepointat v0.2.0 by @mathias */
+
+/**
+ * @license
+ * Lodash (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE
+ * Build: `lodash include="intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach" -p -o ./lib/lodash.custom.min.js`
+ */
+
+/**
+ * Checks if an event is supported in the current execution environment.
+ *
+ * NOTE: This will not work correctly for non-generic events such as `change`,
+ * `reset`, `load`, `error`, and `select`.
+ *
+ * Borrows from Modernizr.
+ *
+ * @param {string} eventNameSuffix Event name, e.g. "click".
+ * @param {?boolean} capture Check if the capture phase is supported.
+ * @return {boolean} True if the event is supported.
+ * @internal
+ * @license Modernizr 3.0.0pre (Custom Build) | MIT
+ */
+
+/** @license React v16.8.6
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
