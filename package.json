@@ -19,7 +19,7 @@
     "string.prototype.codepointat": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^14.0.0",
+    "browserify": "^15.2.0",
     "cached-path-relative": "^1.0.2",
     "jsdoc": "^3.6.3",
     "jsdoc-to-markdown": "^5.0.3",
