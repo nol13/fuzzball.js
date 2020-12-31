@@ -25,7 +25,7 @@
     "jsdoc-to-markdown": "^5.0.3",
     "lodash-cli": "^4.17.5",
     "mocha": "^7.1.1",
-    "uglifyjs": "~2.4.10"
+    "uglify-js": "~2.8.29"
   },
   "repository": {
     "type": "git",
@@ -50,11 +50,11 @@
     "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach -p -o ./lib/lodash.custom.min.js",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",
-    "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball_browser.min.js",
-    "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
-    "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > dist/fuzzball.umd.min.js",
-    "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
-    "build:ultralite": "./node_modules/.bin/browserify ./ultra_lite/fuzzball_ultra_lite.js --standalone fuzzball | ./node_modules/uglifyjs/bin/uglifyjs > ultra_lite/fuzzball_ultra_lite.umd.min.js",
+    "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglify-js/bin/uglifyjs > dist/fuzzball_browser.min.js",
+    "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglify-js/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
+    "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > dist/fuzzball.umd.min.js",
+    "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
+    "build:ultralite": "./node_modules/.bin/browserify ./ultra_lite/fuzzball_ultra_lite.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > ultra_lite/fuzzball_ultra_lite.umd.min.js",
     "build:demo": "rm -rf docs && cd demo-app && npm run build && cp -a build/. ../docs/",
     "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:reg && npm run build:lite && npm run build:ultralite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha --use_strict",
