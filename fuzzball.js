@@ -20,7 +20,7 @@
     var wildleven = require('./lib/wildcardLeven.js');
     var leven = require('./lib/leven.js');
 
-    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
+    if (typeof setImmediate !== 'function') { require('setimmediate'); } // didn't run in tiny-worker without extra check
 
     var utils = require('./lib/utils.js')(_uniq, _uniqWith, _partialRight);
     var validate = utils.validate;
