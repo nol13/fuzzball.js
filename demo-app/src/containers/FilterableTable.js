@@ -87,7 +87,7 @@ class FilterableTable extends PureComponent {
                     ref={node => { input = node; }}
                     onChange={() => onFilter(input.value)} />
                 &nbsp;&nbsp; Full Process? <input type="checkbox" defaultChecked value={fullProcVal} ref={node => { input2 = node; }} onChange={() => onFullProcCheck(input2.checked)} />
-                 &nbsp;&nbsp; Sort by similarity? <input type="checkbox" value={similarityVal} ref={node => { input5 = node; }} onChange={() => onSimilarityCheck(input5.checked)} />
+                 &nbsp;&nbsp; Sort by similarity? <input type="checkbox" defaultChecked value={similarityVal} ref={node => { input5 = node; }} onChange={() => onSimilarityCheck(input5.checked)} />
             
                 &nbsp;&nbsp; Wildcards:&nbsp;
             <input
