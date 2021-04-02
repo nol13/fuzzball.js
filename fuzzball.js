@@ -15,6 +15,21 @@
     var _keys = require('./lib/lodash.custom.min.js').keys;
     var _isArray = require('./lib/lodash.custom.min.js').isArray;
     var _toArray = require('./lib/lodash.custom.min.js').toArray;
+    var _orderBy = require('./lib/lodash.custom.min.js').orderBy;
+
+    function orderByDesc (arr, cmp) {
+        var mapped = arr.map(function (str) {
+            return { key: str, value: cmp(str) };
+        });
+
+        mapped.sort(function (a, b) {
+            return b.value - a.value;
+        });
+
+        return mapped.map(function (item) {
+            return item.key;
+        });
+    }
 
     var iLeven = require('./lib/iLeven.js');
     var wildleven = require('./lib/wildcardLeven.js');
@@ -220,6 +235,63 @@
             str2 = process_and_sort(str2);
         }
         return _partial_ratio(str1, str2, options);
+    }
+
+    function token_similarity_sort_ratio(str1, str2, options_p) {
+        /**
+         * Calculate token sort ratio of the two strings.
+         *
+         * @function token_similarity_sort_ratio
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
+         * @param {number} [options_p.astral] - Use astral aware calculation
+         * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @returns {number} - the levenshtein ratio (0-100).
+         */
+        var options = clone_and_set_option_defaults(options_p);
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
+        /* if (!options.proc_sorted) {
+            str1 = process_and_sort(str1);
+            str2 = process_and_sort(str2);
+        } */
+        return _token_similarity_sort_ratio(str1, str2, options);
+    }
+
+    function partial_token_similarity_sort_ratio(str1, str2, options_p) {
+        /**
+         * Calculate token sort ratio of the two strings.
+         *
+         * @function partial_token_similarity_sort_ratio
+         * @param {string} str1 - the first string.
+         * @param {string} str2 - the second string.
+         * @param {Object} [options_p] - Additional options.
+         * @param {boolean} [options_p.useCollator] - Use `Intl.Collator` for locale-sensitive string comparison.
+         * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
+         * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
+         * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
+         * @param {number} [options_p.astral] - Use astral aware calculation
+         * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @returns {number} - the levenshtein ratio (0-100).
+         */
+        var options = clone_and_set_option_defaults(options_p);
+        str1 = options.full_process ? full_process(str1, options) : str1;
+        str2 = options.full_process ? full_process(str2, options) : str2;
+        if (!validate(str1)) return 0;
+        if (!validate(str2)) return 0;
+        /* if (!options.proc_sorted) {
+            str1 = process_and_sort(str1);
+            str2 = process_and_sort(str2);
+        } */
+        options.partial = true;
+        return _token_similarity_sort_ratio(str1, str2, options);
     }
 
     function WRatio(str1, str2, options_p) {
@@ -599,6 +671,161 @@
 
 /** Main Scoring Code */
 
+    function _cosineSim(v1, v2, options) {
+        var keysV1 = Object.keys(v1);
+        var keysV2 = Object.keys(v2);
+
+        var intersection = _intersect(keysV1, keysV2);
+
+        var prods = intersection.map(function (x) { return v1[x] * v2[x]; })
+        var numerator = prods.reduce(function(acc, x) { return acc + x; }, 0);
+
+        var v1Prods = keysV1.map(function (x) { return Math.pow(v1[x], 2); });
+        var v1sum = v1Prods.reduce(function(acc, x) { return acc + x; }, 0);
+
+        var v2Prods = keysV2.map(function (x) { return Math.pow(v2[x], 2); });
+        var v2sum = v2Prods.reduce(function(acc, x) { return acc + x; }, 0);
+
+        var denominator = Math.sqrt(v1sum) * Math.sqrt(v2sum);
+        return numerator / denominator;
+
+    }
+
+    var WILDCARD_KEY = "%*SuperUniqueWildcardKey*%";
+    var normalWarnCharCounts = false;
+
+    function _getCharacterCounts(str, options) {
+        var normalString = str;
+        if (options.astral) {
+            if (options.normalize) {
+                if (String.prototype.normalize) {
+                    normalString = str.normalize();
+                } else {
+                    if (!normalWarnCharCounts) {
+                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
+                        normalWarnCharCounts = true;
+                    }
+                }
+            }
+            var charArray = _toArray(normalString)
+        } else {
+            var charArray = normalString.split("");
+        }
+
+        var charCounts = {};
+        if (options.wildcards) {
+            for (var i = 0; i < charArray.length; i++) {
+                var char = charArray[i];
+                if (options.wildcards.indexOf(char) > -1) {
+                    if (charCounts[WILDCARD_KEY]) {
+                        charCounts[WILDCARD_KEY] += 1
+                    } else {
+                        charCounts[WILDCARD_KEY] = 1;
+                    }
+                } else if (charCounts[char]) {
+                    charCounts[char] += 1
+                } else {
+                    charCounts[char] = 1;
+                }
+            }
+        } else {
+            for (var i = 0; i < charArray.length; i++) {
+                var char = charArray[i];
+                if (charCounts[char]) {
+                    charCounts[char] += 1
+                } else {
+                    charCounts[char] = 1;
+                }
+            }
+        }
+        
+        return charCounts;
+    }
+
+    // Sort sorted2 according to similarity to sorted1
+    function _token_similarity_sort(sorted1, sorted2, options) {
+        var oldSorted2 = sorted2;
+
+        var charCounts1 = sorted1.reduce(function(acc, str) {
+            acc[str] = _getCharacterCounts(str, options);
+            return acc;
+        }, {});
+
+        var charCounts2 = oldSorted2.reduce(function(acc, str) {
+            acc[str] = _getCharacterCounts(str, options);
+            return acc;
+        }, {});
+
+        var newSorted2 = [];
+        var i = 0;
+
+        while (oldSorted2.length && i < sorted1.length) {
+            // most similar to first token in s1, 2nd token, ... n tokens
+            // sort by similarity to sorted1[i], take most similar
+            var sim = _orderBy(oldSorted2, function (x) {
+                    return _cosineSim(charCounts1[sorted1[i]], charCounts2[x])
+                }, 'desc')[0];
+            newSorted2.push(sim);
+            i++;
+            oldSorted2 = oldSorted2.filter(function (token) { return token !== sim});
+        }
+        // if oldSorted2 is longer, append it to the end
+        return newSorted2.concat(oldSorted2);
+    }
+
+    function _order_token_lists (str1, tokens1, str2, tokens2) {
+        // To keep consistent ordering, assume shortest number of tokens, then str.length,
+        // is more significant, else fallback to sort alphabetacally
+        var first = tokens1;
+        var second = tokens2;
+
+        if (tokens1.length > tokens2.length) {
+            first = tokens2;
+            second = tokens1;
+        } else if (tokens1.length === tokens2.length) {
+            if (str1.length > str2.length) {
+                first = tokens2;
+                second = tokens1;
+            }
+            else {
+                var sortedStrings = [str1, str2].sort();
+                if (sortedStrings[0] === str2) {
+                    first = tokens2;
+                    second = tokens1;
+                }
+            }
+        }
+
+        return [first, second];
+    }
+
+    function _token_similarity_sort_ratio (str1, str2, options) {
+        if (!options.tokens) {
+            var tokens1 = tokenize(str1, options);
+            var tokens2 = tokenize(str2, options);
+        }
+        else {
+            var tokens1 = options.tokens[0];
+            var tokens2 = options.tokens[1];
+        }
+
+        var sorted1 = tokens1.sort();
+        var sorted2 = tokens2.sort();
+
+        var orderedTokenLists = _order_token_lists(str1, sorted1, str2, sorted2);
+        var first = orderedTokenLists[0];
+        var second = orderedTokenLists[1];
+
+        const newSecond = _token_similarity_sort(first, second, options);
+
+        if (!options.partial) {
+            return _ratio(first.join(" "), newSecond.join(" "), options);
+        } else {
+            return _partial_ratio(first.join(" "), newSecond.join(" "), options);
+        }
+    }
+
+
     function _token_set(str1, str2, options) {
 
         if (!options.tokens) {
@@ -624,8 +851,22 @@
         }
 
         var sorted_sect = intersection.sort().join(" ");
-        var sorted_1to2 = diff1to2.sort().join(" ");
-        var sorted_2to1 = diff2to1.sort().join(" ");
+
+        var sorted_1to2List = diff1to2.sort();
+        var sorted_2to1List = diff2to1.sort();
+
+        if (options.sortBySimilarity) {
+            var orderedTokenLists = _order_token_lists(str1, sorted_1to2List, str2, sorted_2to1List);
+            var first = orderedTokenLists[0];
+            var second = orderedTokenLists[1];
+
+            var sorted_1to2 = first.join(" ");
+            var sorted_2to1 = _token_similarity_sort(first, second, options).join(" ");
+        } else {
+            var sorted_1to2 = sorted_1to2List.join(" ");
+            var sorted_2to1 = sorted_2to1List.join(" ");
+        }
+
         var combined_1to2 = sorted_sect + " " + sorted_1to2;
         var combined_2to1 = sorted_sect + " " + sorted_2to1;
 
@@ -778,6 +1019,8 @@
         token_sort_ratio: token_sort_ratio,
         partial_token_set_ratio: partial_token_set_ratio,
         partial_token_sort_ratio: partial_token_sort_ratio,
+        token_similarity_sort_ratio: token_similarity_sort_ratio,
+        partial_token_similarity_sort_ratio: partial_token_similarity_sort_ratio,
         WRatio: WRatio,
         full_process: full_process,
         extract: extract,

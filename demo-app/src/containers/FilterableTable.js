@@ -1,6 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { filterTable, checkFullProcess, enterWildcards, selectDataset } from '../actions';
+import { filterTable, checkFullProcess, enterWildcards, selectDataset, checkSimilaritySort } from '../actions';
 import ProductTable from '../components/ProductTable';
 import { filterableTable, clear } from '../styles/filterableTable.module.scss';
 import { Link } from 'react-router';
@@ -15,11 +15,12 @@ class FilterableTable extends PureComponent {
     };
 
     render() {
-        const { filter, onFilter, fullProcVal, onFullProcCheck, wildcards, onWildcard, dataset, enteredData } = this.props;
+        const { filter, onFilter, fullProcVal, onFullProcCheck, wildcards, onWildcard, dataset, enteredData, similarityVal, onSimilarityCheck } = this.props;
         let input;
         let input2;
         let input3;
         let input4;
+        let input5;
         // alert(filter);
 
         const dlc = [
@@ -86,6 +87,8 @@ class FilterableTable extends PureComponent {
                     ref={node => { input = node; }}
                     onChange={() => onFilter(input.value)} />
                 &nbsp;&nbsp; Full Process? <input type="checkbox" defaultChecked value={fullProcVal} ref={node => { input2 = node; }} onChange={() => onFullProcCheck(input2.checked)} />
+                 &nbsp;&nbsp; Sort by similarity? <input type="checkbox" value={similarityVal} ref={node => { input5 = node; }} onChange={() => onSimilarityCheck(input5.checked)} />
+            
                 &nbsp;&nbsp; Wildcards:&nbsp;
             <input
                     value={wildcards}
@@ -94,8 +97,8 @@ class FilterableTable extends PureComponent {
                 <div>
                     <ProductTable filter={filter} scorer="ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
                     <ProductTable filter={filter} scorer="partial_ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
-                    <ProductTable filter={filter} scorer="token_sort_ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
-                    <ProductTable filter={filter} scorer="token_set_ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
+                    <ProductTable sortBySimilarity={similarityVal} filter={filter} scorer="token_sort_ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
+                    <ProductTable sortBySimilarity={similarityVal} filter={filter} scorer="token_set_ratio" fullProcess={fullProcVal} wildcards={wildcards} dataset={datasets[dataset]} />
                 </div>
                 <div className={clear} />
             </div>
@@ -107,7 +110,9 @@ FilterableTable.propTypes = {
     filter: PropTypes.string,
     onFilter: PropTypes.func,
     fullProcVal: PropTypes.bool,
+    similarityVal: PropTypes.bool,
     onFullProcCheck: PropTypes.func,
+    onSimilarityCheck: PropTypes.func,
     wildcards: PropTypes.string,
     onWildcard: PropTypes.func,
     dataset: PropTypes.string,
@@ -121,7 +126,8 @@ const mapStateToProps = (state) => {
         fullProcVal: state.fullProcess,
         wildcards: state.wildcards,
         dataset: state.dataset,
-        enteredData: state.enteredData || []
+        enteredData: state.enteredData || [],
+        similarityVal: state.similarity
     };
 };
 
@@ -129,6 +135,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onFilter: filterText => dispatch(filterTable(filterText)),
         onFullProcCheck: fullProcVal => dispatch(checkFullProcess(fullProcVal)),
+        onSimilarityCheck: similarityVal => dispatch(checkSimilaritySort(similarityVal)),
         onWildcard: wildcards => dispatch(enterWildcards(wildcards)),
         onDataset: dataset => dispatch(selectDataset(dataset))
     };

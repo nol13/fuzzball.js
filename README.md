@@ -125,6 +125,23 @@ fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
 ```
 If you set options.trySimple to true it will add the simple ratio to the token_set_ratio test suite as well. This can help smooth out occational irregularities in how much differences in the first letter of a token will get penalized.
 
+**Token Similarity Sort Ratio** 
+
+Instead of sorting alphabetically, tokens will be sorted by similarity to the smaller set. Useful if the matching token may have a different first letter, but performs a bit slower. You can also use similarity sorting when calculating token_set_ratio by setting sortBySimilarity to true.
+
+Still somewhat expiremental, not available in the lite builds yet and sorting will not take wildcards into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
+
+```js
+fuzz.token_sort_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
+        58
+fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
+        61
+fuzz.token_similarity_sort_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
+        68
+fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar', {sortBySimilarity: true})
+        71
+```
+
 **Distance**
 
 Unmodified Levenshtein distance without any additional ratio calculations.
@@ -137,6 +154,7 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
 
   * partial_token_set_ratio (options.trySimple = true will add the partial_ratio to the test suite, note this function will always return 100 if there are any tokens in common)
   * partial_token_sort_ratio
+  * partial_token_similarity_sort_ratio
   * WRatio (runs tests based on relative string length and returns weighted top score, current default scorer in fuzzywuzzy extract)
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
@@ -275,9 +293,8 @@ For more complex behavior you can provide a custom scorer, say for a weighted sc
 ```js
 query = {name: "tiger", gender: "female"}
 
-choices = [{name: "tiger", gender: "female"},
-           {name: "tigger", gender: "male"},
-           {name: "lulav", gender: "female"},
+choices = [{name: "tigger", gender: "male"},
+           {name: "lulu", gender: "female"},
            {name: "chad ochocinco", gender: "male"}]
 
 function myCustomScorer(query, choice, options) {

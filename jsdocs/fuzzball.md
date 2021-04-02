@@ -12,6 +12,8 @@
     * [~partial_token_set_ratio(str1, str2, [options_p])](#module_fuzzball..partial_token_set_ratio) ⇒ <code>number</code>
     * [~token_sort_ratio(str1, str2, [options_p])](#module_fuzzball..token_sort_ratio) ⇒ <code>number</code>
     * [~partial_token_sort_ratio(str1, str2, [options_p])](#module_fuzzball..partial_token_sort_ratio) ⇒ <code>number</code>
+    * [~token_similarity_sort_ratio(str1, str2, [options_p])](#module_fuzzball..token_similarity_sort_ratio) ⇒ <code>number</code>
+    * [~partial_token_similarity_sort_ratio(str1, str2, [options_p])](#module_fuzzball..partial_token_similarity_sort_ratio) ⇒ <code>number</code>
     * [~WRatio(str1, str2, [options_p])](#module_fuzzball..WRatio) ⇒ <code>number</code>
     * [~extract(query, choices, [options_p])](#module_fuzzball..extract) ⇒ <code>Array.&lt;Array&gt;</code> \| <code>Array.&lt;Object&gt;</code>
     * [~extractAsync(query, choices, [options_p], callback)](#module_fuzzball..extractAsync)
@@ -145,6 +147,46 @@ Calculate token sort ratio of the two strings.
 
 ### fuzzball~partial\_token\_sort\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
 Calculate partial token sort ratio of the two strings.
+
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
+**Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| str1 | <code>string</code> | the first string. |
+| str2 | <code>string</code> | the second string. |
+| [options_p] | <code>Object</code> | Additional options. |
+| [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
+| [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
+| [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
+| [options_p.astral] | <code>number</code> | Use astral aware calculation |
+| [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+
+<a name="module_fuzzball..token_similarity_sort_ratio"></a>
+
+### fuzzball~token\_similarity\_sort\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+Calculate token sort ratio of the two strings.
+
+**Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
+**Returns**: <code>number</code> - - the levenshtein ratio (0-100).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| str1 | <code>string</code> | the first string. |
+| str2 | <code>string</code> | the second string. |
+| [options_p] | <code>Object</code> | Additional options. |
+| [options_p.useCollator] | <code>boolean</code> | Use `Intl.Collator` for locale-sensitive string comparison. |
+| [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
+| [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
+| [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
+| [options_p.astral] | <code>number</code> | Use astral aware calculation |
+| [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+
+<a name="module_fuzzball..partial_token_similarity_sort_ratio"></a>
+
+### fuzzball~partial\_token\_similarity\_sort\_ratio(str1, str2, [options_p]) ⇒ <code>number</code>
+Calculate token sort ratio of the two strings.
 
 **Kind**: inner method of [<code>fuzzball</code>](#module_fuzzball)  
 **Returns**: <code>number</code> - - the levenshtein ratio (0-100).  

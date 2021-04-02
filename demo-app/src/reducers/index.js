@@ -20,6 +20,15 @@ const fullProcess = (state = true, action) => {
     }
 };
 
+const similarity = (state = false, action) => {
+    switch (action.type) {
+        case types.SIMILARITY:
+            return action.similarityVal;
+        default:
+            return state;
+    }
+};
+
 const wildcards = (state = '', action) => {
     switch (action.type) {
         case types.WILDCARDS:
@@ -54,7 +63,8 @@ const rootReducer = combineReducers({
     wildcards,
     dataset,
     routing,
-    enteredData
+    enteredData,
+    similarity
 });
 
 export default rootReducer;

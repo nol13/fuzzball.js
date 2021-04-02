@@ -34,6 +34,10 @@ export interface FuzzballTokenSetOptions extends FuzzballBaseOptions {
      * Include ratio as part of token set test suite
      */
     trySimple?: boolean;
+    /**
+     * Sort tokens by similarity before combining
+     */
+    sortBySimilarity?: boolean
 }
 
 interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
@@ -57,6 +61,10 @@ interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
      * Lowest score to return, default 0
      */
     cutoff?: number;
+    /**
+     * Sort tokens by similarity before combining with token set scorers
+     */
+    sortBySimilarity?: boolean
 }
 
 interface CancellationToken {
@@ -151,8 +159,10 @@ export function ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): n
 export function partial_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
+export function token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function partial_token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function partial_token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
+export function partial_token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function WRatio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function full_process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;
