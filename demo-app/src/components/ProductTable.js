@@ -20,13 +20,17 @@ class ProductTable extends React.PureComponent {
     extract = (props) => {
         if (this.cancelToken) this.cancelToken.canceled = true;
         this.cancelToken = {canceled: false};
-        const { filter, scorer, fullProcess, wildcards, dataset } = props;
+        let { filter, scorer, fullProcess, wildcards, dataset, sortBySimilarity} = props;
+        if (sortBySimilarity && scorer === "token_sort_ratio") {
+            scorer = "token_similarity_sort_ratio"
+        }
         const options = {
             scorer: fuzz[scorer],
             processor: (choice) => { return choice.name; },
             full_process: fullProcess,
             wildcards,
-            cancelToken: this.cancelToken
+            cancelToken: this.cancelToken,
+            sortBySimilarity
         };
         const choices = dataset;
         fuzz.extractAsPromised(filter, choices, options).then(scoredProds => {
@@ -37,7 +41,10 @@ class ProductTable extends React.PureComponent {
     };
 
     render() {
-        const { scorer } = this.props;
+        let { scorer, sortBySimilarity } = this.props;
+        if (sortBySimilarity && scorer === "token_sort_ratio") {
+            scorer = "token_similarity_sort_ratio"
+        }
         const { scoredProds } = this.state;
         let rows = [];
         scoredProds.forEach((p, i) => {
@@ -46,7 +53,7 @@ class ProductTable extends React.PureComponent {
             );
         });
         return (<div className={productTable}>
-            <p className={scorerStyle}>{scorer}</p>
+            <p className={scorerStyle}>{`${scorer}${sortBySimilarity && scorer === "token_set_ratio" ? ' {sortBySimilarity: true}' : ''}`}</p>
             {rows}
         </div>);
     }
@@ -56,6 +63,7 @@ ProductTable.propTypes = {
     filter: PropTypes.string,
     scorer: PropTypes.string,
     fullProcess: PropTypes.bool,
+    sortBySimilarity: PropTypes.bool,
     wildcards: PropTypes.string,
     dataset: PropTypes.array
 };

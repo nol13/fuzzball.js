@@ -30,7 +30,7 @@ object-assign
 /**
  * @license
  * Lodash (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE
- * Build: `lodash include="intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach" -p -o ./lib/lodash.custom.min.js`
+ * Build: `lodash include="intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach,orderBy" -p -o ./lib/lodash.custom.min.js`
  */
 
 /**

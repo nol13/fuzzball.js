@@ -14,6 +14,13 @@ export function checkFullProcess(fullProcVal) {
     };
 }
 
+export function checkSimilaritySort(similarityVal) {
+    return {
+        type: types.SIMILARITY,
+        similarityVal
+    };
+}
+
 export function enterWildcards(wildcards) {
     return {
         type: types.WILDCARDS,

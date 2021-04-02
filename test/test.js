@@ -9,7 +9,7 @@ if (process.env.testenv === "build") {
     fuzzultra = require('../ultra_lite/fuzzball_ultra_lite.umd.min.js');
 }
 var data = require('./testdata');
-var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio]
+var scorers = [fuzz.ratio, fuzz.token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_set_ratio, fuzz.partial_token_sort_ratio, fuzz.WRatio, fuzz.token_similarity_sort_ratio]
 
 describe('full_process', function () {
     it('should return true if full_process running', function () {
@@ -53,8 +53,13 @@ describe('Scorer Identity Tests', function () {
 describe('Python Test Scores Comparison', function () {
     for (var tscorer in scorers) {
         var tmp = tscorer; //needs to be closure i guess?
+        console.log(scorers[tmp].name);
         describe('Test Scores with: ' + scorers[tmp].name, function () {
             it('should match test scores', function () {
+                if (scorers[tmp].name === "token_similarity_sort_ratio") {
+                    // Doesnt exist in Python
+                    return;
+                }
                 var tc = 0
                 for (var i = 0; i < data.strings.length; i++) {
                     for (var j = 0; j < data.strings.length; j++) {
@@ -190,6 +195,30 @@ describe('Extract', function () {
         var choices = [null, undefined, null];
         var results = fuzz.extract(query, choices, { scorer: fuzz.partial_ratio });
         assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with similarity null choices not error', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_similarity_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with partial similarity null choices not error', function () {
+        var query = null;
+        var choices = [null, undefined, null];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_similarity_sort_ratio });
+        assert.equal(results[0][1], 0);
+    });
+    it('should return true if extract with similarity is working', function () {
+        var query = 'apple cup zebrah horse';
+        var choices = ['zapple cub horse bebrah', 'azzale club house zebllllll', 'lol so similar'];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_similarity_sort_ratio });
+        assert.equal(results[0][1], 89);
+    });
+    it('should return true if extract with token_set and sortBySimilarity is working', function () {
+        var query = 'apple cup zebrah horse';
+        var choices = ['zapple cub horse bebrah', 'azzale club house zebllllll', 'lol so similar'];
+        var results = fuzz.extract(query, choices, { scorer: fuzz.token_set_ratio, sortBySimilarity: true });
+        assert.equal(results[0][1], 89);
     });
 });
 
