@@ -20,7 +20,7 @@ const fullProcess = (state = true, action) => {
     }
 };
 
-const similarity = (state = false, action) => {
+const similarity = (state = true, action) => {
     switch (action.type) {
         case types.SIMILARITY:
             return action.similarityVal;
