@@ -129,7 +129,7 @@ If you set options.trySimple to true it will add the simple ratio to the token_s
 
 Instead of sorting alphabetically, tokens will be sorted by similarity to the smaller set. Useful if the matching token may have a different first letter, but performs a bit slower. You can also use similarity sorting when calculating token_set_ratio by setting sortBySimilarity to true.
 
-Still somewhat expiremental, not available in the lite builds yet and sorting will not take wildcards into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
+Still somewhat expiremental, not available in the lite builds yet and sorting will not take wildcards or collation into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
 
 ```js
 fuzz.token_sort_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
