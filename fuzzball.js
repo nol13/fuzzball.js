@@ -141,6 +141,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -166,6 +167,7 @@
          * @param {boolean} [options_p.full_process] - Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
@@ -362,6 +364,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @returns {Array[] | Object[]} - array of choice results with their computed ratios (0-100).
@@ -505,6 +508,7 @@
          * @param {boolean} [options_p.force_ascii] - Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false
          * @param {boolean} [options_p.collapseWhitespace] - Collapse consecutive white space during full_process, default true
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
+         * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
          * @param {Object} [options_p.cancelToken] - track cancellation

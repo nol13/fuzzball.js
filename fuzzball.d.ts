@@ -35,7 +35,7 @@ export interface FuzzballTokenSetOptions extends FuzzballBaseOptions {
      */
     trySimple?: boolean;
     /**
-     * Sort tokens by similarity before combining
+     * Sort tokens by by similarity to each other before combining instead of alphabetically
      */
     sortBySimilarity?: boolean
 }

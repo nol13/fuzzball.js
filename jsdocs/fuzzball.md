@@ -98,6 +98,7 @@ Calculate token set ratio of the two strings.
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
+| [options_p.sortBySimilarity] | <code>boolean</code> | sort tokens by similarity to each other before combining instead of alphabetically |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
@@ -119,6 +120,7 @@ Calculate partial token ratio of the two strings.
 | [options_p.full_process] | <code>boolean</code> | Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true |
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
+| [options_p.sortBySimilarity] | <code>boolean</code> | sort tokens by similarity to each other before combining instead of alphabetically |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
@@ -248,6 +250,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false |
 | [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
+| [options_p.sortBySimilarity] | <code>boolean</code> | sort tokens by similarity to each other before combining instead of alphabetically |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
 
@@ -274,6 +277,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.force_ascii] | <code>boolean</code> | Strip non-ascii in full_process if true (non-ascii will not become whtespace), only applied if full_process is true as well, default false |
 | [options_p.collapseWhitespace] | <code>boolean</code> | Collapse consecutive white space during full_process, default true |
 | [options_p.trySimple] | <code>boolean</code> | try simple/partial ratio as part of (parial_)token_set_ratio test suite |
+| [options_p.sortBySimilarity] | <code>boolean</code> | sort tokens by similarity to each other before combining instead of alphabetically |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
 | [options_p.cancelToken] | <code>Object</code> | track cancellation |
