@@ -40,6 +40,15 @@ npm install fuzzball
 fuzzball.ratio("fuzz", "fuzzy")
 </script>
 ```
+
+or as module
+
+```html
+<script charset="UTF-8" type="module"">
+import {ratio} from './esm/fuzzball.esm.min.js';
+console.log(ratio('fuzz', 'fuzzy'));
+</script>
+```
 For other no-build/standalone environments, use this file as well. Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
 
 # Usage
@@ -51,9 +60,10 @@ fuzz = require('fuzzball');
 
 fuzz.ratio("hello world", "hiyyo wyrld");
         64
-
 fuzz.token_set_ratio("fuzzy was a bear", "a fuzzy bear fuzzy was");
         100
+fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar', {sortBySimilarity: true})
+        71
 
 options = {scorer: fuzz.token_set_ratio};
 choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
@@ -129,7 +139,7 @@ If you set options.trySimple to true it will add the simple ratio to the token_s
 
 Instead of sorting alphabetically, tokens will be sorted by similarity to the smaller set. Useful if the matching token may have a different first letter, but performs a bit slower. You can also use similarity sorting when calculating token_set_ratio by setting sortBySimilarity to true.
 
-Still somewhat expiremental, not available in the lite builds yet and sorting will not take wildcards or collation into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
+Not available in the lite builds yet and sorting will not take wildcards or collation into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
 
 ```js
 fuzz.token_sort_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
@@ -448,7 +458,7 @@ Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if 
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
-The full, lite and ultra_lite flavors currently weight in at a compressed 28kB, 20kB, and 8kB, respectively. Now using UMD format but the old browser bundles still provided.
+The full, lite and ultra_lite flavors currently weight in at a compressed 28kB, 20kB, and 8kB, respectively.
 
 ### Credits
 
