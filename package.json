@@ -19,8 +19,9 @@
       "require": "./ultra_lite/fuzzball_ultra_lite.js",
       "import": "./ultra_lite/esm/fuzzball_ultra_lite.esm.min.js"
     },
-    "./lite/": "./lite/",
-    "./ultra_lite/": "./ultra_lite/"
+    "./lite/*": "./lite/*",
+    "./ultra_lite/*": "./ultra_lite/*",
+    "./dist/*": "./dist/*"
   },
   "files": [
     "fuzzball.js",
