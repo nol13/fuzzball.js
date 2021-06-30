@@ -37,7 +37,7 @@ npm install fuzzball
 ```html
 <script charset="UTF-8" src="dist/fuzzball.umd.min.js"></script>
 <script>
-fuzzball.ratio("fuzz", "fuzzy")
+fuzzball.ratio("fuzz", "fuzzy");
 </script>
 ```
 
@@ -45,7 +45,7 @@ or as module
 
 ```html
 <script charset="UTF-8" type="module"">
-import {ratio} from './esm/fuzzball.esm.min.js';
+import {ratio} from './dist/esm/fuzzball.esm.min.js';
 console.log(ratio('fuzz', 'fuzzy'));
 </script>
 ```
@@ -62,7 +62,7 @@ fuzz.ratio("hello world", "hiyyo wyrld");
         64
 fuzz.token_set_ratio("fuzzy was a bear", "a fuzzy bear fuzzy was");
         100
-fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar', {sortBySimilarity: true})
+fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar', {sortBySimilarity: true});
         71
 
 options = {scorer: fuzz.token_set_ratio};
@@ -454,7 +454,7 @@ Not all scoring options are available if using the difflib calculation. (i.e. us
 
 ### Lite Bundles
 
-Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located at lite/fuzzball_lite.umd.min.js and ultra_lite/fuzzball_ultra_lite.umd.min.js. The full version has been reworked to only pull in the needed parts from difflib, so the difference between it and lite isn't quite as much as before.
+Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located in fuzzbal/lite and fuzzball/ultra_lite. The full version has been reworked to only pull in the needed parts from difflib, so the difference between it and lite isn't quite as much as before.
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
