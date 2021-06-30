@@ -6,7 +6,7 @@ export default [
   {
   input: 'esmwrapper.js',
   output: {
-    file: 'esm/fuzzball.esm.min.js',
+    file: 'dist/esm/fuzzball.esm.min.js',
     format: 'es',
     name: 'fuzzball',
     exports: 'named',
@@ -14,11 +14,30 @@ export default [
   plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true}) ],
 },
 {
+  input: './fuzzball.js',
+  output: {
+    file: 'dist/fuzzball.umd.min.js',
+    format: 'umd',
+    name: 'fuzzball'
+  },
+  plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true})],
+},
+{
   input: './lite/fuzzball_lite.js',
   output: {
     file: 'lite/fuzzball_lite.umd.min.js',
     format: 'umd',
     name: 'fuzzball'
+  },
+  plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true})],
+},
+{
+  input: './lite/esmwrapper_lite.js',
+  output: {
+    file: 'lite/esm/fuzzball_lite.esm.min.js',
+    format: 'es',
+    name: 'fuzzball',
+    exports: 'named',
   },
   plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true})],
 },
@@ -32,11 +51,12 @@ export default [
   plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true})],
 },
 {
-  input: './fuzzball.js',
+  input: './ultra_lite/esmwrapper_ultra_lite.js',
   output: {
-    file: 'dist/fuzzball.umd.min.js',
-    format: 'umd',
-    name: 'fuzzball'
+    file: 'ultra_lite/esm/fuzzball_ultra_lite.esm.min.js',
+    format: 'es',
+    name: 'fuzzball',
+    exports: 'named',
   },
   plugins: [commonjs(), nodeResolve(), terser({keep_fnames: true})],
 },

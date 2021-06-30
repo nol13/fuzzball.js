@@ -3,20 +3,24 @@
   "version": "2.0.0-0",
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
-  "module": "./esm/fuzzball.esm.min.js",
+  "module": "./dist/esm/fuzzball.esm.min.js",
   "type": "commonjs",
   "types": "fuzzball.d.ts",
   "exports": {
     ".": {
       "require": "./fuzzball.js",
-      "import": "./esm/fuzzball.esm.min.js"
+      "import": "./dist/esm/fuzzball.esm.min.js"
     },
     "./lite": {
-      "require": "./*.js"
+      "require": "./lite/fuzzball_lite.js",
+      "import": "./lite/esm/fuzzball_lite.esm.min.js"
     },
     "./ultra_lite": {
-      "require": "./*.js"
-    }
+      "require": "./ultra_lite/fuzzball_ultra_lite.js",
+      "import": "./ultra_lite/esm/fuzzball_ultra_lite.esm.min.js"
+    },
+    "./lite/": "./lite/",
+    "./ultra_lite/": "./ultra_lite/"
   },
   "files": [
     "fuzzball.js",
@@ -24,8 +28,7 @@
     "dist",
     "lite",
     "ultra_lite",
-    "lib",
-    "esm"
+    "lib"
   ],
   "dependencies": {
     "heap": ">=0.2.0",
@@ -69,8 +72,8 @@
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",
     "build:demo": "rm -rf docs && cd demo-app && npm run build && cp -a build/. ../docs/",
-    "build:esm": "rollup --config rollup.config.js",
-    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:esm && npm run jsdoc2md && npm run test:build && npm run build:demo",
+    "build:bundles": "rollup --config rollup.config.js",
+    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:bundles && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha --use_strict",
     "test:build": "testenv=build npm run test"
   },
