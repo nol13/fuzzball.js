@@ -1,4 +1,4 @@
- [![Build Status](https://travis-ci.org/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.org/nol13/fuzzball.js) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
+ [![Build Status](https://travis-ci.com/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.com/nol13/fuzzball.js) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
