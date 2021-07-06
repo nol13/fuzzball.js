@@ -11,4 +11,3 @@ export const extractAsPromised = fuzzball.extractAsPromised;
 export const process_and_sort = fuzzball.process_and_sort;
 export const unique_tokens = fuzzball.unique_tokens;
 export const dedupe = fuzzball.dedupe;
-export default fuzzball;

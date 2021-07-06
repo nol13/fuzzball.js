@@ -49,7 +49,7 @@ import {ratio} from './dist/esm/fuzzball.esm.min.js';
 console.log(ratio('fuzz', 'fuzzy'));
 </script>
 ```
-For other no-build/standalone environments, use this file as well. Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
+Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
 
 # Usage
 
@@ -139,7 +139,7 @@ If you set options.trySimple to true it will add the simple ratio to the token_s
 
 Instead of sorting alphabetically, tokens will be sorted by similarity to the smaller set. Useful if the matching token may have a different first letter, but performs a bit slower. You can also use similarity sorting when calculating token_set_ratio by setting sortBySimilarity to true.
 
-Not available in the lite builds yet and sorting will not take wildcards or collation into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
+Not available in the lite builds and sorting doesn't yet take wildcards or collation into account. Based off this fuzzywuzzy PR by Exquisition. (https://github.com/seatgeek/fuzzywuzzy/pull/296)
 
 ```js
 fuzz.token_sort_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar')
