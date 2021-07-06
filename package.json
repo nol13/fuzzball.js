@@ -1,9 +1,28 @@
 {
   "name": "fuzzball",
-  "version": "1.4.0",
+  "version": "2.0.0-3",
   "description": "Fuzzy string matching algorithms and utilities, port of the fuzzywuzzy Python library.",
   "main": "fuzzball.js",
+  "module": "./dist/esm/fuzzball.esm.min.js",
+  "type": "commonjs",
   "types": "fuzzball.d.ts",
+  "exports": {
+    ".": {
+      "require": "./fuzzball.js",
+      "import": "./dist/esm/fuzzball.esm.min.js"
+    },
+    "./lite": {
+      "require": "./lite/fuzzball_lite.js",
+      "import": "./lite/esm/fuzzball_lite.esm.min.js"
+    },
+    "./ultra_lite": {
+      "require": "./ultra_lite/fuzzball_ultra_lite.js",
+      "import": "./ultra_lite/esm/fuzzball_ultra_lite.esm.min.js"
+    },
+    "./lite/*": "./lite/*",
+    "./ultra_lite/*": "./ultra_lite/*",
+    "./dist/*": "./dist/*"
+  },
   "files": [
     "fuzzball.js",
     "fuzzball.d.ts",
@@ -19,12 +38,15 @@
     "string.prototype.codepointat": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^15.2.0",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "cached-path-relative": "^1.0.2",
     "jsdoc": "^3.6.3",
     "jsdoc-to-markdown": "^5.0.3",
     "lodash-cli": "^4.17.5",
     "mocha": "^7.1.1",
+    "rollup": "^2.52.3",
+    "rollup-plugin-terser": "^7.0.2",
     "uglify-js": "^3.12.3"
   },
   "repository": {
@@ -50,13 +72,9 @@
     "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach,orderBy -p -o ./lib/lodash.custom.min.js",
     "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
     "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",
-    "build:reg:old": "./node_modules/.bin/browserify -r ./fuzzball.js:fuzzball | ./node_modules/uglify-js/bin/uglifyjs > dist/fuzzball_browser.min.js",
-    "build:lite:old": "./node_modules/.bin/browserify -r ./lite/fuzzball_lite.js:fuzzball | ./node_modules/uglify-js/bin/uglifyjs > lite/fuzzball_lite_browser.min.js",
-    "build:reg": "./node_modules/.bin/browserify ./fuzzball.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > dist/fuzzball.umd.min.js",
-    "build:lite": "./node_modules/.bin/browserify ./lite/fuzzball_lite.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > lite/fuzzball_lite.umd.min.js",
-    "build:ultralite": "./node_modules/.bin/browserify ./ultra_lite/fuzzball_ultra_lite.js --standalone fuzzball | ./node_modules/uglify-js/bin/uglifyjs > ultra_lite/fuzzball_ultra_lite.umd.min.js",
     "build:demo": "rm -rf docs && cd demo-app && npm run build && cp -a build/. ../docs/",
-    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:reg && npm run build:lite && npm run build:ultralite && npm run build:reg:old && npm run build:lite:old && npm run jsdoc2md && npm run test:build && npm run build:demo",
+    "build:bundles": "rollup --config rollup.config.js",
+    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:bundles && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha --use_strict",
     "test:build": "testenv=build npm run test"
   },

@@ -9,7 +9,7 @@
     var iLeven = require('../lib/iLeven.js');
     var wildLeven = require('../lib/wildcardLeven.js');
     var leven = require('../lib/leven.js');
-    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
+    if (typeof setImmediate !== 'function') { require('setimmediate'); } // didn't run in tiny-worker without extra check
 
     var utils = require('../lib/utils.js')(_uniq);
     var validate = utils.validate;

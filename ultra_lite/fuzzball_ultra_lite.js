@@ -13,7 +13,7 @@
     var full_process = utils.full_process;
     var clone_and_set_option_defaults = utils.clone_and_set_option_defaults;
     var isCustomFunc = utils.isCustomFunc;
-    if (typeof setImmediate !== 'function') require('setimmediate'); // didn't run in tiny-worker without extra check
+    if (typeof setImmediate !== 'function') { require('setimmediate'); } // didn't run in tiny-worker without extra check
     // isArray polyfill
     if (typeof Array.isArray === 'undefined') {
         Array.isArray = function (obj) {
