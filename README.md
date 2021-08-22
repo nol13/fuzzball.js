@@ -4,7 +4,7 @@
 ==========
 Easy to use and powerful fuzzy string matching. 
 
-Mostly a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library, with some cool added features.
+Mostly a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library, with some cool added features like the sortBySimilarity option and wildcard support.
 
 Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. Auto-generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
 
@@ -62,8 +62,6 @@ fuzz.ratio("hello world", "hiyyo wyrld");
         64
 fuzz.token_set_ratio("fuzzy was a bear", "a fuzzy bear fuzzy was");
         100
-fuzz.token_set_ratio('apple cup zebrah horse foo', 'zapple cub horse bebrah bar', {sortBySimilarity: true});
-        71
 
 options = {scorer: fuzz.token_set_ratio};
 choices = ["Hood, Harry", "Mr. Minor", "Mr. Henry Hood"];
@@ -456,7 +454,7 @@ Not all scoring options are available if using the difflib calculation. (i.e. us
 
 Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ bundles if you need a smaller file size. These are located in fuzzbal/lite and fuzzball/ultra_lite. The full version has been reworked to only pull in the needed parts from difflib, so the difference between it and lite isn't quite as much as before.
 
-The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and further leaves support out proper for collation or astral symbols, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
+The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and also leaves out support for collation or correct astral symbols handling, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
 The full, lite and ultra_lite flavors currently weight in at a compressed 28kB, 20kB, and 8kB, respectively.
 

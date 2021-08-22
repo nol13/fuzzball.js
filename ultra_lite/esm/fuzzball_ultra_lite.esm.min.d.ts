@@ -1,9 +1,5 @@
 export interface FuzzballBaseOptions {
     /**
-     * Use Intl.Collator for locale-sensitive string comparison
-     */
-    useCollator?: boolean;
-    /**
      * Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
      */
     full_process?: boolean;
@@ -20,10 +16,6 @@ export interface FuzzballBaseOptions {
      */
     wildcards?: string;
     /**
-     * Use astral symbol and post-BMP codepoint aware distance calculation, default false
-     */
-    astral?: boolean;
-    /**
      * Normalize unicode representations, default true when astral is true
      */
     normalize?: boolean;
@@ -37,7 +29,7 @@ export interface FuzzballTokenSetOptions extends FuzzballBaseOptions {
     /**
      * Sort tokens by by similarity to each other before combining instead of alphabetically
      */
-    sortBySimilarity?: boolean;
+    sortBySimilarity?: boolean
 }
 
 interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
@@ -61,10 +53,6 @@ interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
      * Lowest score to return, default 0
      */
     cutoff?: number;
-    /**
-     * Sort tokens by similarity before combining with token set scorers
-     */
-    sortBySimilarity?: boolean;
 }
 
 interface CancellationToken {
@@ -156,14 +144,9 @@ export interface FuzzballDedupeObjOptionsWithMap extends FuzzballExtractObjectOp
 
 export function distance(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function partial_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function partial_token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function partial_token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function partial_token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function WRatio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function full_process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;
 export function unique_tokens(str: string, opts?: FuzzballExtractOptions): string[];
