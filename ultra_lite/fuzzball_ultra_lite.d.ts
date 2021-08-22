@@ -171,3 +171,5 @@ export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptions): 
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptions): Array<{ item: any, key: string }>;
 export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: number, matches: Array<{ choice: any, score: number, key: number }>}>;
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: string, matches: Array<{ choice: any, score: number, key: string }>}>;
+
+export as namespace fuzzball;

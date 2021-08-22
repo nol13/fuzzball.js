@@ -1,5 +1,9 @@
 export interface FuzzballBaseOptions {
     /**
+     * Use Intl.Collator for locale-sensitive string comparison
+     */
+    useCollator?: boolean;
+    /**
      * Apply basic cleanup, non-alphanumeric to whitespace etc. if true. default true
      */
     full_process?: boolean;
@@ -15,6 +19,10 @@ export interface FuzzballBaseOptions {
      * Substitution cost, default 1 for distance, 2 for all ratios, prob don't want to change it
      */
     wildcards?: string;
+    /**
+     * Use astral symbol and post-BMP codepoint aware distance calculation, default false
+     */
+    astral?: boolean;
     /**
      * Normalize unicode representations, default true when astral is true
      */
@@ -171,3 +179,5 @@ export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptions): 
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptions): Array<{ item: any, key: string }>;
 export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: number, matches: Array<{ choice: any, score: number, key: number }>}>;
 export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: string, matches: Array<{ choice: any, score: number, key: string }>}>;
+
+export as namespace fuzzball;
