@@ -21,7 +21,8 @@
     },
     "./lite/*": "./lite/*",
     "./ultra_lite/*": "./ultra_lite/*",
-    "./dist/*": "./dist/*"
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "fuzzball.js",
