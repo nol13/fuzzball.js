@@ -4,7 +4,7 @@
 ==========
 Easy to use and powerful fuzzy string matching. 
 
-Mostly a JavaScript port of the [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy) Python library, with some cool added features like token similarity sorting and wildcard support.
+Mostly a JavaScript port of the [TheFuzz](https://github.com/seatgeek/thefuzz) (formerly fuzzywuzzy) Python library, with some additional features like token similarity sorting and wildcard support.
 
 Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. Auto-generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
 
