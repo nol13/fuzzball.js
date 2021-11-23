@@ -2,11 +2,11 @@
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
-Easy to use and powerful fuzzy string matching. 
+Easy to use and powerful fuzzy string matching.
 
 Mostly a JavaScript port of the [TheFuzz](https://github.com/seatgeek/thefuzz) (formerly fuzzywuzzy) Python library, with some additional features like token similarity sorting and wildcard support.
 
-Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. Auto-generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>. 
+Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comparing some of the different scorers/options. Auto-generated API Docs <a href="https://github.com/nol13/fuzzball.js/blob/master/jsdocs/fuzzball.md" target="_blank">here</a>.
 
 # Contents
  * [Installation](#installation)
@@ -73,7 +73,7 @@ fuzz.extract("mr. harry hood", choices, options);
   [ 'Mr. Henry Hood', 85, 2 ],
   [ 'Mr. Minor', 40, 1 ] ]
 
-/** 
+/**
 * Set options.returnObjects = true to get back
 * an array of {choice, score, key} objects instead of tuples
 */
@@ -89,9 +89,23 @@ options.cancelToken = cancelToken;
 fuzz.extractAsPromised("gonna get canceled", choices, options)
         .then(res => {/* do stuff */})
         .catch((e) => {
-                if (e.message === 'canceled') console.log('I got canceled!') 
+                if (e.message === 'canceled') console.log('I got canceled!')
         });
 cancelToken.canceled = true;
+
+// or use AbortController to cancel search
+
+// Cancel search
+const abortController = new AbortController();
+
+options.abortController = abortController;
+fuzz.extractAsPromised("gonna get canceled", choices, options)
+        .then(res => {/* do stuff */})
+        .catch((e) => {
+                if (e.message === 'aborted') console.log('Search was aborted!')
+        });
+
+abortController.abort();
 ```
 
 **Simple Ratio**
@@ -102,7 +116,7 @@ fuzz.ratio("this is a test", "This is a test!");
         100
 ```
 
-**Partial Ratio** 
+**Partial Ratio**
 
 Highest scoring substring of the longer string vs. the shorter string.
 
@@ -122,18 +136,18 @@ fuzz.token_sort_ratio("fuzzy wuzzy was a bear", "wuzzy fuzzy was a bear");
         100
 ```
 
-**Token Set Ratio** 
+**Token Set Ratio**
 
 Highest of 3 scores comparing the set intersection, intersection + difference 1 to 2, and intersection + difference 2 to 1.
 ```js
 fuzz.token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
         84
-fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear"); 
+fuzz.token_set_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear");
         100
 ```
 If you set options.trySimple to true it will add the simple ratio to the token_set_ratio test suite as well. This can help smooth out occational irregularities in how much differences in the first letter of a token will get penalized.
 
-**Token Similarity Sort Ratio** 
+**Token Similarity Sort Ratio**
 
 Instead of sorting alphabetically, tokens will be sorted by similarity to the smaller set. Useful if the matching token may have a different first letter, but performs a bit slower. You can also use similarity sorting when calculating token_set_ratio by setting sortBySimilarity to true.
 
@@ -200,7 +214,7 @@ fuzz.ratio("this is ä test", "this is a test", options);
         100
 ```
 
-If your strings contain code points beyond the basic multilingual plane (BMP), set **astral** to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters and the ratio will be off a bit. (This will have some impact on performance, which is why it is turned off by default.) 
+If your strings contain code points beyond the basic multilingual plane (BMP), set **astral** to true. If your strings contain astral symbols and this is not set, those symbols will be treated as multiple characters and the ratio will be off a bit. (This will have some impact on performance, which is why it is turned off by default.)
 
 ```js
 options = {astral: true};
@@ -211,7 +225,7 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
 
-### Batch Extract 
+### Batch Extract
 Search list of choices for top results.
 
 ###### fuzz.extract(query, choices, options);
@@ -327,7 +341,7 @@ options.asyncLoopOffset = 64;
 fuzz.extractAsPromised("gonna get canceled", choices, options)
         .then(res => {/* do stuff */})
         .catch((e) => {
-                if (e.message === 'canceled') console.log('I got canceled!') 
+                if (e.message === 'canceled') console.log('I got canceled!')
         });
 
 // ...

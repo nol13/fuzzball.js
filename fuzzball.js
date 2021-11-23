@@ -511,11 +511,18 @@
          * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
+         * @param {Object} [options_p.abortController] - track abortion
          * @param {Object} [options_p.cancelToken] - track cancellation
          * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = clone_and_set_option_defaults(options_p);
+
+        var abortController;
+        if (typeof options_p.abortController === "object") {
+            abortController = options_p.abortController;
+        }
+
         var cancelToken;
         if (typeof options_p.cancelToken === "object") {
             cancelToken = options_p.cancelToken;
@@ -646,6 +653,11 @@
                 }
             }
 
+            if (abortController && abortController.signal.aborted === true) {
+                callback(new Error("aborted"));
+                return;
+            }
+
             if (cancelToken && cancelToken.canceled === true) {
                 callback(new Error("canceled"));
                 return;
@@ -742,7 +754,7 @@
                 }
             }
         }
-        
+
         return charCounts;
     }
 
