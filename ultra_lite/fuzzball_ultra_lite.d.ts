@@ -51,6 +51,13 @@ interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
     cutoff?: number;
 }
 
+interface AbortController {
+    /**
+     * If extract has been aborted;
+     */
+    signal: { aborted: boolean }
+}
+
 interface CancellationToken {
     /**
      * If extract has been canceled;
@@ -74,6 +81,10 @@ export interface FuzzballExtractObjectOptions extends FuzzballExtractBaseOptions
 
 export interface FuzzballAsyncExtractOptions extends FuzzballExtractOptions {
     /**
+     * Track if extract has been aborted
+     */
+    abortController?: AbortController;
+    /**
      * Track if extract has been canceled
      */
     cancelToken?: CancellationToken;
@@ -84,6 +95,10 @@ export interface FuzzballAsyncExtractOptions extends FuzzballExtractOptions {
 }
 
 export interface FuzzballAsyncExtractObjectOptions extends FuzzballExtractObjectOptions {
+    /**
+     * Track if extract has been aborted
+     */
+    abortController?: AbortController;
     /**
      * Track if extract has been canceled;
      */

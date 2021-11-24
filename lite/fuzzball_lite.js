@@ -28,7 +28,7 @@
 
     var processing = require('../lib/process.js')(clone_and_set_option_defaults, Array.isArray, QRatio, extract);
     var dedupe = processing.dedupe;
- 
+
 /** Mostly follows after python fuzzywuzzy, https://github.com/seatgeek/fuzzywuzzy */
 
 
@@ -292,11 +292,17 @@
          * @param {boolean} [options_p.trySimple] - try simple/partial ratio as part of (parial_)token_set_ratio test suite
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
+         * @param {Object} [options_p.abortController] - track abortion
          * @param {Object} [options_p.cancelToken] - track cancellation
          * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = clone_and_set_option_defaults(options_p);
+
+        var abortController;
+        if (typeof options_p.abortController === "object") {
+            abortController = options_p.abortController;
+        }
 
         var cancelToken;
         if (typeof options_p.cancelToken === "object") {
@@ -428,6 +434,11 @@
                 }
             }
 
+            if (abortController && abortController.signal.aborted === true) {
+                callback(new Error("aborted"));
+                return;
+            }
+
             if (cancelToken && cancelToken.canceled === true) {
                 callback(new Error("canceled"));
                 return;
@@ -476,7 +487,7 @@
         var sorted_2to1 = diff2to1.sort().join(" ");
         var combined_1to2 = sorted_sect + " " + sorted_1to2;
         var combined_2to1 = sorted_sect + " " + sorted_2to1;
-        
+
         sorted_sect = sorted_sect.trim();
         combined_1to2 = combined_1to2.trim();
         combined_2to1 = combined_2to1.trim();
