@@ -80,23 +80,16 @@ fuzz.extract("mr. harry hood", choices, options);
 
 fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
 
-// In supported environments, Promise will not be polyfilled
 fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
 
 // Cancel search
-let cancelToken = {canceled: false};
-options.cancelToken = cancelToken;
-fuzz.extractAsPromised("gonna get canceled", choices, options)
-        .then(res => {/* do stuff */})
-        .catch((e) => {
-                if (e.message === 'canceled') console.log('I got canceled!')
-        });
-cancelToken.canceled = true;
 
-// or use AbortController to cancel search
+// For Node versions 14 and below and IE, use the legacy cancelToken option instead
+// see the "Async and Cancellation" section below
+
 const abortController = new AbortController();
-
 options.abortController = abortController;
+
 fuzz.extractAsPromised("gonna get canceled", choices, options)
         .then(res => {/* do stuff */})
         .catch((e) => {
