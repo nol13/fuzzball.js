@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ProductRow from './ProductRow';
 import { productTable, scorer as scorerStyle } from '../styles/productTable.module.scss';
 import * as fuzz from 'fuzzball';
