@@ -260,10 +260,6 @@
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
         if (!validate(str2)) return 0;
-        /* if (!options.proc_sorted) {
-            str1 = process_and_sort(str1);
-            str2 = process_and_sort(str2);
-        } */
         return _token_similarity_sort_ratio(str1, str2, options);
     }
 
@@ -288,10 +284,6 @@
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
         if (!validate(str2)) return 0;
-        /* if (!options.proc_sorted) {
-            str1 = process_and_sort(str1);
-            str2 = process_and_sort(str2);
-        } */
         options.partial = true;
         return _token_similarity_sort_ratio(str1, str2, options);
     }
