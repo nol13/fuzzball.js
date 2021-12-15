@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-//import { browserHistory } from 'react-router';
 import { enterData, selectDataset, filterTable, enterWildcards } from '../actions';
-import { backToDemo, enterContainer, dataInput, linkButton } from '../styles/enterData.module.scss'
+import styles from '../styles/enterData.module.scss';
+
+const { backToDemo, enterContainer, dataInput, linkButton } = styles;
 
 class EnterData extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class EnterData extends Component {
         return (<div>
         <div className={backToDemo}>
             <button className={linkButton} onClick={() => this.context.router.push('/')}> {"< cancel / back to demo"} </button>
-        </div>}
+        </div>
         <div className={enterContainer}>
             <p style={{fontWeight: '600', fontSize: '1.1em'}}>Enter custom search terms below, one term per line.</p>
             <textarea className={dataInput} value={this.state.text} onChange={this.handleChange} />

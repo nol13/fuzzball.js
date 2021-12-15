@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { prodrow } from '../styles/productRow.module.scss';
+import styles from '../styles/productRow.module.scss';
+
+const { prodrow } = styles;
 
 const ProductRow = ({ data }) =>
     <div>

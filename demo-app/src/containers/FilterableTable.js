@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { filterTable, checkFullProcess, enterWildcards, selectDataset, checkSimilaritySort } from '../actions';
 import ProductTable from '../components/ProductTable';
-import { filterableTable, clear } from '../styles/filterableTable.module.scss';
+import styles from '../styles/filterableTable.module.scss';
 import { Link } from 'react-router';
+
+const { filterableTable, clear } = styles;
 
 class FilterableTable extends PureComponent {
 

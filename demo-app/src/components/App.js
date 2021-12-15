@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { footerContainer, lol } from '../styles/footer.module.scss';
+import styles from '../styles/footer.module.scss';
 import logo from '../images/fuzzballlogo2alpha.png';
+
+const { footerContainer, lol } = styles;
 
 const App = ({ children }) =>
     <div style={{
