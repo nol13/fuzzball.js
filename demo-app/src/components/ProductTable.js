@@ -4,8 +4,6 @@ import ProductRow from './ProductRow';
 import styles from '../styles/productTable.module.scss';
 import * as fuzz from 'fuzzball';
 
-const { productTable, scorer: scorerStyle } = styles;
-
 class ProductTable extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -55,8 +53,8 @@ class ProductTable extends React.PureComponent {
                 <ProductRow key={p[0].name + '-@-' + i} data={p} />
             );
         });
-        return (<div className={productTable}>
-            <p className={scorerStyle}>{`${scorer}${sortBySimilarity && scorer === "token_set_ratio" ? ' {sortBySimilarity: true}' : ''}`}</p>
+        return (<div className={styles.productTable}>
+            <p className={styles.scorer}>{`${scorer}${sortBySimilarity && scorer === "token_set_ratio" ? ' {sortBySimilarity: true}' : ''}`}</p>
             {rows}
         </div>);
     }

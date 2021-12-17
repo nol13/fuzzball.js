@@ -35,7 +35,7 @@ class EnterData extends Component {
             <button className={linkButton} onClick={() => this.context.router.push('/')}> {"< cancel / back to demo"} </button>
         </div>
         <div className={enterContainer}>
-            <p style={{fontWeight: '600', fontSize: '1.1em'}}>Enter custom search terms below, one term per line.</p>
+            <p className={styles.customDataText}>Enter custom search terms below, one term per line.</p>
             <textarea className={dataInput} value={this.state.text} onChange={this.handleChange} />
             <br /><br />
             <input type="button" onClick={this.handleSave} value="Save" disabled={!this.state.text.trim()} />&nbsp;

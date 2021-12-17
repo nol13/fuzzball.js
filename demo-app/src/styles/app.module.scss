@@ -1,0 +1,32 @@
+.container {
+  font-family: sans-serif;
+  font-size: 13px;
+  padding: 10px;
+}
+
+.bg {
+  background-color: #222222;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.readmeLink {
+	a, a:visited {
+		 color: whitesmoke !important;
+	}
+	margin-bottom: 3px
+}
+
+.logo {
+    height: 50px;
+    display: inline;
+    margin-top: 10px;
+}
+
+.header {
+    color: whitesmoke;
+}
