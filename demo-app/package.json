@@ -15,7 +15,7 @@
   "author": "Nolan Kaplan",
   "license": "MIT",
   "dependencies": {
-    "file-loader": "^0.9.0",
+    "file-loader": "^6.2.0",
     "fuzzball": "^1.3.0",
     "lodash": "^4.17.21",
     "node-sass": "^7.0.0",
