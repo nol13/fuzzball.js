@@ -6,7 +6,7 @@
   "private": true,
   "homepage": ".",
   "devDependencies": {
-    "gh-pages": "^2.2.0",
+    "gh-pages": "^5.0.0",
     "react-scripts": "^5.0.0",
     "redux-devtools": "^3.5.0",
     "redux-devtools-dock-monitor": "^1.1.3",
