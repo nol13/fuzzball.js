@@ -65,7 +65,7 @@
     "dedupe"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
-  "license": "GPL-2.0",
+  "license": "MIT",
   "scripts": {
     "jsdoc2md": "./node_modules/.bin/jsdoc2md --template ./jsdocs/README.hbs fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
     "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach,orderBy -p -o ./lib/lodash.custom.min.js",
