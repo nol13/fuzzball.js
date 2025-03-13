@@ -490,7 +490,7 @@ Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ versions if
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and also leaves out support for collation or correct astral symbols handling, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
-The full, lite and ultra_lite bundles currently weight in at a compressed 28kB, 20kB, and 8kB, respectively.
+The full, lite and ultra_lite bundles currently weight in at a compressed 27.0kB, 17.8kB, and 7.0kB, respectively.
 
 ### Credits
 

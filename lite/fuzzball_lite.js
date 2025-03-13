@@ -2,10 +2,12 @@
     /** @module fuzzball */
     'use strict';
     var Heap = require('heap');
-    var _intersect = require('./lodash.custom.min.js').intersection;
-    var _difference = require('./lodash.custom.min.js').difference;
-    var _uniq = require('./lodash.custom.min.js').uniq;
-    var _toArray = require('./lodash.custom.min.js').toArray;
+    
+    var _intersect = require('lodash/intersection');
+    var _difference = require('lodash/difference');
+    var _uniq = require('lodash/uniq');
+    var _toArray = require('lodash/toArray');
+    
     var iLeven = require('../lib/iLeven.js');
     var wildLeven = require('../lib/wildcardLeven.js');
     var leven = require('../lib/leven.js');
