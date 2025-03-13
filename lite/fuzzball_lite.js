@@ -3,7 +3,6 @@
     'use strict';
     var Heap = require('heap');
     
-    // Import individual lodash functions
     var _intersect = require('lodash/intersection');
     var _difference = require('lodash/difference');
     var _uniq = require('lodash/uniq');
