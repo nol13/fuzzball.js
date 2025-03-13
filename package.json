@@ -34,6 +34,7 @@
   ],
   "dependencies": {
     "heap": ">=0.2.0",
+    "lodash": "^4.17.21",
     "setimmediate": "^1.0.5",
     "string.fromcodepoint": "^0.2.1",
     "string.prototype.codepointat": "^0.2.0"
@@ -44,7 +45,6 @@
     "cached-path-relative": "^1.0.2",
     "jsdoc": "^3.6.3",
     "jsdoc-to-markdown": "^5.0.3",
-    "lodash-cli": "^4.17.5",
     "mocha": "^9.1.3",
     "rollup": "^2.52.3",
     "rollup-plugin-terser": "^7.0.2",
@@ -68,12 +68,9 @@
   "license": "MIT",
   "scripts": {
     "jsdoc2md": "./node_modules/.bin/jsdoc2md --template ./jsdocs/README.hbs fuzzball.js > jsdocs/fuzzball.md && ./node_modules/.bin/jsdoc2md lib/process.js > jsdocs/process.md",
-    "lodash:reg": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,intersectionWith,differenceWith,uniqWith,toArray,partialRight,keys,isArray,forEach,orderBy -p -o ./lib/lodash.custom.min.js",
-    "lodash:lite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq,toArray -p -o ./lite/lodash.custom.min.js",
-    "lodash:ultralite": "./node_modules/lodash-cli/bin/lodash include=intersection,difference,uniq -p -o ./ultra_lite/lodash.custom.min.js",
     "build:demo": "rm -rf docs && cd demo-app && npm run build && cp -a build/. ../docs/",
     "build:bundles": "rollup --config rollup.config.js",
-    "build": "npm run lodash:ultralite && npm run lodash:lite && npm run lodash:reg && npm run build:bundles && npm run jsdoc2md && npm run test:build && npm run build:demo",
+    "build": "npm run build:bundles && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha --use_strict",
     "test:build": "testenv=build npm run test"
   },

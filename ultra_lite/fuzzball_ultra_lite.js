@@ -1,9 +1,12 @@
 (function () {
     /** @module fuzzball */
     'use strict';
-    var _intersect = require('./lodash.custom.min.js').intersection;
-    var _difference = require('./lodash.custom.min.js').difference;
-    var _uniq = require('./lodash.custom.min.js').uniq;
+    
+    // Import individual lodash functions
+    var _intersect = require('lodash/intersection');
+    var _difference = require('lodash/difference');
+    var _uniq = require('lodash/uniq');
+    
     var leven = require('../lib/leven');
 
     var utils = require('../lib/utils_ultra_lite.js')(_uniq);

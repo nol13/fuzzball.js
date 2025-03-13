@@ -4,18 +4,19 @@
     var SequenceMatcher = require('./lib/fbdifflib.js');
     var Heap = require('heap');
 
-    var _intersect = require('./lib/lodash.custom.min.js').intersection;
-    var _intersectWith = require('./lib/lodash.custom.min.js').intersectionWith;
-    var _difference = require('./lib/lodash.custom.min.js').difference;
-    var _differenceWith = require('./lib/lodash.custom.min.js').differenceWith;
-    var _uniq = require('./lib/lodash.custom.min.js').uniq;
-    var _uniqWith = require('./lib/lodash.custom.min.js').uniqWith;
-    var _partialRight = require('./lib/lodash.custom.min.js').partialRight;
-    var _forEach = require('./lib/lodash.custom.min.js').forEach;
-    var _keys = require('./lib/lodash.custom.min.js').keys;
-    var _isArray = require('./lib/lodash.custom.min.js').isArray;
-    var _toArray = require('./lib/lodash.custom.min.js').toArray;
-    var _orderBy = require('./lib/lodash.custom.min.js').orderBy;
+    // Import individual lodash functions
+    var _intersect = require('lodash/intersection');
+    var _intersectWith = require('lodash/intersectionWith');
+    var _difference = require('lodash/difference');
+    var _differenceWith = require('lodash/differenceWith');
+    var _uniq = require('lodash/uniq');
+    var _uniqWith = require('lodash/uniqWith');
+    var _partialRight = require('lodash/partialRight');
+    var _forEach = require('lodash/forEach');
+    var _keys = require('lodash/keys');
+    var _isArray = require('lodash/isArray');
+    var _toArray = require('lodash/toArray');
+    var _orderBy = require('lodash/orderBy');
 
     function orderByDesc (arr, cmp) {
         var mapped = arr.map(function (str) {
