@@ -49,7 +49,7 @@ import {ratio} from './dist/esm/fuzzball.esm.min.js';
 console.log(ratio('fuzz', 'fuzzy'));
 </script>
 ```
-Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
+See the lite section below if you need the smallest possible file size.
 
 # Usage
 
@@ -490,7 +490,7 @@ Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ versions if
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and also leaves out support for collation or correct astral symbols handling, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
-The full, lite and ultra_lite bundles currently weight in at a compressed 27.0kB, 17.8kB, and 7.0kB, respectively.
+The full, lite and ultra_lite bundles currently weight in at a compressed 19.4kB, 9.8kB, and 7.0kB, respectively. A wrapper is provided for ES Module compatibility but it won't fully support code shaking.
 
 ### Credits
 
