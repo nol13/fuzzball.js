@@ -212,9 +212,9 @@ options = {astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
-**If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
+
 
 ### Batch Extract
 Search list of choices for top results.

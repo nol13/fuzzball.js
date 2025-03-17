@@ -72,10 +72,12 @@
          * @returns {number} - the levenshtein distance (0 and above).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (typeof options.subcost === "undefined") options.subcost = 1;
-        if (options.astral) return iLeven(str1, str2, options, _toArray);
+        if (options.astral) return iLeven(str1, str2, options);
         else return wildleven(str1, str2, options, leven); // falls back to leven if no wildcards
     }
 
@@ -97,6 +99,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -122,6 +126,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -148,6 +154,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -174,6 +182,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -199,6 +209,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -227,6 +239,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -256,6 +270,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -280,6 +296,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         str1 = options.full_process ? full_process(str1, options) : str1;
         str2 = options.full_process ? full_process(str2, options) : str2;
         if (!validate(str1)) return 0;
@@ -306,6 +324,8 @@
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
+        str1 = options.normalize ? str1.normalize() : str1;
+        str2 = options.normalize ? str2.normalize() : str2;
         //str1 = full_process(str1, options);  //fuzzywuzzy runs no matter what, reason? going by options.full_process
         //str2 = full_process(str2, options);
         str1 = options.full_process ? full_process(str1, options) : str1;
@@ -393,8 +413,6 @@
         }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options);
-            options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
                 if (String.prototype.normalize) {
@@ -405,6 +423,8 @@
                     if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                 }
             }
+            query = pre_processor(query, options);
+            options.full_process = false;
             if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
@@ -436,8 +456,8 @@
                 options.proc_sorted = true;
                 if (value && value.proc_sorted) mychoice = value.proc_sorted;
                 else {
-                    mychoice = pre_processor(options.processor(value), options);
-                    mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
+                    mychoice = pre_processor(normalize ? options.processor(value).normalize() : options.processor(value), options);
+                    mychoice = process_and_sort(mychoice);
                 }
                 result = options.scorer(proc_sorted_query, mychoice, options);
             }
@@ -448,8 +468,8 @@
                     if (options.trySimple) mychoice = pre_processor(options.processor(value), options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(value), options);
-                    options.tokens = [query_tokens, tokenize((normalize ? mychoice.normalize() : mychoice), options)]
+                    mychoice = pre_processor(normalize ? options.processor(value).normalize() : options.processor(value), options);
+                    options.tokens = [query_tokens, tokenize(mychoice, options)]
                 }
                 //query and mychoice only used for validation here unless trySimple = true
                 result = options.scorer(query, mychoice, options);
@@ -460,9 +480,8 @@
                 result = options.scorer(query, mychoice, options);
             }
             else {
-                mychoice = pre_processor(options.processor(value), options);
+                mychoice = pre_processor(normalize ? options.processor(value).normalize() : options.processor(value), options);
                 if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
-                if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                 result = options.scorer(query, mychoice, options);
             }
             if (result > options.cutoff) {
@@ -563,8 +582,6 @@
         }
         var normalize = false;
         if (!isCustom) { // if custom scorer func let scorer handle it
-            query = pre_processor(query, options);
-            options.full_process = false;
             if (options.astral && options.normalize) {
                 options.normalize = false;  // don't normalize again in ratio if doing here
                 if (String.prototype.normalize) {
@@ -575,6 +592,8 @@
                     if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
                 }
             }
+            query = pre_processor(query, options);
+            options.full_process = false;
             if (query.length === 0) if (typeof console !== undefined) console.warn("Processed query is empty string");
         }
         var results = [];
@@ -608,8 +627,8 @@
                     options.proc_sorted = true;
                     if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options);
-                        mychoice = process_and_sort(normalize ? mychoice.normalize() : mychoice);
+                        mychoice = pre_processor(normalize ? options.processor(choices[c]).normalize() : options.processor(choices[c]), options);
+                        mychoice = process_and_sort(mychoice);
                     }
                     result = options.scorer(proc_sorted_query, mychoice, options);
                 }
@@ -620,8 +639,8 @@
                         if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
                     else {
-                        mychoice = pre_processor(options.processor(choices[c]), options);
-                        options.tokens = [query_tokens, tokenize((normalize ? mychoice.normalize() : mychoice), options)]
+                        mychoice = pre_processor(normalize ? options.processor(choices[c]).normalize() : options.processor(choices[c]), options);
+                        options.tokens = [query_tokens, tokenize(mychoice, options)]
                     }
                     //query and mychoice only used for validation here unless trySimple = true
                     result = options.scorer(query, mychoice, options);
@@ -632,9 +651,8 @@
                     result = options.scorer(query, mychoice, options);
                 }
                 else {
-                    mychoice = pre_processor(options.processor(choices[c]), options);
+                    mychoice = pre_processor(normalize ? options.processor(choices[c]).normalize() : options.processor(choices[c]), options);
                     if (typeof mychoice !== "string" || mychoice.length === 0) anyblank = true;
-                    if (normalize && typeof mychoice === "string") mychoice = mychoice.normalize();
                     result = options.scorer(query, mychoice, options);
                 }
                 if (isArray) idx = parseInt(c);
@@ -715,7 +733,7 @@
                     }
                 }
             }
-            var charArray = _toArray(normalString)
+            var charArray = Array.from(normalString);
         } else {
             var charArray = normalString.split("");
         }
@@ -911,20 +929,8 @@
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance, lensum;
         if (options.astral) {
-            if (options.normalize) {
-                if (String.prototype.normalize) {
-                    str1 = str1.normalize();
-                    str2 = str2.normalize();
-                }
-                else {
-                    if (!normalWarn) {
-                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                        normalWarn = true;
-                    }
-                }
-            }
-            levdistance = iLeven(str1, str2, options, _toArray);
-            lensum = _toArray(str1).length + _toArray(str2).length
+            levdistance = iLeven(str1, str2, options);
+            lensum = Array.from(str1).length + Array.from(str2).length
         }
         else {
             if (!options.wildcards) {
