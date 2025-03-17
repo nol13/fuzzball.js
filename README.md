@@ -49,7 +49,7 @@ import {ratio} from './dist/esm/fuzzball.esm.min.js';
 console.log(ratio('fuzz', 'fuzzy'));
 </script>
 ```
-See the lite section below if you need the smallest possible file size.
+See the lite section below if you need the smallest possible file size. If you need to support IE or node < v14 use v2.1.6 or earlier.
 
 # Usage
 
