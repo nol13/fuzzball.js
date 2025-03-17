@@ -4,7 +4,6 @@
     var SequenceMatcher = require('./lib/fbdifflib.js');
     var Heap = require('heap');
 
-    // Import native replacements for lodash functions
     var nativeUtils = require('./lib/native_utils.js');
     var _intersect = nativeUtils._intersect;
     var _intersectWith = nativeUtils._intersectWith;

@@ -3,7 +3,6 @@
     'use strict';
     var Heap = require('heap');
     
-    // Import native replacements for lodash functions
     var nativeUtils = require('../lib/native_utils.js');
     var _intersect = nativeUtils._intersect;
     var _difference = nativeUtils._difference;
