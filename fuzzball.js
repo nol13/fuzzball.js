@@ -3,6 +3,7 @@
     'use strict';
     var SequenceMatcher = require('./lib/fbdifflib.js');
     var Heap = require('heap');
+    var orderBy = require('lodash/orderBy');
 
     var nativeUtils = require('./lib/native_utils.js');
     var _intersect = nativeUtils._intersect;
@@ -15,7 +16,6 @@
     var _forEach = nativeUtils._forEach;
     var _keys = nativeUtils._keys;
     var _isArray = nativeUtils._isArray;
-    var _orderBy = nativeUtils._orderBy;
 
     var iLeven = require('./lib/iLeven.js');
     var wildleven = require('./lib/wildcardLeven.js');
@@ -763,7 +763,7 @@
         while (oldSorted2.length && i < sorted1.length) {
             // most similar to first token in s1, 2nd token, ... n tokens
             // sort by similarity to sorted1[i], take most similar
-            var sim = _orderBy(oldSorted2, function (x) {
+            var sim = orderBy(oldSorted2, function (x) {
                     return _cosineSim(charCounts1[sorted1[i]], charCounts2[x])
                 }, 'desc')[0];
             newSorted2.push(sim);
