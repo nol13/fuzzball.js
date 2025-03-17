@@ -500,8 +500,6 @@ Distance calculations based on [leven](https://github.com/sindresorhus/leven) an
 
 Default ratio formula is based on [python-Levenshtein](https://github.com/miohtama/python-Levenshtein).
 
-Unicode alphanumerica check from [XRegExp](http://xregexp.com).
-
 Substring matching from [difflib.js](https://github.com/qiao/difflib.js).
 
 Inspiration to add cancellation and async optimization from [fuzzysort](https://github.com/farzher/fuzzysort)
