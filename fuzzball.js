@@ -4,32 +4,19 @@
     var SequenceMatcher = require('./lib/fbdifflib.js');
     var Heap = require('heap');
 
-    var _intersect = require('lodash/intersection');
-    var _intersectWith = require('lodash/intersectionWith');
-    var _difference = require('lodash/difference');
-    var _differenceWith = require('lodash/differenceWith');
-    var _uniq = require('lodash/uniq');
-    var _uniqWith = require('lodash/uniqWith');
-    var _partialRight = require('lodash/partialRight');
-    var _forEach = require('lodash/forEach');
-    var _keys = require('lodash/keys');
-    var _isArray = require('lodash/isArray');
-    var _toArray = require('lodash/toArray');
-    var _orderBy = require('lodash/orderBy');
-
-    function orderByDesc (arr, cmp) {
-        var mapped = arr.map(function (str) {
-            return { key: str, value: cmp(str) };
-        });
-
-        mapped.sort(function (a, b) {
-            return b.value - a.value;
-        });
-
-        return mapped.map(function (item) {
-            return item.key;
-        });
-    }
+    // Import native replacements for lodash functions
+    var nativeUtils = require('./lib/native_utils.js');
+    var _intersect = nativeUtils._intersect;
+    var _intersectWith = nativeUtils._intersectWith;
+    var _difference = nativeUtils._difference;
+    var _differenceWith = nativeUtils._differenceWith;
+    var _uniq = nativeUtils._uniq;
+    var _uniqWith = nativeUtils._uniqWith;
+    var _partialRight = nativeUtils._partialRight;
+    var _forEach = nativeUtils._forEach;
+    var _keys = nativeUtils._keys;
+    var _isArray = nativeUtils._isArray;
+    var _orderBy = nativeUtils._orderBy;
 
     var iLeven = require('./lib/iLeven.js');
     var wildleven = require('./lib/wildcardLeven.js');

@@ -3,10 +3,12 @@
     'use strict';
     var Heap = require('heap');
     
-    var _intersect = require('lodash/intersection');
-    var _difference = require('lodash/difference');
-    var _uniq = require('lodash/uniq');
-    var _toArray = require('lodash/toArray');
+    // Import native replacements for lodash functions
+    var nativeUtils = require('../lib/native_utils.js');
+    var _intersect = nativeUtils._intersect;
+    var _difference = nativeUtils._difference;
+    var _uniq = nativeUtils._uniq;
+    var _toArray = nativeUtils._toArray;
     
     var iLeven = require('../lib/iLeven.js');
     var wildLeven = require('../lib/wildcardLeven.js');
