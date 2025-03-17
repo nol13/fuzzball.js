@@ -6,7 +6,6 @@
     var _intersect = require('lodash/intersection');
     var _difference = require('lodash/difference');
     var _uniq = require('lodash/uniq');
-    var _toArray = require('lodash/toArray');
     
     var iLeven = require('../lib/iLeven.js');
     var wildLeven = require('../lib/wildcardLeven.js');

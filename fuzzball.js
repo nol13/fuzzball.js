@@ -14,22 +14,7 @@
     var _forEach = require('lodash/forEach');
     var _keys = require('lodash/keys');
     var _isArray = require('lodash/isArray');
-    var _toArray = require('lodash/toArray');
     var _orderBy = require('lodash/orderBy');
-
-    function orderByDesc (arr, cmp) {
-        var mapped = arr.map(function (str) {
-            return { key: str, value: cmp(str) };
-        });
-
-        mapped.sort(function (a, b) {
-            return b.value - a.value;
-        });
-
-        return mapped.map(function (item) {
-            return item.key;
-        });
-    }
 
     var iLeven = require('./lib/iLeven.js');
     var wildleven = require('./lib/wildcardLeven.js');
