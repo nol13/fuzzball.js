@@ -8,7 +8,6 @@
     var _intersect = nativeUtils._intersect;
     var _difference = nativeUtils._difference;
     var _uniq = nativeUtils._uniq;
-    var _toArray = nativeUtils._toArray;
     
     var iLeven = require('../lib/iLeven.js');
     var wildLeven = require('../lib/wildcardLeven.js');
