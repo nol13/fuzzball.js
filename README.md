@@ -49,7 +49,7 @@ import {ratio} from './dist/esm/fuzzball.esm.min.js';
 console.log(ratio('fuzz', 'fuzzy'));
 </script>
 ```
-Also available are two lite bundles which leave out select features in exchange for a smaller file size. See lite section below.
+See the lite section below if you need the smallest possible file size.
 
 # Usage
 
@@ -212,9 +212,9 @@ options = {astral: true};
 fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
-**If astral is set to true, full_process will be set to false automatically, as the current alphanumeric check only supports BMP.**
 
 When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
+
 
 ### Batch Extract
 Search list of choices for top results.
@@ -490,7 +490,7 @@ Also available are the __fuzzball_lite__ and __fuzzball_ultra_lite__ versions if
 
 The lite version doesn't include the partial ratio functions, and only has limited wildcard support. The ultra_lite version doesn't include those and also leaves out support for collation or correct astral symbols handling, the extract functions are not as optimized for large datasets, and it's alphanumeric check will strip out all non-ascii characters.
 
-The full, lite and ultra_lite bundles currently weight in at a compressed 27.0kB, 17.8kB, and 7.0kB, respectively.
+The full, lite and ultra_lite bundles currently weigh in at a compressed 15.1kB, 6.3kB, and 4.0kB, respectively. A wrapper is provided for ES Module compatibility but it won't fully support code shaking.
 
 ### Credits
 
@@ -499,8 +499,6 @@ In addition to all dependencies..
 Distance calculations based on [leven](https://github.com/sindresorhus/leven) and [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein).
 
 Default ratio formula is based on [python-Levenshtein](https://github.com/miohtama/python-Levenshtein).
-
-Unicode alphanumerica check from [XRegExp](http://xregexp.com).
 
 Substring matching from [difflib.js](https://github.com/qiao/difflib.js).
 

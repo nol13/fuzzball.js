@@ -35,9 +35,7 @@
   "dependencies": {
     "heap": ">=0.2.0",
     "lodash": "^4.17.21",
-    "setimmediate": "^1.0.5",
-    "string.fromcodepoint": "^0.2.1",
-    "string.prototype.codepointat": "^0.2.0"
+    "setimmediate": "^1.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
@@ -72,7 +70,8 @@
     "build:bundles": "rollup --config rollup.config.js",
     "build": "npm run build:bundles && npm run jsdoc2md && npm run test:build && npm run build:demo",
     "test": "mocha --use_strict",
-    "test:build": "testenv=build npm run test"
+    "test:build": "testenv=build npm run test",
+    "benchmark": "node benchmark.js"
   },
   "runkitExample": "var fuzz = require('fuzzball');"
 }

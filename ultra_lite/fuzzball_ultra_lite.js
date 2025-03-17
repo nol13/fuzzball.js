@@ -2,9 +2,10 @@
     /** @module fuzzball */
     'use strict';
     
-    var _intersect = require('lodash/intersection');
-    var _difference = require('lodash/difference');
-    var _uniq = require('lodash/uniq');
+    var nativeUtils = require('../lib/native_utils.js');
+    var _intersect = nativeUtils._intersect;
+    var _difference = nativeUtils._difference;
+    var _uniq = nativeUtils._uniq;
     
     var leven = require('../lib/leven');
 
