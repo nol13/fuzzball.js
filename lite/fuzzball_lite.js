@@ -521,18 +521,6 @@
         if (typeof options.subcost === "undefined") options.subcost = 2;
         var levdistance, lensum;
         if (options.astral) {
-            if (options.normalize) {
-                if (String.prototype.normalize) {
-                    str1 = str1.normalize();
-                    str2 = str2.normalize();
-                }
-                else {
-                    if (!normalWarn) {
-                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                        normalWarn = true;
-                    }
-                }
-            }
             levdistance = iLeven(str1, str2, options);
             lensum = Array.from(str1).length + Array.from(str2).length
         }

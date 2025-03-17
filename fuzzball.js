@@ -718,21 +718,10 @@
     }
 
     var WILDCARD_KEY = "%*SuperUniqueWildcardKey*%";
-    var normalWarnCharCounts = false;
 
     function _getCharacterCounts(str, options) {
         var normalString = str;
         if (options.astral) {
-            if (options.normalize) {
-                if (String.prototype.normalize) {
-                    normalString = str.normalize();
-                } else {
-                    if (!normalWarnCharCounts) {
-                        if (typeof console !== undefined) console.warn("Normalization not supported in your environment");
-                        normalWarnCharCounts = true;
-                    }
-                }
-            }
             var charArray = Array.from(normalString);
         } else {
             var charArray = normalString.split("");
