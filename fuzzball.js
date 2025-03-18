@@ -890,7 +890,6 @@
         return Math.max.apply(null, pairwise);
     }
 
-    var normalWarn = false;
     function _ratio(str1, str2, options) {
         if (!validate(str1)) return 0;
         if (!validate(str2)) return 0;
