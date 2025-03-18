@@ -14,7 +14,6 @@
     var _uniqWith = nativeUtils._uniqWith;
     var _partialRight = nativeUtils._partialRight;
     var _forEach = nativeUtils._forEach;
-    var _keys = nativeUtils._keys;
     var _isArray = nativeUtils._isArray;
 
     var iLeven = require('./lib/iLeven.js');
@@ -375,7 +374,7 @@
         else if (!(choices instanceof Object)) {
             throw new Error("Invalid choices");
         }
-        else numchoices = _keys(choices).length;
+        else numchoices = Object.keys(choices).length;
         if (!choices || numchoices === 0) {
             if (typeof console !== undefined) console.warn("No choices");
             return [];
@@ -891,7 +890,6 @@
         return Math.max.apply(null, pairwise);
     }
 
-    var normalWarn = false;
     function _ratio(str1, str2, options) {
         if (!validate(str1)) return 0;
         if (!validate(str2)) return 0;
