@@ -84,9 +84,6 @@ fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do st
 
 // Cancel search
 
-// For Node versions 14 and below and IE, use the legacy cancelToken option instead
-// see the "Async and Cancellation" section below
-
 const abortController = new AbortController();
 options.abortController = abortController;
 
@@ -324,13 +321,11 @@ results = fuzz.extract(query, choices, options);
 ### Async and Cancellation
 
 When using extractAsPromised or extractAsync, you might want to cancel the action before it has finished.
-It can be done using `CancelToken` or `AbortController`.
+It can be done using `AbortController`.
 
 For performance, by default only every 256th loop will be async, but set `asyncLoopOffset` to change. It is most likely not worth changing this.
 
 **AbortController**
-
-[AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) is present in modern browsers and from node version `15+`. It is currently a standard way how to cancel running operations.
 
 ```js
 // or use AbortController to cancel search
@@ -348,26 +343,6 @@ fuzz.extractAsPromised("gonna get aborted", choices, options)
 abortController.abort();
 ```
 
-**CancelToken**
-
-For older browsers and node versions you can use cancel token. It is an in
-
-```js
-let cancelToken = { canceled: false };
-
-options.cancelToken = cancelToken;
-options.asyncLoopOffset = 64;
-
-fuzz.extractAsPromised("gonna get canceled", choices, options)
-        .then(res => {/* do stuff */})
-        .catch((e) => {
-                if (e.message === 'canceled') console.log('I got canceled!')
-        });
-
-// ...
-
-cancelToken.canceled = true;
-```
 
 ### Wildcards
 
