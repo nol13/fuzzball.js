@@ -1,4 +1,4 @@
- [![Build Status](https://travis-ci.com/nol13/fuzzball.js.svg?branch=master)](https://travis-ci.com/nol13/fuzzball.js) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
+[![Node.js CI](https://github.com/nol13/fuzzball/actions/workflows/node-ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/<WORKFLOW_FILE>.yml) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
