@@ -1,4 +1,4 @@
-![Build Status](https://github.com/nol13/fuzzball/actions/workflows/node-ci.yml/badge.svg) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
+![Build Status](https://github.com/nol13/fuzzball.js/actions/workflows/node-ci.yml/badge.svg) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
