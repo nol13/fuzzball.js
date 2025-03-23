@@ -192,7 +192,7 @@ Consecutive white space will be collapsed unless options.collapseWhitespace = fa
 
 ### Collation and Unicode Stuff
 
-To use collation when calculating edit distance, set **useCollator** to true. Will be ignored if Intl.Collator does not exist in your enviroment. (node 0.10 and under, IE10 and under)
+To use collation when calculating edit distance, set **useCollator** to true.
 
 Setting useCollator to true will have an impact on performance, so if you have really large number of choices may be best to pre-process (i.e. lodash _.deburr) instead if possible.
 
@@ -210,7 +210,7 @@ fuzz.ratio("ab🐴c", "ab🐴d", options);
         75
 ```
 
-When astral is true it will also normalize your strings before scoring, as long as String.prototype.normalize exists in your environment, but will not attempt to polyfill. (So if you need to compare unnormalized strings in IE, normalize separately) You can set the **normalize** option to false if you want different representations not to match, but is true by default.
+When astral is true it will also normalize your strings before scoring. You can set the **normalize** option to false if you want different representations not to match, but is true by default.
 
 
 ### Batch Extract
