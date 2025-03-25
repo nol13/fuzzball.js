@@ -1,4 +1,4 @@
-![Build Status](https://github.com/nol13/fuzzball.js/actions/workflows/node-ci.yml/badge.svg) [![Try fuzzball on RunKit](https://badge.runkitcdn.com/fuzzball.svg)](https://runkit.com/npm/fuzzball)
+![Build Status](https://github.com/nol13/fuzzball.js/actions/workflows/node-ci.yml/badge.svg)
 
 ![fuzzball.js logo](fuzzballlogo.jpg "feed me strings!")
 ==========
@@ -10,7 +10,8 @@ Demo <a href="https://nol13.github.io/fuzzball.js" target="_blank">here</a> comp
 
 # Contents
  * [Installation](#installation)
- * [Usage and Scoring Overview](#usage)
+ * [Basic Usage](#basic-usage)
+ * [Functions](#functions)
  * [Pre-Processing](#pre-processing)
  * [Collation and Unicode Stuff](#collation-and-unicode-stuff)
  * [Batch Extract](#batch-extract)
@@ -51,9 +52,7 @@ console.log(ratio('fuzz', 'fuzzy'));
 ```
 See the lite section below if you need the smallest possible file size. If you need to support IE or node < v14 use v2.1.6 or earlier.
 
-# Usage
-
-**Basic Overview**
+# Basic Usage
 
 ```js
 fuzz = require('fuzzball');
@@ -78,9 +77,7 @@ fuzz.extract("mr. harry hood", choices, options);
 * an array of {choice, score, key} objects instead of tuples
 */
 
-fuzz.extractAsync("mr. harry hood", choices, options, function (err, results){/* do stuff */});
-
-fuzz.extractAsPromised("mr. harry hood", choices, options).then(res => {/* do stuff */});
+results = await fuzz.extractAsPromised("mr. harry hood", choices, options);
 
 // Cancel search
 
@@ -95,6 +92,8 @@ fuzz.extractAsPromised("gonna get canceled", choices, options)
 
 abortController.abort();
 ```
+
+# Functions
 
 **Simple Ratio**
 
@@ -168,6 +167,8 @@ fuzz.distance("fuzzy was a bear", "fozzy was a bear");
   * WRatio (runs tests based on relative string length and returns weighted top score, current default scorer in fuzzywuzzy extract)
 
 Blog post with overview of scoring algorithms can be found [**here**](http://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/).
+
+# Options
 
 ### Pre-Processing
 
@@ -320,7 +321,7 @@ results = fuzz.extract(query, choices, options);
 
 ### Async and Cancellation
 
-When using extractAsPromised or extractAsync, you might want to cancel the action before it has finished.
+When using extractAsPromised or extractAsync (callback style), you might want to cancel the action before it has finished.
 It can be done using `AbortController`.
 
 For performance, by default only every 256th loop will be async, but set `asyncLoopOffset` to change. It is most likely not worth changing this.
