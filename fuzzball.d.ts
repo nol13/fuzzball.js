@@ -29,6 +29,24 @@ export interface FuzzballBaseOptions {
     normalize?: boolean;
 }
 
+export interface FuzzballRatioOptions extends FuzzballBaseOptions {
+    /**
+     * A string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+     */
+    ratio_alg?: 'levenshtein' | 'difflib';
+    /**
+     * Autojunk argument passed to difflib if you're using the ratio_alg option, default true
+     */
+    autojunk?: boolean;
+}
+
+export interface FuzzballPartialRatioOptions extends FuzzballBaseOptions {
+    /**
+     * Autojunk argument passed to difflib, default true
+     */
+    autojunk?: boolean;
+}
+
 export interface FuzzballTokenSetOptions extends FuzzballBaseOptions {
     /**
      * Include ratio as part of token set test suite
@@ -64,7 +82,15 @@ interface FuzzballExtractBaseOptions extends FuzzballBaseOptions {
     /**
      * Sort tokens by similarity before combining with token set scorers
      */
-    sortBySimilarity?: boolean
+    sortBySimilarity?: boolean;
+    /**
+     * A string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+     */
+    ratio_alg?: 'levenshtein' | 'difflib';
+    /**
+     * Autojunk argument passed to difflib if you're using the ratio_alg option, default true
+     */
+    autojunk?: boolean;
 }
 
 interface AbortController {
@@ -170,14 +196,14 @@ export interface FuzzballDedupeObjOptionsWithMap extends FuzzballExtractObjectOp
 }
 
 export function distance(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function partial_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function partial_token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
-export function partial_token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function partial_token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
+export function ratio(str1: string, str2: string, opts?: FuzzballRatioOptions): number;
+export function partial_ratio(str1: string, str2: string, opts?: FuzzballPartialRatioOptions): number;
+export function token_set_ratio(str1: string, str2: string, opts?: FuzzballRatioOptions & FuzzballTokenSetOptions): number;
+export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballRatioOptions): number;
+export function token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballRatioOptions & FuzzballTokenSetOptions): number;
+export function partial_token_set_ratio(str1: string, str2: string, opts?: FuzzballPartialRatioOptions & FuzzballTokenSetOptions): number;
+export function partial_token_sort_ratio(str1: string, str2: string, opts?: FuzzballPartialRatioOptions): number;
+export function partial_token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballPartialRatioOptions & FuzzballTokenSetOptions): number;
 export function WRatio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function full_process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;

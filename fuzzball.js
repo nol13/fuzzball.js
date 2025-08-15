@@ -81,6 +81,8 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -108,6 +110,7 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -136,6 +139,8 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -164,6 +169,7 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -191,6 +197,8 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -221,6 +229,7 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -252,6 +261,8 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -278,6 +289,7 @@
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {number} [options_p.astral] - Use astral aware calculation
          * @param {string} [options_p.normalize] - Normalize unicode representations
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib, default true
          * @returns {number} - the levenshtein ratio (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -364,6 +376,8 @@
          * @param {boolean} [options_p.sortBySimilarity] - sort tokens by similarity to each other before combining instead of alphabetically
          * @param {string} [options_p.wildcards] - characters that will be used as wildcards if provided
          * @param {boolean} [options_p.returnObjects] - return array of object instead of array of tuples; default false
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @returns {Array[] | Object[]} - array of choice results with their computed ratios (0-100).
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -510,6 +524,8 @@
          * @param {Object} [options_p.abortController] - track abortion
          * @param {Object} [options_p.cancelToken] - track cancellation
          * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
+         * @param {string} [options_p.ratio_alg] - a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein"
+         * @param {boolean} [options_p.autojunk] - autojunk argument passed to difflib if you're using the ratio_alg option, default true
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
         var options = clone_and_set_option_defaults(options_p);
@@ -894,7 +910,7 @@
         if (!validate(str1)) return 0;
         if (!validate(str2)) return 0;
         if (options.ratio_alg && options.ratio_alg === "difflib") {
-            var m = new SequenceMatcher(null, str1, str2);
+            var m = new SequenceMatcher(null, str1, str2, options.autojunk);
             var r = m.ratio();
             return Math.round(100 * r);
         }
@@ -929,7 +945,7 @@
             var shorter = str2
             var longer = str1
         }
-        var m = new SequenceMatcher(null, shorter, longer);
+        var m = new SequenceMatcher(null, shorter, longer, options.autojunk);
         var blocks = m.getMatchingBlocks();
         var scores = [];
         for (var b = 0; b < blocks.length; b++) {
