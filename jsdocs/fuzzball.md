@@ -59,6 +59,8 @@ Calculate levenshtein ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 
 <a name="module_fuzzball..partial_ratio"></a>
 
@@ -80,6 +82,7 @@ Calculate partial levenshtein ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib, default true |
 
 <a name="module_fuzzball..token_set_ratio"></a>
 
@@ -102,6 +105,8 @@ Calculate token set ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 
 <a name="module_fuzzball..partial_token_set_ratio"></a>
 
@@ -124,6 +129,7 @@ Calculate partial token ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib, default true |
 
 <a name="module_fuzzball..token_sort_ratio"></a>
 
@@ -144,6 +150,8 @@ Calculate token sort ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 
 <a name="module_fuzzball..partial_token_sort_ratio"></a>
 
@@ -164,6 +172,7 @@ Calculate partial token sort ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib, default true |
 
 <a name="module_fuzzball..token_similarity_sort_ratio"></a>
 
@@ -184,6 +193,8 @@ Calculate token sort ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 
 <a name="module_fuzzball..partial_token_similarity_sort_ratio"></a>
 
@@ -204,6 +215,7 @@ Calculate token sort ratio of the two strings.
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.astral] | <code>number</code> | Use astral aware calculation |
 | [options_p.normalize] | <code>string</code> | Normalize unicode representations |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib, default true |
 
 <a name="module_fuzzball..WRatio"></a>
 
@@ -253,6 +265,8 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.sortBySimilarity] | <code>boolean</code> | sort tokens by similarity to each other before combining instead of alphabetically |
 | [options_p.wildcards] | <code>string</code> | characters that will be used as wildcards if provided |
 | [options_p.returnObjects] | <code>boolean</code> | return array of object instead of array of tuples; default false |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 
 <a name="module_fuzzball..extractAsync"></a>
 
@@ -283,5 +297,7 @@ Return the top scoring items from an array (or assoc array) of choices
 | [options_p.abortController] | <code>Object</code> | track abortion |
 | [options_p.cancelToken] | <code>Object</code> | track cancellation |
 | [options_p.asyncLoopOffset] | <code>number</code> | number of rows to run in between every async loop iteration, default 256 |
+| [options_p.ratio_alg] | <code>string</code> | a string representing the ratio algorithm to use, either "levenshtein" or "difflib", default "levenshtein" |
+| [options_p.autojunk] | <code>boolean</code> | autojunk argument passed to difflib if you're using the ratio_alg option, default true |
 | callback | <code>function</code> | node style callback (err, arrayOfResults) |
 
