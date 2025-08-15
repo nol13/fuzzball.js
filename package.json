@@ -1,6 +1,6 @@
 {
   "name": "fuzzball",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Fuzzy string matching algorithms and utilities, port of the TheFuzz Python library.",
   "main": "fuzzball.js",
   "module": "./dist/esm/fuzzball.esm.min.js",
