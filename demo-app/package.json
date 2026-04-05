@@ -17,7 +17,7 @@
   "dependencies": {
     "file-loader": "^6.2.0",
     "fuzzball": "^2.2.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
