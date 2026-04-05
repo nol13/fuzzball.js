@@ -19,6 +19,68 @@ describe('full_process', function () {
         var options = {full_process: false}; //non-alphanumeric will not be converted to whitespace if false, default true 
         assert.equal(fuzz.ratio("this is a test", "this is a test!", options), 97);
     });
+    it('should remove non-wildcard pipe characters when wildcard processing is enabled', function () {
+        assert.equal(fuzz.full_process("a|b*c", { wildcards: "*" }), "a b*c");
+    });
+});
+
+describe('Async extract option handling', function () {
+    it('should allow extractAsync without options in main build', function (done) {
+        fuzz.extractAsync("polar bear", ["polar bear"], undefined, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 100);
+            done();
+        });
+    });
+    it('should allow extractAsync without options in lite build', function (done) {
+        fuzzlite.extractAsync("polar bear", ["polar bear"], undefined, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 100);
+            done();
+        });
+    });
+    it('should allow extractAsync without options in ultra_lite build', function (done) {
+        fuzzultra.extractAsync("polar bear", ["polar bear"], undefined, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 100);
+            done();
+        });
+    });
+    it('should allow extractAsPromised without options in ultra_lite build', async function () {
+        var results = await fuzzultra.extractAsPromised("polar bear", ["polar bear"]);
+        assert.equal(results[0][1], 100);
+    });
+});
+
+describe('Async extract null choice handling', function () {
+    it('should not throw for lite token_sort_ratio with null choices', function (done) {
+        fuzzlite.extractAsync("x", [null], { scorer: fuzzlite.token_sort_ratio }, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 0);
+            done();
+        });
+    });
+    it('should not throw for lite token_set_ratio with null choices', function (done) {
+        fuzzlite.extractAsync("x", [null], { scorer: fuzzlite.token_set_ratio }, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 0);
+            done();
+        });
+    });
+    it('should not throw for ultra_lite token_sort_ratio with null choices', function (done) {
+        fuzzultra.extractAsync("x", [null], { scorer: fuzzultra.token_sort_ratio }, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 0);
+            done();
+        });
+    });
+    it('should not throw for ultra_lite token_set_ratio with null choices', function (done) {
+        fuzzultra.extractAsync("x", [null], { scorer: fuzzultra.token_set_ratio }, function (err, results) {
+            assert.ifError(err);
+            assert.equal(results[0][1], 0);
+            done();
+        });
+    });
 });
 
 describe('Scorer Identity Tests', function () {

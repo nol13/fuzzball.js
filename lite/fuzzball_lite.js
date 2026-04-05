@@ -306,6 +306,7 @@
          * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
+        options_p = options_p || {};
         var options = clone_and_set_option_defaults(options_p);
 
         var abortController;
@@ -404,7 +405,7 @@
                 options.proc_sorted = false;
                 if (tsort) {
                     options.proc_sorted = true;
-                    if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
+                    if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(normalize ? options.processor(choices[c]).normalize() : options.processor(choices[c]), options);
                         mychoice = process_and_sort(mychoice);
@@ -413,7 +414,7 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) {
+                    if (choices[c] && choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
                         if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
