@@ -306,17 +306,16 @@
          * @param {number} [options_p.asyncLoopOffset] - number of rows to run in between every async loop iteration, default 256
          * @param {function} callback - node style callback (err, arrayOfResults)
          */
-        options_p = options_p || {};
         var options = clone_and_set_option_defaults(options_p);
 
         var abortController;
-        if (typeof options_p.abortController === "object") {
-            abortController = options_p.abortController;
+        if (typeof options.abortController === "object") {
+            abortController = options.abortController;
         }
 
         var cancelToken;
-        if (typeof options_p.cancelToken === "object") {
-            cancelToken = options_p.cancelToken;
+        if (typeof options.cancelToken === "object") {
+            cancelToken = options.cancelToken;
         }
 
         var loopOffset = 256;
