@@ -60,7 +60,9 @@
     "search",
     "ratio",
     "wildcard",
-    "dedupe"
+    "dedupe",
+    "thefuzz",
+    "rapidfuzz"
   ],
   "author": "Nolan Kaplan <nolan@nolankaplan.com>",
   "license": "MIT",
