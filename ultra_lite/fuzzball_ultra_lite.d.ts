@@ -157,7 +157,6 @@ export function distance(str1: string, str2: string, opts?: FuzzballBaseOptions)
 export function ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
 export function token_set_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function token_sort_ratio(str1: string, str2: string, opts?: FuzzballBaseOptions): number;
-export function token_similarity_sort_ratio(str1: string, str2: string, opts?: FuzzballTokenSetOptions): number;
 export function full_process(str: string, options?: FuzzballExtractOptions | boolean): string;
 export function process_and_sort(str: string): string;
 export function unique_tokens(str: string, opts?: FuzzballExtractOptions): string[];
@@ -167,24 +166,14 @@ export function extract(query: any, choices: Object, opts?: FuzzballExtractOptio
 export function extract(query: any, choices: any[], opts?: FuzzballExtractObjectOptions): Array<{choice: any, score: number, key: number}>;
 export function extract(query: any, choices: Object, opts?: FuzzballExtractObjectOptions): Array<{ choice: any, score: number, key: string}>;
 
-export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractOptions, callback: (err: any, results?: Array<[any, number, number]>) => void): void;
-export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractOptions, callback: (err: any, results?: Array<[any, number, string]>) => void): void;
-export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: number }>) => void): void;
-export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractObjectOptions, callback: (err: any, results?: Array<{ choice: any, score: number, key: string }>) => void): void;
+export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractOptions | undefined, callback: (err: any, results?: Array<[any, number, number]>) => void): void;
+export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractOptions | undefined, callback: (err: any, results?: Array<[any, number, string]>) => void): void;
+export function extractAsync(query: any, choices: any[], opts: FuzzballAsyncExtractObjectOptions | undefined, callback: (err: any, results?: Array<{ choice: any, score: number, key: number }>) => void): void;
+export function extractAsync(query: any, choices: Object, opts: FuzzballAsyncExtractObjectOptions | undefined, callback: (err: any, results?: Array<{ choice: any, score: number, key: string }>) => void): void;
 
-export function extractAsPromised(query: any, choices: any[], opts: FuzzballAsyncExtractOptions): Promise<Array<[any, number, number]>>;
-export function extractAsPromised(query: any, choices: Object, opts: FuzzballAsyncExtractOptions): Promise<Array<[any, number, string]>>;
-export function extractAsPromised(query: any, choices: any[], opts: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: number }>>;
-export function extractAsPromised(query: any, choices: Object, opts: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: string }>>;
-
-export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeOptions): Array<[any, number]>;
-export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeOptions): Array<[any, string]>;
-export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeOptionsWithMap): Array<[any, number, Array<[any, number, number]>]>;
-export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeOptionsWithMap): Array<[any, string, Array<[any, number, string]>]>;
-
-export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptions): Array<{item: any, key: number}>;
-export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptions): Array<{ item: any, key: string }>;
-export function dedupe(contains_dupes: any[], opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: number, matches: Array<{ choice: any, score: number, key: number }>}>;
-export function dedupe(contains_dupes: Object, opts?: FuzzballDedupeObjOptionsWithMap): Array<{item: any, key: string, matches: Array<{ choice: any, score: number, key: string }>}>;
+export function extractAsPromised(query: any, choices: any[], opts?: FuzzballAsyncExtractOptions): Promise<Array<[any, number, number]>>;
+export function extractAsPromised(query: any, choices: Object, opts?: FuzzballAsyncExtractOptions): Promise<Array<[any, number, string]>>;
+export function extractAsPromised(query: any, choices: any[], opts?: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: number }>>;
+export function extractAsPromised(query: any, choices: Object, opts?: FuzzballAsyncExtractObjectOptions): Promise<Array<{ choice: any, score: number, key: string }>>;
 
 export as namespace fuzzball;
