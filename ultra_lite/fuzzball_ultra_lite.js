@@ -265,13 +265,13 @@
         var options = clone_and_set_option_defaults(options_p);
 
         var abortController;
-        if (typeof options_p.abortController === "object") {
-            abortController = options_p.abortController;
+        if (typeof options.abortController === "object") {
+            abortController = options.abortController;
         }
 
         var cancelToken;
-        if (typeof options_p.cancelToken === "object") {
-            cancelToken = options_p.cancelToken;
+        if (typeof options.cancelToken === "object") {
+            cancelToken = options.cancelToken;
         }
 
         var loopOffset = 256;
@@ -347,7 +347,7 @@
                 options.proc_sorted = false;
                 if (tsort) {
                     options.proc_sorted = true;
-                    if (choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
+                    if (choices[c] && choices[c].proc_sorted) mychoice = choices[c].proc_sorted;
                     else {
                         mychoice = pre_processor(options.processor(choices[c]), options);
                         mychoice = process_and_sort(mychoice);
@@ -356,7 +356,7 @@
                 }
                 else if (tset) {
                     mychoice = "x"; //dummy string so it validates
-                    if (choices[c].tokens) {
+                    if (choices[c] && choices[c].tokens) {
                         options.tokens = [query_tokens, choices[c].tokens];
                         if (options.trySimple) mychoice = pre_processor(options.processor(choices[c]), options);
                     }
